@@ -1,0 +1,19 @@
+name: ☎ Suggestions
+description: Have a suggestion for us?
+title: "[Suggestion] : "
+labels: ['type: Suggestion', 'status: Waiting Triage']
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: For which platform you need support with?
+      options:
+        - FireHub Core
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe your suggestion
+      description: A clear and concise description of your suggestion.
+    validations:
+      required: true
