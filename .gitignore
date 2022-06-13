@@ -1,2 +1,12 @@
 # JetBrains
 .idea/
+
+# Phar
+phar/*
+
+# FireHub
+/.gitkeep
+core/firehub.phar
+core/firehub.phar.pubkey
+core/packages/*
+!core/packages/.gitkeep
