@@ -1,0 +1,31 @@
+name: Triage
+on:
+  issues:
+    types: [opened]
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    steps:
+      # guests who open issues with 'Waiting Triage' status will go to Triage project
+      - if: "${{github.actor != 'dieselxxx' && contains(github.event.issue.labels.*.name, 'status: Waiting Triage') }}"
+        uses: alex-page/github-project-automation-plus@v0.8.1
+        with:
+          project: 🚩 Triage
+          column: Needs Triage
+          repo-token: ${{ secrets.GH_TOKEN }}
+      # add comment on issue with 'Waiting Triage' status
+      - if: "${{github.actor != 'dieselxxx' && contains(github.event.issue.labels.*.name, 'status: Waiting Triage') }}"
+        uses: actions-ecosystem/action-create-comment@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Thank you for your inquiry.
+            This issue has been moved to Triage Project and it will soon be reviewed by our moderators.
+            Please stand by 🌋
+      # guests who try to open internal issues will automatically be closed
+      - if: "${{github.actor != 'dieselxxx' && contains(github.event.issue.labels.*.name, 'status: Waiting Triage') != true }}"
+        uses: peter-evans/close-issue@v1
+        with:
+          comment: |
+            You cannot open internal or blank issue.
+            Auto-closing this issue.
