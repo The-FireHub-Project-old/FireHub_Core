@@ -12,7 +12,9 @@
  * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
  *
  * @package FireHub\Initializers
+ *
  * @version 1.0
+ * @version 1.1 Added CORE_ROOT constant.
  */
 
 namespace FireHub\Initializers\Constants;
@@ -42,6 +44,14 @@ defined('FireHub\Initializers\Constants\DS') ?: define('FireHub\Initializers\Con
  * @name string
  */
 defined('FireHub\Initializers\Constants\FIREHUB_ROOT') ?: define('FireHub\Initializers\Constants\FIREHUB_ROOT', Phar::running(true));
+
+/**
+ * ### Core path, for paths outside phar archive
+ * @since 0.1.5.pre-alpha.M1
+ *
+ * @name string
+ */
+defined('FireHub\Initializers\Constants\CORE_ROOT') ?: define('FireHub\Initializers\Constants\CORE_ROOT', dirname(Phar::running(false)).DS.'..');
 
 /**
  * ### Packages path
