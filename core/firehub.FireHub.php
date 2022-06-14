@@ -9,12 +9,17 @@
  * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
  *
  * @package FireHub
+ *
  * @version 1.0
+ * @version 1.1 Added autoload method and DS and FIREHUB_ROOT import constants.
  */
 
 namespace FireHub;
 
-use DirectoryIterator;
+use DirectoryIterator, Error;
+
+use const FireHub\Initializers\Constants\DS;
+use const FireHub\Initializers\Constants\FIREHUB_ROOT;
 
 /**
  * ### Main FireHub class for bootstrapping
@@ -48,14 +53,17 @@ final class FireHub {
      *
      * Load series of bootloaders required for
      * booting FireHub framework.
+     *
      * @since 0.1.4.pre-alpha.M1
+     * @since 0.1.5.pre-alpha.M1 Added autoload bootloader.
      *
      * @return $this This object.
      */
     private function bootloaders ():self {
 
         return $this
-            ->registerConstants();
+            ->registerConstants()
+            ->autoload();
 
     }
 
@@ -77,6 +85,29 @@ final class FireHub {
                 require $file->getPathname();
 
             }
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * ### Load autoload file
+     *
+     * This file contains definitions and series of functions
+     * needed for calling objects.
+     * @since 0.1.5.pre-alpha.M1
+     *
+     * @throws Error if system cannot load Autoload file.
+     *
+     * @return $this This object.
+     */
+    private function autoload ():self {
+
+        if (!include(FIREHUB_ROOT.DS.'initializers'.DS.'firehub.Autoload.php')) {
+
+            throw new Error('Cannot load Autoload file, please contact your administrator.');
 
         }
 

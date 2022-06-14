@@ -6,6 +6,7 @@ package FireHub <<Node>> #FFEBEE {
             + boot ():self
             - bootloaders ():self
             - registerConstants ():self
+            - autoload ():self
         }
     }
 }
