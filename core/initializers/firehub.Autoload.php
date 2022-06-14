@@ -12,7 +12,9 @@
  * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
  *
  * @package FireHub\Initializers
+ *
  * @version 1.0
+ * @version 1.1 Callback function now checks if object is empty before requiring it.
  */
 
 namespace FireHub\Initializers;
@@ -279,6 +281,7 @@ $file = static function (string $object_FQN) use ($firehubFile, $appFile, $vendo
 /**
  * ### Autoload function for object registration
  * @since 0.1.5.pre-alpha.M1
+ * @since 0.1.6.pre-alpha.M1 Checks if object is empty before requiring it.
  *
  * @param string $object_FQN <p>
  * Calling object fully qualified name.
@@ -288,7 +291,7 @@ $file = static function (string $object_FQN) use ($firehubFile, $appFile, $vendo
  */
 $callback = static function (string $object_FQN) use ($file):void {
 
-    require $file($object_FQN); // check if object is not null, then include object file
+    empty($file($object_FQN)) ?: require $file($object_FQN); // check if object is empty, then include object file
 
 };
 
