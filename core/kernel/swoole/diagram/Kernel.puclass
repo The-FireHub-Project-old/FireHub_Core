@@ -1,0 +1,11 @@
+@startuml
+
+package FireHub\Kernel\Swoole <<Node>> #FFEBEE {
+    namespace FireHub\Kernel\Swoole {
+        class Kernel #D50000;line:9B0000 {
+            + runtime ():string
+        }
+    }
+}
+
+@enduml
