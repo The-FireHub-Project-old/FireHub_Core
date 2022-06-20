@@ -12,10 +12,13 @@
  *
  * @version 1.0
  * @version 1.1 Added autoload method and DS and FIREHUB_ROOT import constants.
+ * @version 1.2 Added processKernel boot sequence and processKernel method.
  */
 
 namespace FireHub;
 
+use FireHub\Initializers\Enums\Kernel as Kernel_Enum;
+use FireHub\Initializers\Kernel;
 use DirectoryIterator, Error;
 
 use const FireHub\Initializers\Constants\DS;
@@ -37,14 +40,22 @@ final class FireHub {
      *
      * This methode serves for instantiating FireHub framework
      * and is the only publicly available method.
-     * @since 0.1.4.pre-alpha.M1
      *
-     * @return $this This object.
+     * @since 0.1.4.pre-alpha.M1
+     * @since 0.1.6.pre-alpha.M1 Added processKernel boot sequence.
+     *
+     * @param \FireHub\Initializers\Enums\Kernel $kernel <p>
+     * Pick Kernel from Kernel enum, process your
+     * request and return appropriate response.
+     * </p>
+     *
+     * @return string
      */
-    public function boot ():self {
+    public function boot (Kernel_Enum $kernel):string {
 
         return $this
-            ->bootloaders();
+            ->bootloaders()
+            ->processKernel($kernel->kernel());
 
     }
 
@@ -112,6 +123,24 @@ final class FireHub {
         }
 
         return $this;
+
+    }
+
+    /**
+     * ### Response
+     * @since 0.1.6.pre-alpha.M1
+     *
+     * @param \FireHub\Initializers\Kernel $kernel <p>
+     * Picked Kernel from Kernel enum, process your
+     * request and return appropriate response.
+     * </p>
+     *
+     * @return string Response from Kernel.
+     */
+    private function processKernel (Kernel $kernel):string {
+
+        // handle client runtime
+        return $kernel->runtime();
 
     }
 

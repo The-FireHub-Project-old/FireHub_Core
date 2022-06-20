@@ -3,10 +3,11 @@
 package FireHub <<Node>> #FFEBEE {
     namespace FireHub {
         class FireHub #D50000;line:9B0000 {
-            + boot ():self
+            + boot (Kernel_Enum $kernel):self
             - bootloaders ():self
             - registerConstants ():self
             - autoload ():self
+            - processKernel (Kernel $kernel):string
         }
     }
 }
