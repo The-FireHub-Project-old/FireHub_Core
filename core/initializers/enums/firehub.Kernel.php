@@ -15,7 +15,12 @@
 namespace FireHub\Initializers\Enums;
 
 use FireHub\Initializers\Kernel as Base_Kernel;
-use FireHub\Kernel\HTTP\Kernel as HTTP_Kernel;
+use FireHub\Kernel\ {
+    HTTP\Kernel as HTTP_Kernel,
+    HTTP\Micro\Kernel as HTTP_Micro_Kernel,
+    Console\Kernel as Console_Kernel,
+    Swoole\Kernel as Swoole_Kernel
+};
 
 /**
  * ### Enum for available Kernel types
@@ -31,6 +36,21 @@ enum Kernel {
     case HTTP;
 
     /**
+     * Simplified Micro HTTP Kernel
+     */
+    case MICRO_HTTP;
+
+    /**
+     * Console Kernel
+     */
+    case CONSOLE;
+
+    /**
+     * Swoole Kernel
+     */
+    case SWOOLE;
+
+    /**
      * ### Get selected Kernel
      * @since 0.1.6.pre-alpha.M1
      *
@@ -39,7 +59,10 @@ enum Kernel {
     public function kernel ():Base_Kernel {
 
         return match ($this) {
-            self::HTTP => new HTTP_Kernel
+            self::HTTP => new HTTP_Kernel(),
+            self::MICRO_HTTP => new HTTP_Micro_Kernel(),
+            self::CONSOLE => new Console_Kernel,
+            self::SWOOLE => new Swoole_Kernel
         };
 
     }
