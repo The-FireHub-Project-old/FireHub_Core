@@ -2,7 +2,7 @@
 
 package FireHub\Kernel\HTTP <<Node>> #FFEBEE {
     namespace FireHub\Kernel\HTTP\Micro {
-        class FireHub #D50000;line:9B0000 {
+        class Kernel #D50000;line:9B0000 {
             + runtime ():string
         }
     }
