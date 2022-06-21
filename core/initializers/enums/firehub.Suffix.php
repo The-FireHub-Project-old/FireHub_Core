@@ -10,6 +10,7 @@
  *
  * @package FireHub\Initializers
  * @version 1.0
+ * @version 1.1 Added TYPE enum.
  */
 
 namespace FireHub\Initializers\Enums;
@@ -21,5 +22,7 @@ namespace FireHub\Initializers\Enums;
  * @package FireHub\Initializers
  */
 enum Suffix:string {
+
+    case TYPE = 'type';
 
 }
