@@ -309,19 +309,19 @@ $blue-grey-900: #263238 !default;
 
 $body-background-color: $black;
 $sidebar-color: $grey-900;
-$search-background-color: $grey-800;
-$table-background-color: $grey-800;
-$code-background-color: $grey-800;
+$search-background-color: $grey-900;
+$table-background-color: $grey-900;
+$code-background-color: $grey-900;
 $feedback-color: darken($sidebar-color, 3%);
-$border-color: $grey-700;
+$border-color: $blue-grey-900;
 
-$body-text-color: $grey-300;
-$body-heading-color: $grey-000;
-$search-result-preview-color: $grey-600;
-$nav-child-link-color: $grey-600;
+$body-text-color: $blue-grey-300;
+$body-heading-color: $blue-grey-000;
+$search-result-preview-color: $blue-grey-600;
+$nav-child-link-color: $blue-grey-600;
 $link-color: $red-a700;
 $btn-primary-color: $red-a700;
-$base-button-color: $grey-800;
+$base-button-color: $blue-grey-800;
 
 //
 // Spacing
