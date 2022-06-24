@@ -153,7 +153,7 @@ final class Lazy_Type implements CollectableNonRewindable {
     public function &__get (string $name):Generator {
 
         // check if property name is "items", then invoke callable that will call "__set" magic method
-        $this->items = $name === 'items' ? $this->invokeItems() : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $this->items = $name === 'items' ? $this->invokeItems() : throw new Error(sprintf('Property %s does not exist.', $name));
 
         return $this->items;
 
@@ -175,7 +175,7 @@ final class Lazy_Type implements CollectableNonRewindable {
     public function __set (string $name, Generator $value):void {
 
         // check if property name is "items", if is - set to value
-        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s does not exist.', $name));
 
     }
 
