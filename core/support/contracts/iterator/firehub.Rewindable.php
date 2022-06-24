@@ -14,14 +14,18 @@
 
 namespace FireHub\Support\Contracts\Iterator;
 
+use ArrayAccess;
+
 /**
  * ### Rewindable iterator contract
  *
  * This contract allows Iterator to rewinds back to the first element of the Iterator.
  * @since 0.2.0.pre-alpha.M2
  *
+ * @extends ArrayAccess<mixed, mixed>
+ *
  * @package FireHub\Support\Contracts
  */
-interface Rewindable extends Iterator {
+interface Rewindable extends Iterator, ArrayAccess {
 
 }
