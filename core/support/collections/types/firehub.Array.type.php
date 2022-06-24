@@ -17,10 +17,10 @@ namespace FireHub\Support\Collections\Types;
 use FireHub\Support\Collections\CollectableRewindable;
 use Closure, Traversable, Error;
 
+use function sprintf;
 use function count;
 use function serialize;
 use function json_encode;
-use function sprintf;
 
 /**
  * ### Basic collection type
@@ -58,6 +58,66 @@ final class Array_Type implements CollectableRewindable {
     public function count ():int {
 
         return count($this->items);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string $offset <p>
+     * An offset to check for.
+     * </p>
+     */
+    public function offsetExists (mixed $offset):bool {
+
+        return isset($this->items[$offset]);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string $offset <p>
+     * The offset to retrieve.
+     * </p>
+     */
+    public function offsetGet (mixed $offset):mixed {
+
+        return $this->items[$offset] ?? throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetSet (mixed $offset, mixed $value):void {
+
+        if (empty($offset)) {
+
+            $this->items[] = $value;
+
+        } else {
+
+            $this->items[$offset] = $value;
+
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetUnset (mixed $offset):void {
+
+        unset($this->items[$offset]);
 
     }
 
@@ -149,7 +209,7 @@ final class Array_Type implements CollectableRewindable {
     public function &__get (string $name):array {
 
         // check if property name is "items", then invoke callable that will call "__set" magic method
-        $this->items = $name === 'items' ? $this->invokeItems() : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $this->items = $name === 'items' ? $this->invokeItems() : throw new Error(sprintf('Property %s does not exist.', $name));
 
         return $this->items;
 
@@ -171,7 +231,7 @@ final class Array_Type implements CollectableRewindable {
     public function __set (string $name, array $value):void {
 
         // check if property name is "items", if is - set to value
-        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s does not exist.', $name));
 
     }
 

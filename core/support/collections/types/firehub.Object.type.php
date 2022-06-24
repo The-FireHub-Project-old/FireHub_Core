@@ -18,10 +18,10 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplObjectStorage, Closure, Traversable, Error;
 
 use function iterator_to_array;
+use function sprintf;
 use function serialize;
 use function json_encode;
 use function is_object;
-use function sprintf;
 
 /**
  * ### Object collection type
@@ -57,6 +57,58 @@ final class Object_Type implements CollectableRewindable {
     public function count ():int {
 
         return $this->items->count();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $offset <p>
+     * An offset to check for.
+     * </p>
+     */
+    public function offsetExists (mixed $offset):bool {
+
+        return $this->items->contains($offset);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $offset <p>
+     * The offset to retrieve.
+     * </p>
+     */
+    public function offsetGet (mixed $offset):mixed {
+
+        return $this->offsetExists($offset) ? $this->items->offsetGet($offset) : throw new Error(sprintf('Key %s does not exist in Collection.', $offset::class));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetSet (mixed $offset, mixed $value):void {
+
+        $this->items->attach($offset, $value);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetUnset (mixed $offset):void {
+
+        $this->items->detach($offset);
 
     }
 
@@ -159,7 +211,7 @@ final class Object_Type implements CollectableRewindable {
         // check if property name is "items"
         if ($name !== 'items') {
 
-            throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+            throw new Error(sprintf('Property %s does not exist.', $name));
 
         }
 
@@ -189,7 +241,7 @@ final class Object_Type implements CollectableRewindable {
     public function __set (string $name, SplObjectStorage $value):void {
 
         // check if property name is "items", if is - set to value
-        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s does not exist.', $name));
 
     }
 

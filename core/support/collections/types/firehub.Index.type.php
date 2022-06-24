@@ -18,10 +18,10 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplFixedArray, Closure, Traversable, Error;
 
 use function iterator_to_array;
+use function sprintf;
 use function serialize;
 use function json_encode;
 use function count;
-use function sprintf;
 
 /**
  * ### Index collection type
@@ -85,6 +85,58 @@ final class Index_Type implements CollectableRewindable {
 
         // change the size of index array
         return $this->items->setSize($size);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $offset <p>
+     * An offset to check for.
+     * </p>
+     */
+    public function offsetExists (mixed $offset):bool {
+
+        return $this->items->offsetExists($offset);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $offset <p>
+     * The offset to retrieve.
+     * </p>
+     */
+    public function offsetGet (mixed $offset):mixed {
+
+        return $this->offsetExists($offset) ? $this->items->offsetGet($offset) : throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetSet (mixed $offset, mixed $value):void {
+
+        $this->offsetExists($offset) ? $this->items->offsetSet($offset, $value) : throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     */
+    public function offsetUnset (mixed $offset):void {
+
+        !$this->offsetExists($offset) ?: $this->items->offsetUnset($offset);
 
     }
 
@@ -187,7 +239,7 @@ final class Index_Type implements CollectableRewindable {
         // check if property name is "items"
         if ($name !== 'items') {
 
-            throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+            throw new Error(sprintf('Property %s does not exist.', $name));
 
         }
 
@@ -218,7 +270,7 @@ final class Index_Type implements CollectableRewindable {
     public function __set (string $name, SplFixedArray $value):void {
 
         // check if property name is "items", if is - set to value
-        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s doesn\'t exist.', $name));
+        $name === 'items' ? $this->$name = $value : throw new Error(sprintf('Property %s does not exist.', $name));
 
     }
 
