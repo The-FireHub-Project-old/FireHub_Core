@@ -70,6 +70,36 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Removes an item at the end of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return void
+     */
+    public function pop ():void {
+
+        $this->setSize($this->count() - 1);
+
+    }
+
+    /**
+     * ### Push an item at the end of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @return void
+     */
+    public function push (mixed $value):void {
+
+        $this->setSize($this->count() + 1);
+
+        $this->items[$this->count() - 1] = $value;
+
+    }
+
+    /**
      * ### Change the size of an array
      * @since 0.2.0.pre-alpha.M2
      *

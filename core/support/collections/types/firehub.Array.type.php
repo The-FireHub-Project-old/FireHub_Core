@@ -17,8 +17,10 @@ namespace FireHub\Support\Collections\Types;
 use FireHub\Support\Collections\CollectableRewindable;
 use Closure, Traversable, Error;
 
-use function sprintf;
 use function count;
+use function array_key_first;
+use function array_key_last;
+use function sprintf;
 use function serialize;
 use function json_encode;
 
@@ -58,6 +60,73 @@ final class Array_Type implements CollectableRewindable {
     public function count ():int {
 
         return count($this->items);
+
+    }
+
+    /**
+     * ### Removes an item at the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return void
+     */
+    public function shift ():void {
+
+        $this->offsetUnset(array_key_first($this->items));
+
+    }
+
+    /**
+     * ### Push an item at the beginning of the collection
+     *
+     * If pushed key already exists, it will replace the original value
+     * and shift it to the beginning of the collection.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @return void
+     */
+    public function unshift (string|int $key, mixed $value):void {
+
+        $this->items = [$key => $value] + $this->items;
+
+    }
+
+    /**
+     * ### Removes an item at the end of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return void
+     */
+    public function pop ():void {
+
+        $this->offsetUnset(array_key_last($this->items));
+
+    }
+
+    /**
+     * ### Push an item at the end of the collection
+     *
+     * If pushed key already exists, it will replace the original value.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @return void
+     */
+    public function push (string|int $key, mixed $value):void {
+
+        $this[$key] = $value;
 
     }
 

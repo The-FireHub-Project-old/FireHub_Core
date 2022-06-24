@@ -22,9 +22,13 @@ nav_order: 1
 - [# Method Listing](#-method-listing)
 - - [# all](#-all)
 - - [# count](#-count)
+- - [# pop](#-pop)
+- - [# push](#-push)
 - - [# serialize](#-serialize)
 - - [# setSize](#-setsize)
+- - [# shift](#-shift)
 - - [# toJSON](#-tojson)
+- - [# unshift](#-unshift)
 
 ## # Introduction
 
@@ -334,6 +338,72 @@ echo count($collection);
 // 3
 ```
 
+### # pop
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | no
+
+Removes an item at the end of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->pop();
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe ) 
+```
+
+
+### # push
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | no
+
+Push an item at the end of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->push('height', '190cm');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )  
+```
+
+If pushed key already exists, it will replace the original value.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->push('lastname', 'Smith');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Smith [age] => 25 )   
+```
+
 ### # serialize
 
 > Available on collection:
@@ -394,6 +464,30 @@ print_r($collection->all());
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => [4] => [5] => [6] => [7] => [8] => [9] => ) 
 ```
 
+### # shift
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Removes an item at the beginning of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->shift();
+
+print_r($collection->all());
+
+// result:
+// Array ( [lastname] => Doe [age] => 25 )
+```
+
 ### # toJSON
 
 > Available on collection:
@@ -416,4 +510,46 @@ echo $json_serialize;
 
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
+```
+
+### # unshift
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Push an item at the beginning of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->unshift('height', '190cm');
+
+print_r($collection->all());
+
+// result:
+// Array ( [height] => 190cm [firstname] => John [lastname] => Doe [age] => 25 )  
+```
+
+If pushed key already exists, it will replace the original value and shift it to the
+beginning of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->unshift('lastname', 'Smith');
+
+print_r($collection->all());
+
+// result:
+// Array ( [lastname] => Smith [firstname] => John [age] => 25 ) 
 ```
