@@ -168,6 +168,66 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function each (Closure $callback):self {
+
+        foreach ($this->items as $value) {
+
+            // run callable and break if result is false
+            if ($callback($value) === false) {
+
+                break;
+
+            }
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function walk (Closure $callback):self {
+
+        // iterate over current items
+        foreach ($this->items as $key => $value) {
+
+            // add current callback value to same key
+            $this->items[$key] = $callback($key, $value);
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function map (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add current callback value to same key
+                $items[$key] = $callback($key, $value);
+
+            }
+
+        });
+
+    }
+
+    /**
      * ### Change the size of an array
      * @since 0.2.0.pre-alpha.M2
      *

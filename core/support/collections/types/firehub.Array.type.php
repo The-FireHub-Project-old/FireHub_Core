@@ -208,6 +208,67 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function each (Closure $callback):self {
+
+        foreach ($this->items as $key => $value) {
+
+            // run callable and break if result is false
+            if ($callback($key, $value) === false) {
+
+                break;
+
+            }
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function walk (Closure $callback):self {
+
+        foreach ($this->items as $key => &$value) {
+
+            // add current callback value to same key
+            $this->items[$key] = $callback($key, $value);
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function map (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):array {
+
+            $items = [];
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add current callback value to same key
+                $items[] = $callback($key, $value);
+
+            }
+
+            // return new items
+            return $items;
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

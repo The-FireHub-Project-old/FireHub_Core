@@ -145,20 +145,59 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
-     * ### Removes an item at the collection
-     * @since 0.2.0.pre-alpha.M2
-     *
-     * @param object $key <p>
-     * Collection item key.
-     * </p>
-     *
-     * @throws Error If $offset is not object.
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function remove (object $key):void {
+    public function each (Closure $callback):self {
 
-        $this->offsetUnset($key);
+        foreach ($this->items as $key => $value) {
+
+            // run callable and break if result is false
+            if ($callback($key, $value) === false) {
+
+                break;
+
+            }
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function walk (Closure $callback):self {
+
+        // iterate over current items
+        foreach ($this->items as $info => $object) {
+
+            // add current callback value to same key
+            $this->items[$object] = $callback($object, $info);
+
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function map (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // iterate over current items
+            foreach ($this->items as $info => $object) {
+
+                // add current callback value to same key
+                $items[$object] = $callback($object, $info);
+
+            }
+
+        });
 
     }
 

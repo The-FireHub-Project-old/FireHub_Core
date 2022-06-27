@@ -15,6 +15,7 @@
 namespace FireHub\Support\Collections;
 
 use FireHub\Support\Contracts\Iterator\Rewindable;
+use Closure;
 
 /**
  * ### Collection rewindable contract
@@ -78,5 +79,45 @@ interface CollectableRewindable extends Collectable, Rewindable {
      * @return void
      */
     public function unset (mixed $key):void;
+
+    /**
+     * ### Perform function on each item from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return $this This collection.
+     */
+    public function each (Closure $callback):self;
+
+    /**
+     * ### Apply a user supplied function to every collection item
+     *
+     * This method will transform existing collection.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return $this This collection.
+     */
+    public function walk (Closure $callback):self;
+
+    /**
+     * ### Applies the callback to the collection items
+     *
+     * This method will create new collection.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function map (Closure $callback):self;
 
 }

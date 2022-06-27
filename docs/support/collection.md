@@ -22,17 +22,20 @@ nav_order: 1
 - [# Method Listing](#-method-listing)
 - - [# all](#-all)
 - - [# count](#-count)
+- - [# each](#-each)
 - - [# get](#-get)
 - - [# isset](#-isset)
+- - [# map](#-map)
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# serialize](#-serialize)
-- - [#set](#-set)
+- - [# set](#-set)
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
 - - [# toJSON](#-tojson)
 - - [# unset](#-unset)
 - - [# unshift](#-unshift)
+- - [# walk](#-walk)
 
 ## # Introduction
 
@@ -368,6 +371,96 @@ echo count($collection);
 // 3
 ```
 
+### # each
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Perform function on each item from collection.
+
+> note: if you are working with large collections, it is better internal loop like `foreach`,
+> `while`, `for` etc. because of the performance benefits.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->each(function ($key, $value) {
+    echo "I'm key: $key, with value: $value";
+});
+
+// result:
+// I'm key: firstname, with value: John
+// I'm key: lastname, with value: Doe
+// I'm key: age, with value: 25
+```
+
+You can do all kind of evaluating expressions on `each` method.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->each(function ($key, $value) {
+    if ($key !== 'age') {
+        echo "I'm key: $key, with value: $value";
+    }
+   
+});
+
+// result:
+// I'm key: firstname, with value: John
+// I'm key: lastname, with value: Doe
+```
+
+You can break the loop at any time by returning false.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->each(function ($key, $value) {
+    if ($key === 'lastname') {
+        return false;
+    }
+    echo "I'm key: $key, with value: $value";
+});
+
+// result:
+// I'm key: firstname, with value: John
+```
+
+If you are using this method on fixed collection callable only required value parameter for
+`each` method.
+
+```php
+$collection = Collection::index(function ($items):void {
+    $items[0] = 'one';
+    $items[1] = 'two';
+    $items[2] = 'three';
+}, size: 3);
+
+$collection->each(function ($value) {
+    echo "I'm value: $value";
+});
+
+// result:
+// I'm value: one
+// I'm value: two
+// I'm value: three
+```
+
 ### # get
 
 > Available on collection:
@@ -442,6 +535,29 @@ echo isset($collection['age']);
 // true 
 ```
 
+### # map
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Applies the callback to the collection items.
+
+This method will create new collection.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$multiplied = $collection->map(function ($key, $value) {
+    return $value * 2;
+});
+print_r($multiplied->all());
+
+// result:
+// Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
+```
+
 ### # pop
 
 > Available on collection:
@@ -452,9 +568,7 @@ echo isset($collection['age']);
 Removes an item at the end of the collection.
 
 ```php
-$collection = Collection::create(fn ():array => [
-    1,2,3,4,5
-]);
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->pop();
 
@@ -475,9 +589,7 @@ print_r($collection->all());
 Push an item at the end of the collection.
 
 ```php
-$collection = Collection::create(fn ():array => [
-    1,2,3,4,5
-]);
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->push(6,7,8);
 
@@ -600,9 +712,7 @@ print_r($collection->all());
 Removes an item at the beginning of the collection.
 
 ```php
-$collection = Collection::create(fn ():array => [
-    1,2,3,4,5
-]);
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->shift();
 
@@ -687,9 +797,7 @@ print_r($collection->all());
 Push an item at the beginning of the collection.
 
 ```php
-$collection = Collection::create(fn ():array => [
-    1,2,3,4,5
-]);
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->unshift(6,7,8);
 
@@ -697,4 +805,27 @@ print_r($collection->all());
 
 // result:
 // Array ( [0] => 6 [1] => 7 [2] => 8 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 ) 
+```
+
+### # walk
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Apply a user supplied function to every collection item.
+
+This method will modify your existing collection.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$collection->walk(function ($key, $value) {
+    return $value * 2;
+});
+print_r($collection->all());
+
+// result:
+// Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
 ```
