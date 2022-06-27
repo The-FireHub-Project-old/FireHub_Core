@@ -61,6 +61,47 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Adds an item at the collection
+     *
+     * If added key already exists, it will replace the original value.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $info <p>
+     * The data to associate with the object.
+     * </p>
+     *
+     * @throws Error If $offset is not object.
+     *
+     * @return void
+     */
+    public function add (object $key, mixed $info):void {
+
+        $this->offsetSet($key, $info);
+
+    }
+
+    /**
+     * ### Removes an item at the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not object.
+     *
+     * @return void
+     */
+    public function remove (object $key):void {
+
+        $this->offsetUnset($key);
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>

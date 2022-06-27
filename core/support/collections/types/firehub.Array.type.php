@@ -18,8 +18,10 @@ use FireHub\Support\Collections\CollectableRewindable;
 use Closure, Traversable, Error;
 
 use function count;
-use function array_key_first;
-use function array_key_last;
+use function array_shift;
+use function array_unshift;
+use function array_pop;
+use function array_push;
 use function is_string;
 use function is_int;
 use function sprintf;
@@ -66,22 +68,9 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
-     * ### Removes an item at the beginning of the collection
-     * @since 0.2.0.pre-alpha.M2
+     * ### Adds an item at the collection
      *
-     * @return void
-     */
-    public function shift ():void {
-
-        $this->offsetUnset(array_key_first($this->items));
-
-    }
-
-    /**
-     * ### Push an item at the beginning of the collection
-     *
-     * If pushed key already exists, it will replace the original value
-     * and shift it to the beginning of the collection.
+     * If added key already exists, it will replace the original value.
      * @since 0.2.0.pre-alpha.M2
      *
      * @param string|int $key <p>
@@ -91,11 +80,59 @@ final class Array_Type implements CollectableRewindable {
      * Collection item value.
      * </p>
      *
+     * @throws Error If $offset is not int or string.
+     *
      * @return void
      */
-    public function unshift (string|int $key, mixed $value):void {
+    public function add (string|int $key, mixed $value):void {
 
-        $this->items = [$key => $value] + $this->items;
+        $this->offsetSet($key, $value);
+
+    }
+
+    /**
+     * ### Removes an item at the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not int or string.
+     *
+     * @return void
+     */
+    public function remove (string|int $key):void {
+
+        $this->offsetUnset($key);
+
+    }
+
+    /**
+     * ### Removes an item at the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return void
+     */
+    public function shift ():void {
+
+        array_shift($this->items);
+
+    }
+
+    /**
+     * ### Push items at the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed ...$values <p>
+     * List of values to unshift.
+     * </p>
+     *
+     * @return void
+     */
+    public function unshift (mixed ...$values):void {
+
+        array_unshift($this->items, ...$values);
 
     }
 
@@ -107,28 +144,23 @@ final class Array_Type implements CollectableRewindable {
      */
     public function pop ():void {
 
-        $this->offsetUnset(array_key_last($this->items));
+        array_pop($this->items);
 
     }
 
     /**
-     * ### Push an item at the end of the collection
-     *
-     * If pushed key already exists, it will replace the original value.
+     * ### Push items at the end of the collection
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param string|int $key <p>
-     * Collection item key.
-     * </p>
-     * @param mixed $value <p>
-     * Collection item value.
+     * @param mixed ...$values <p>
+     * List of values to push.
      * </p>
      *
      * @return void
      */
-    public function push (string|int $key, mixed $value):void {
+    public function push (mixed ...$values):void {
 
-        $this[$key] = $value;
+        array_push($this->items, ...$values);
 
     }
 

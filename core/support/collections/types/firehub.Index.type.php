@@ -86,17 +86,21 @@ final class Index_Type implements CollectableRewindable {
      * ### Push an item at the end of the collection
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param mixed $value <p>
-     * Collection item value.
+     * @param mixed ...$values <p>
+     * List of values to push.
      * </p>
      *
      * @return void
      */
-    public function push (mixed $value):void {
+    public function push (mixed ...$values):void {
 
-        $this->setSize($this->count() + 1);
+        foreach ($values as $value) {
 
-        $this->items[$this->count() - 1] = $value;
+            $this->setSize($this->count() + 1);
+
+            $this->items[$this->count() - 1] = $value;
+
+        }
 
     }
 

@@ -20,10 +20,12 @@ nav_order: 1
 - [# Serialize and Unserialize Collection](#-serialize-and-unserialize-collection)
 - - [# JSON Serialize](#-json-serialize)
 - [# Method Listing](#-method-listing)
+- - [# add](#-add)
 - - [# all](#-all)
 - - [# count](#-count)
 - - [# pop](#-pop)
 - - [# push](#-push)
+- - [# remove](#-remove)
 - - [# serialize](#-serialize)
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
@@ -281,6 +283,48 @@ Bellow is a list of all available methods you can use on the collections.
 Not all collection types will have available all these methods, so we will list all collection that
 can use each method in separate table.
 
+### # add
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | yes
+
+Adds an item at the collection
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->add('height', '190cm');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
+```
+
+If pushed key already exists, it will replace the original value.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->push('lastname', 'Smith');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Smith [age] => 25 )   
+
+```
+
 ### # all
 
 > Available on collection:
@@ -349,9 +393,7 @@ Removes an item at the end of the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
+    1,2,3,4,5
 ]);
 
 $collection->pop();
@@ -359,7 +401,7 @@ $collection->pop();
 print_r($collection->all());
 
 // result:
-// Array ( [firstname] => John [lastname] => Doe ) 
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
 ```
 
 
@@ -374,20 +416,25 @@ Push an item at the end of the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
+    1,2,3,4,5
 ]);
 
-$collection->push('height', '190cm');
+$collection->push(6,7,8);
 
 print_r($collection->all());
 
 // result:
-// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )  
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
 ```
 
-If pushed key already exists, it will replace the original value.
+### # remove
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | yes
+
+Removes an item at the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
@@ -396,12 +443,12 @@ $collection = Collection::create(fn ():array => [
     'age' => 25
 ]);
 
-$collection->push('lastname', 'Smith');
+$collection->remove('age');
 
 print_r($collection->all());
 
 // result:
-// Array ( [firstname] => John [lastname] => Smith [age] => 25 )   
+// Array ( [firstname] => John [lastname] => Doe ) 
 ```
 
 ### # serialize
@@ -475,9 +522,7 @@ Removes an item at the beginning of the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
+    1,2,3,4,5
 ]);
 
 $collection->shift();
@@ -485,7 +530,7 @@ $collection->shift();
 print_r($collection->all());
 
 // result:
-// Array ( [lastname] => Doe [age] => 25 )
+// Array ( [0] => 2 [1] => 3 [2] => 4 [3] => 5 ) 
 ```
 
 ### # toJSON
@@ -523,33 +568,13 @@ Push an item at the beginning of the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
+    1,2,3,4,5
 ]);
 
-$collection->unshift('height', '190cm');
+$collection->unshift(6,7,8);
 
 print_r($collection->all());
 
 // result:
-// Array ( [height] => 190cm [firstname] => John [lastname] => Doe [age] => 25 )  
-```
-
-If pushed key already exists, it will replace the original value and shift it to the
-beginning of the collection.
-
-```php
-$collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
-]);
-
-$collection->unshift('lastname', 'Smith');
-
-print_r($collection->all());
-
-// result:
-// Array ( [lastname] => Smith [firstname] => John [age] => 25 ) 
+// Array ( [0] => 6 [1] => 7 [2] => 8 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 ) 
 ```
