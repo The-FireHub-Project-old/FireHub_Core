@@ -148,6 +148,8 @@ final class Lazy_Type implements CollectableNonRewindable {
      * Property name.
      * </p>
      *
+     * @throws Error If property does not exist.
+     *
      * @return Generator Current array.
      */
     public function &__get (string $name):Generator {
@@ -169,6 +171,8 @@ final class Lazy_Type implements CollectableNonRewindable {
      * @param Generator $value <p>
      * Property value.
      * </p>
+     *
+     * @throws Error If property does not exist.
      *
      * @return void
      */

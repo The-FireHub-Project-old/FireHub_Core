@@ -18,10 +18,10 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplObjectStorage, Closure, Traversable, Error;
 
 use function iterator_to_array;
+use function is_object;
 use function sprintf;
 use function serialize;
 use function json_encode;
-use function is_object;
 
 /**
  * ### Object collection type
@@ -66,10 +66,12 @@ final class Object_Type implements CollectableRewindable {
      * @param object $offset <p>
      * An offset to check for.
      * </p>
+     *
+     * @throws Error If $offset is not object.
      */
     public function offsetExists (mixed $offset):bool {
 
-        return $this->items->contains($offset);
+        return !is_object($offset) ? throw new Error('Key needs to be object.') : $this->items->contains($offset);
 
     }
 
@@ -79,6 +81,8 @@ final class Object_Type implements CollectableRewindable {
      * @param object $offset <p>
      * The offset to retrieve.
      * </p>
+     *
+     * @throws Error If $offset is not object or does not exist in Collection.
      */
     public function offsetGet (mixed $offset):mixed {
 
@@ -92,10 +96,12 @@ final class Object_Type implements CollectableRewindable {
      * @param object $offset <p>
      * The offset to assign the value to.
      * </p>
+     *
+     * @throws Error If $offset is not object.
      */
     public function offsetSet (mixed $offset, mixed $value):void {
 
-        $this->items->attach($offset, $value);
+        !is_object($offset) ? throw new Error('Key needs to be object.') : $this->items->attach($offset, $value);
 
     }
 
@@ -105,10 +111,12 @@ final class Object_Type implements CollectableRewindable {
      * @param object $offset <p>
      * The offset to assign the value to.
      * </p>
+     *
+     * @throws Error If $offset is not object.
      */
-    public function offsetUnset (mixed $offset):void {
+    public function offsetUnset (mixed $offset):void {;
 
-        $this->items->detach($offset);
+        !$this->offsetExists($offset) ?: $this->items->detach($offset);
 
     }
 
@@ -204,6 +212,8 @@ final class Object_Type implements CollectableRewindable {
      * Property name.
      * </p>
      *
+     * @throws Error If property does not exist.
+     *
      * @return SplObjectStorage<self, object> Current array.
      */
     public function &__get (string $name):SplObjectStorage {
@@ -235,6 +245,8 @@ final class Object_Type implements CollectableRewindable {
      * @param SplObjectStorage<self, object> $value <p>
      * Property value.
      * </p>
+     *
+     * @throws Error If property does not exist.
      *
      * @return void
      */

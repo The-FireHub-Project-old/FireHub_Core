@@ -20,6 +20,8 @@ use Closure, Traversable, Error;
 use function count;
 use function array_key_first;
 use function array_key_last;
+use function is_string;
+use function is_int;
 use function sprintf;
 use function serialize;
 use function json_encode;
@@ -133,60 +135,51 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param int|string $offset <p>
-     * An offset to check for.
-     * </p>
+     * @throws Error If $offset is not int or string.
      */
     public function offsetExists (mixed $offset):bool {
 
-        return isset($this->items[$offset]);
+        return is_string($offset) || is_int($offset) ? isset($this->items[$offset]) : throw new Error('Key needs to be int or string.');
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int|string $offset <p>
-     * The offset to retrieve.
-     * </p>
+     * @throws Error If $offset does not exist in Collection or is not int or string.
      */
     public function offsetGet (mixed $offset):mixed {
 
-        return $this->items[$offset] ?? throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
-
+        return $this->offsetExists($offset) ?: $this->items[$offset];
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int|string $offset <p>
-     * The offset to assign the value to.
-     * </p>
+     * @throws Error If $offset is not int or string.
      */
     public function offsetSet (mixed $offset, mixed $value):void {
 
-        if (empty($offset)) {
-
-            $this->items[] = $value;
-
-        } else {
-
-            $this->items[$offset] = $value;
-
-        }
+        is_string($offset) || is_int($offset)
+            ? empty($offset)
+                ? $this->items[] = $value
+                : $this->items[$offset] = $value
+            : throw new Error('Key needs to be int or string.');
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int|string $offset <p>
-     * The offset to assign the value to.
-     * </p>
+     * @throws Error If $offset is not int or string.
      */
     public function offsetUnset (mixed $offset):void {
 
-        unset($this->items[$offset]);
+        if ($this->offsetExists($offset)) {
+
+            unset($this->items[$offset]);
+
+        }
 
     }
 
@@ -273,6 +266,8 @@ final class Array_Type implements CollectableRewindable {
      * Property name.
      * </p>
      *
+     * @throws Error If property does not exist.
+     *
      * @return array<int|string, mixed> Current array.
      */
     public function &__get (string $name):array {
@@ -294,6 +289,8 @@ final class Array_Type implements CollectableRewindable {
      * @param array<int|string, mixed> $value <p>
      * Property value.
      * </p>
+     *
+     * @throws Error If property does not exist.
      *
      * @return void
      */

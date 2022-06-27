@@ -15,9 +15,10 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
-use SplFixedArray, Closure, Traversable, Error;
+use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function iterator_to_array;
+use function is_int;
 use function sprintf;
 use function serialize;
 use function json_encode;
@@ -121,50 +122,64 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param int $offset <p>
-     * An offset to check for.
-     * </p>
+     * @throws Error If $offset is not int.
      */
     public function offsetExists (mixed $offset):bool {
 
-        return $this->items->offsetExists($offset);
+        return is_int($offset) ? isset($this->items[$offset]) : throw new Error('Key needs to be int.');
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int $offset <p>
-     * The offset to retrieve.
-     * </p>
+     * @throws Error If $offset does not exist in Collection or is not int.
      */
     public function offsetGet (mixed $offset):mixed {
 
-        return $this->offsetExists($offset) ? $this->items->offsetGet($offset) : throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+        is_int($offset) ?: throw new Error('Key needs to be int.');
+
+        try {
+
+            return $this->items->offsetGet($offset);
+
+        } catch (Throwable) {
+
+            throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+
+        }
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int $offset <p>
-     * The offset to assign the value to.
-     * </p>
+     * @throws Error If $offset is not int or string or does not exist in Collection.
      */
     public function offsetSet (mixed $offset, mixed $value):void {
 
-        $this->offsetExists($offset) ? $this->items->offsetSet($offset, $value) : throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+        is_int($offset) ?: throw new Error('Key needs to be int.');
+
+        try {
+
+            $this->items->offsetSet($offset, $value);
+
+        } catch (Throwable) {
+
+            throw new Error(sprintf('Key %s does not exist in Collection.', $offset));
+
+        }
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int $offset <p>
-     * The offset to assign the value to.
-     * </p>
+     * @throws Error If $offset is not int.
      */
     public function offsetUnset (mixed $offset):void {
+
+        is_int($offset) ?: throw new Error('Key needs to be int.');
 
         !$this->offsetExists($offset) ?: $this->items->offsetUnset($offset);
 
@@ -262,6 +277,8 @@ final class Index_Type implements CollectableRewindable {
      * Property name.
      * </p>
      *
+     * @throws Error If property does not exist.
+     *
      * @return SplFixedArray<mixed> Current array.
      */
     public function &__get (string $name):SplFixedArray {
@@ -294,6 +311,8 @@ final class Index_Type implements CollectableRewindable {
      * @param SplFixedArray<mixed> $value <p>
      * Property value.
      * </p>
+     *
+     * @throws Error If property does not exist.
      *
      * @return void
      */
