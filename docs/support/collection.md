@@ -20,16 +20,18 @@ nav_order: 1
 - [# Serialize and Unserialize Collection](#-serialize-and-unserialize-collection)
 - - [# JSON Serialize](#-json-serialize)
 - [# Method Listing](#-method-listing)
-- - [# add](#-add)
 - - [# all](#-all)
 - - [# count](#-count)
+- - [# get](#-get)
+- - [# isset](#-isset)
 - - [# pop](#-pop)
 - - [# push](#-push)
-- - [# remove](#-remove)
 - - [# serialize](#-serialize)
+- - [#set](#-set)
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
 - - [# toJSON](#-tojson)
+- - [# unset](#-unset)
 - - [# unshift](#-unshift)
 
 ## # Introduction
@@ -290,7 +292,9 @@ can use each method in separate table.
 >> :---:|:---:|:---:|:---:
 >> yes | no | no | yes
 
-Adds an item at the collection
+Adds an item at the collection.
+
+If key already exist, method will throw error.
 
 ```php
 $collection = Collection::create(fn ():array => [
@@ -305,24 +309,6 @@ print_r($collection->all());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
-```
-
-If pushed key already exists, it will replace the original value.
-
-```php
-$collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
-]);
-
-$collection->push('lastname', 'Smith');
-
-print_r($collection->all());
-
-// result:
-// Array ( [firstname] => John [lastname] => Smith [age] => 25 )   
-
 ```
 
 ### # all
@@ -382,6 +368,80 @@ echo count($collection);
 // 3
 ```
 
+### # get
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Gets item from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+echo $collection->get('age');
+
+// result:
+// 25 
+```
+
+You can also use short PHP function.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+echo $collection['age'];
+
+// result:
+// 25 
+```
+
+### # isset
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Checks if item exist in the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+echo $collection->isset('age');
+
+// result:
+// true 
+```
+
+You can also use short PHP isset function.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+echo isset($collection['age']);
+
+// result:
+// true 
+```
+
 ### # pop
 
 > Available on collection:
@@ -427,30 +487,6 @@ print_r($collection->all());
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
 ```
 
-### # remove
-
-> Available on collection:
->> Basic | Index | Lazy | Object
->> :---:|:---:|:---:|:---:
->> yes | no | no | yes
-
-Removes an item at the collection.
-
-```php
-$collection = Collection::create(fn ():array => [
-    'firstname' => 'John',
-    'lastname' => 'Doe',
-    'age' => 25
-]);
-
-$collection->remove('age');
-
-print_r($collection->all());
-
-// result:
-// Array ( [firstname] => John [lastname] => Doe ) 
-```
-
 ### # serialize
 
 > Available on collection:
@@ -473,6 +509,49 @@ echo $serialize;
 
 // result:
 // O:44:"FireHub\Support\Collections\Types\Array_Type":3:{s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:3:"age";i:25;}
+```
+
+### # set
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Sets an item at the collection.
+
+If key already exists, it will replace the original value.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->set('height', '190cm');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
+```
+
+You can also use short function to set the item.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection['height'] = '190cm';
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
 ```
 
 ### # setSize
@@ -555,6 +634,47 @@ echo $json_serialize;
 
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
+```
+
+### # unset
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Removes an item at the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->unset('age');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe ) 
+```
+
+You can also use short PHP unset function.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+unset($collection['age']);
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe ) 
 ```
 
 ### # unshift

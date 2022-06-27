@@ -26,4 +26,57 @@ use FireHub\Support\Contracts\Iterator\Rewindable;
  */
 interface CollectableRewindable extends Collectable, Rewindable {
 
+    /**
+     * ### Gets item from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @return mixed Item value.
+     */
+    public function get (mixed $key):mixed;
+
+    /**
+     * ### Sets an item at the collection
+     *
+     * If key already exists, it will replace the original value.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @return void
+     */
+    public function set (mixed $key, mixed $value):void;
+
+    /**
+     * ### Checks if item exist in the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @return bool True if key exist, false otherwise.
+     */
+    public function isset (mixed $key):bool;
+
+    /**
+     * ### Removes an item at the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @return void
+     */
+    public function unset (mixed $key):void;
+
 }

@@ -71,6 +71,69 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @param int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset does not exist in Collection or is not int.
+     */
+    public function get (mixed $key):mixed {
+
+        return $this->offsetGet($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @throws Error If $offset is not int.
+     */
+    public function set (mixed $key, mixed $value):void {
+
+        $this->offsetSet($key, $value);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not int.
+     */
+    public function isset (mixed $key):bool {
+
+        return $this->offsetExists($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not int.
+     */
+    public function unset (mixed $key):void {
+
+        $this->offsetUnset($key);
+
+    }
+
+    /**
      * ### Removes an item at the end of the collection
      * @since 0.2.0.pre-alpha.M2
      *

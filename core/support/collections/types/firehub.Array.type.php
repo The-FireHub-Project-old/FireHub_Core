@@ -69,8 +69,6 @@ final class Array_Type implements CollectableRewindable {
 
     /**
      * ### Adds an item at the collection
-     *
-     * If added key already exists, it will replace the original value.
      * @since 0.2.0.pre-alpha.M2
      *
      * @param string|int $key <p>
@@ -80,29 +78,74 @@ final class Array_Type implements CollectableRewindable {
      * Collection item value.
      * </p>
      *
-     * @throws Error If $offset is not int or string.
+     * @throws Error If $offset is not int or string or key already exist.
      *
      * @return void
      */
     public function add (string|int $key, mixed $value):void {
+
+        !$this->offsetExists($key) ? $this->offsetSet($key, $value) : throw new Error(sprintf('Key %s already exist.', $key));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset does not exist in Collection or is not int or string.
+     */
+    public function get (mixed $key):mixed {
+
+        return $this->offsetGet($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @throws Error If $offset is not int or string.
+     */
+    public function set (mixed $key, mixed $value):void {
 
         $this->offsetSet($key, $value);
 
     }
 
     /**
-     * ### Removes an item at the collection
-     * @since 0.2.0.pre-alpha.M2
+     * {@inheritDoc}
      *
      * @param string|int $key <p>
      * Collection item key.
      * </p>
      *
      * @throws Error If $offset is not int or string.
-     *
-     * @return void
      */
-    public function remove (string|int $key):void {
+    public function isset (mixed $key):bool {
+
+        return $this->offsetExists($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param string|int $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not int or string.
+     */
+    public function unset (mixed $key):void {
 
         $this->offsetUnset($key);
 
@@ -182,7 +225,8 @@ final class Array_Type implements CollectableRewindable {
      */
     public function offsetGet (mixed $offset):mixed {
 
-        return $this->offsetExists($offset) ?: $this->items[$offset];
+        return $this->offsetExists($offset) ? $this->items[$offset] : throw new Error('Key does not exist.');
+
     }
 
     /**

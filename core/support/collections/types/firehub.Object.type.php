@@ -62,8 +62,6 @@ final class Object_Type implements CollectableRewindable {
 
     /**
      * ### Adds an item at the collection
-     *
-     * If added key already exists, it will replace the original value.
      * @since 0.2.0.pre-alpha.M2
      *
      * @param object $key <p>
@@ -79,7 +77,70 @@ final class Object_Type implements CollectableRewindable {
      */
     public function add (object $key, mixed $info):void {
 
-        $this->offsetSet($key, $info);
+        !$this->offsetExists($key) ? $this->offsetSet($key, $info) : throw new Error(sprintf('Key %s already exist.', $key::class));
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset does not exist in Collection or is not object.
+     */
+    public function get (mixed $key):mixed {
+
+        return $this->offsetGet($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @throws Error If $offset is not object.
+     */
+    public function set (mixed $key, mixed $value):void {
+
+        $this->offsetSet($key, $value);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not object.
+     */
+    public function isset (mixed $key):bool {
+
+        return $this->offsetExists($key);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     *
+     * @throws Error If $offset is not object.
+     */
+    public function unset (mixed $key):void {
+
+        $this->offsetUnset($key);
 
     }
 
