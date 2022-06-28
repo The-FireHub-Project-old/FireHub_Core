@@ -97,9 +97,9 @@ method.
 use FireHub\Support\Collections\Collection;
 
 $example_array = [
-'firstname' => 'John',
-'lastname' => 'Doe',
-'age' => 25
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
 ];
 
 // anonymous style collection
@@ -633,15 +633,15 @@ will replace keys from original collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-'firstname' => 'John',
-'lastname' => 'Doe',
-'age' => 25,
-'gender' => 'female'
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25,
+    'gender' => 'female'
 ]);
 
 $merge = $collection->merge(fn ():array => [
-'height' => '190cm',
-'gender' => 'male'
+    'height' => '190cm',
+    'gender' => 'male'
 ]);
 
 // result:
@@ -655,9 +655,9 @@ and any subsequent key should increase by 1.
 
 ```php
 $collection = Collection::index(function ($items):void {
-$items[0] = 0;
-$items[1] = 1;
-$items[2] = 2;
+    $items[0] = 0;
+    $items[1] = 1;
+    $items[2] = 2;
 }, size: 3);
 
 $merge = $collection->merge(function ($items, $counter):void {
