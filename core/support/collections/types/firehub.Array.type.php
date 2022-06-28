@@ -299,8 +299,8 @@ final class Array_Type implements CollectableRewindable {
 
         is_string($offset) || is_int($offset)
             ? empty($offset)
-                ? $this->items[] = $value
-                : $this->items[$offset] = $value
+            ? $this->items[] = $value
+            : $this->items[$offset] = $value
             : throw new Error('Key needs to be int or string.');
 
     }
