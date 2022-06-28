@@ -21,6 +21,7 @@ nav_order: 1
 - - [# JSON Serialize](#-json-serialize)
 - [# Method Listing](#-method-listing)
 - - [# all](#-all)
+- - [# chunk](#-chunk)
 - - [# count](#-count)
 - - [# each](#-each)
 - - [# get](#-get)
@@ -336,6 +337,42 @@ print_r($result);
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 ) 
+```
+
+### # chunk
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Breaks this collection into smaller collections and applies user function on each
+collection items.
+
+First parameter is size of each collection, and the second parameter is callable function
+which will be applied to each item on each collection.
+
+Each $collection parameter inside callable function is instance of new collection.
+Means that after chunking, you can apply any collection method to it.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25,
+    'height' => '190cm',
+    'gender' => 'male'
+]);
+
+$collection->chunk(2, function ($collection):void {
+    $collection->add('info', 'more info');
+    print_r($collection->all());
+});
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [info] => more info )
+// Array ( [age] => 25 [height] => 190cm [info] => more info ) 
+// Array ( [gender] => male [info] => more info ) 
 ```
 
 ### # count

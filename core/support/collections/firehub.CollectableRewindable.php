@@ -120,4 +120,19 @@ interface CollectableRewindable extends Collectable, Rewindable {
      */
     public function map (Closure $callback):self;
 
+    /**
+     * ### Breaks this collection into smaller collections and applies user function on each collection items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $size <p>
+     * Size of each collection.
+     * </p>
+     * @param Closure $callback <p>
+     * Callback of each collection.
+     * </p>
+     *
+     * @return void
+     */
+    public function chunk (int $size, Closure $callback):void;
+
 }

@@ -228,6 +228,46 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function chunk (int $size, Closure $callback):void {
+
+        // create empty collection
+        $collection = new self(function () {return [];});
+        $collection->setSize($size);
+        $count = 0;
+
+        // iterate over current items
+        foreach ($this->items as $value) {
+
+            // add item to collection
+            $collection->items[$count++] = $value;
+
+            if ($count === $size) {
+
+                // pass the batch into the callback
+                $callback($collection);
+
+                // reset the collection
+                $collection = new self(function () {return [];});
+                $collection->setSize($size);
+                $count = 0;
+
+            }
+
+        }
+
+        // see if we have any leftover items to process
+        if ($count > 0) {
+
+            // pass the collection into the callback
+            $callback($collection);
+
+        }
+
+    }
+
+    /**
      * ### Change the size of an array
      * @since 0.2.0.pre-alpha.M2
      *

@@ -269,6 +269,43 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function chunk (int $size, Closure $callback):void {
+
+        // create empty collection
+        $collection = new self(function () {return [];});
+
+        // iterate over current items
+        foreach ($this->items as $key => $value) {
+
+            // add item to collection
+            $collection->items[$key] = $value;
+
+            // see if we have the right amount in the batch
+            if ($collection->count() === $size) {
+
+                // pass the batch into the callback
+                $callback($collection);
+
+                // reset the collection
+                $collection = new self(function () {return [];});
+
+            }
+
+        }
+
+        // see if we have any leftover items to process
+        if ($collection->count()) {
+
+            // pass the collection into the callback
+            $callback($collection);
+
+        }
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
