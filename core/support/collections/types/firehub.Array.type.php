@@ -306,6 +306,21 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function merge (Closure $callback):self {
+
+        foreach($callback() as $key => $value) {
+
+            $this->items[$key] = $value;
+
+        }
+
+        return $this;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

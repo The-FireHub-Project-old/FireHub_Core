@@ -42,7 +42,10 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param int $size <p>
+     * @param Closure $callable <p>
+     * Data from callable source.
+     * </p>
+     * @param int $size [optional] <p>
      * Size argument lets you change the size of an array to the new size of size. If size is less than the current array size,
      * any values after the new size will be discarded. If size is greater than the current array size,
      * the array will be padded with null values.
@@ -264,6 +267,41 @@ final class Index_Type implements CollectableRewindable {
             $callback($collection);
 
         }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     * @param int $size [optional] <p>
+     * Size argument lets you change the size of an array to the new size of size. If size is less than the current array size,
+     * any values after the new size will be discarded. If size is greater than the current array size,
+     * the array will be padded with null values.
+     * </p>
+     */
+    public function merge (Closure $callback, int $size = 1):self {
+
+        $this->items->setSize($this->items->getSize() + $size);
+
+        $callback($this->items, $this->items->getSize() - $size);
+
+        return $this;
+
+    }
+
+    /**
+     * ### Gets the size of the array
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return int The size of the array.
+     */
+    public function getSize ():int {
+
+        // get the size of index array
+        return $this->items->getSize();
 
     }
 

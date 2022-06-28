@@ -25,8 +25,10 @@ nav_order: 1
 - - [# count](#-count)
 - - [# each](#-each)
 - - [# get](#-get)
+- - [# getSize](#-getsize)
 - - [# isset](#-isset)
 - - [# map](#-map)
+- - [# merge](#-merge)
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# serialize](#-serialize)
@@ -535,6 +537,28 @@ echo $collection['age'];
 // 25 
 ```
 
+### # setSize
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> no | yes | no | no
+
+Gets the size of the array.
+
+```php
+$collection = Collection::index(function ($items):void {
+    $items[0] = 0;
+    $items[1] = 1;
+    $items[2] = 2;
+}, size: 3);
+
+echo $collection->getSize();
+
+// result:
+// 3 
+```
+
 ### # isset
 
 > Available on collection:
@@ -593,6 +617,56 @@ print_r($multiplied->all());
 
 // result:
 // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
+```
+
+### # merge
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Merge new collection with original one.
+
+> note: If there are same keys on both collections, keys from new collection
+will replace keys from original collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+'firstname' => 'John',
+'lastname' => 'Doe',
+'age' => 25,
+'gender' => 'female'
+]);
+
+$merge = $collection->merge(fn ():array => [
+'height' => '190cm',
+'gender' => 'male'
+]);
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => male [height] => 190cm ) 
+```
+
+Merging with index collection.
+
+Here second parameter `counter` represents first available key for merging collection,
+and any subsequent key should increase by 1.
+
+```php
+$collection = Collection::index(function ($items):void {
+$items[0] = 0;
+$items[1] = 1;
+$items[2] = 2;
+}, size: 3);
+
+$merge = $collection->merge(function ($items, $counter):void {
+    $items[$counter] = 0;
+    $items[++$counter] = 1;
+}, 2);
+
+// result:
+// Array ( [0] => 0 [1] => 1 [2] => 2 [3] => 0 [4] => 1 ) 
 ```
 
 ### # pop

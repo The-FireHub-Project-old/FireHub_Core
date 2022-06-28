@@ -135,4 +135,19 @@ interface CollectableRewindable extends Collectable, Rewindable {
      */
     public function chunk (int $size, Closure $callback):void;
 
+    /**
+     * ### Merge new collection with original one
+     *
+     * If there are same keys on both collections, keys from new collection
+     * will replace keys from original collection.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function merge (Closure $callback):self;
+
 }

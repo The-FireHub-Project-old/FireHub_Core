@@ -239,6 +239,17 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function merge (Closure $callback):self {
+
+        $callback($this->items);
+
+        return $this;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>
