@@ -22,6 +22,7 @@ use function array_shift;
 use function array_unshift;
 use function array_pop;
 use function array_push;
+use function array_merge_recursive;
 use function is_string;
 use function is_int;
 use function sprintf;
@@ -315,6 +316,27 @@ final class Array_Type implements CollectableRewindable {
             $this->items[$key] = $value;
 
         }
+
+        return $this;
+
+    }
+
+    /**
+     * ### Merge collection recursively
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * Merges the elements of one or more arrays together so that the values of one are appended
+     * to the end of the previous one.
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection
+     */
+    public function mergeRecursive (Closure $callback):self {
+
+        $this->items = array_merge_recursive($this->items, $callback());
 
         return $this;
 

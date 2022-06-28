@@ -29,6 +29,7 @@ nav_order: 1
 - - [# isset](#-isset)
 - - [# map](#-map)
 - - [# merge](#-merge)
+- - [# mergeRecursive](#-mergerecursive)
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# serialize](#-serialize)
@@ -537,7 +538,7 @@ echo $collection['age'];
 // 25 
 ```
 
-### # setSize
+### # getSize
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -667,6 +668,33 @@ $merge = $collection->merge(function ($items, $counter):void {
 
 // result:
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => 0 [4] => 1 ) 
+```
+
+### # mergeRecursive
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Merges the elements of one or more arrays together so that the values of one are appended 
+to the end of the previous one.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25,
+    'gender' => 'female'
+]);
+
+$merge = $collection->mergeRecursive(fn ():array => [
+    'height' => '190cm',
+    'gender' => 'male'
+]);
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => Array ( [0] => female [1] => male ) [height] => 190cm )  
 ```
 
 ### # pop
