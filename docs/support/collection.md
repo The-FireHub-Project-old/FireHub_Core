@@ -33,6 +33,7 @@ nav_order: 1
 - - [# mergeRecursive](#-mergerecursive)
 - - [# pop](#-pop)
 - - [# push](#-push)
+- - [# reject](#-reject)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
 - - [# setSize](#-setsize)
@@ -763,6 +764,34 @@ print_r($collection->all());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
+```
+
+### # reject
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | yes
+
+Remove elements of the Collection.
+
+This method is reverse from filter method.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$filter = $collection->reject(function ($key, $value) {
+    return $key === 'lastname';
+});
+
+print_r($filter->all());
+
+// result:
+// Array ( [firstname] => John [age] => 25 ) 
 ```
 
 ### # serialize

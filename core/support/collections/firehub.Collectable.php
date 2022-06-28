@@ -56,4 +56,18 @@ interface Collectable {
      */
     public function filter (Closure $callback):self;
 
+    /**
+     * ### Remove elements of the Collection
+     *
+     * This method is reverse from filter method.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function reject (Closure $callback):self;
+
 }

@@ -368,6 +368,31 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function reject (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):array {
+
+            $items = [];
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is false
+                $callback($key, $value) ?: $items[$key] = $value;
+
+            }
+
+            // return new items
+            return $items;
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
