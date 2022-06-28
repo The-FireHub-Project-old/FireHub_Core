@@ -64,6 +64,25 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * @inheritDoc
      */
+    public function filter (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                !$callback($key, $value) ?: yield $key => $value;
+
+            }
+
+        });
+
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function serialize ():string {
 
         return serialize($this);

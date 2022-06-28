@@ -24,6 +24,7 @@ nav_order: 1
 - - [# chunk](#-chunk)
 - - [# count](#-count)
 - - [# each](#-each)
+- - [# filter](#-filter)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
 - - [# isset](#-isset)
@@ -499,6 +500,32 @@ $collection->each(function ($value) {
 // I'm value: one
 // I'm value: two
 // I'm value: three
+```
+
+### # filter
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | yes
+
+Filter elements of the Collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$filter = $collection->filter(function ($key, $value) {
+    return $key === 'lastname';
+});
+
+print_r($filter->all());
+
+// result:
+// Array ( [lastname] => Doe ) 
 ```
 
 ### # get

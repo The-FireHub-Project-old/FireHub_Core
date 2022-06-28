@@ -250,6 +250,26 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function filter (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is true
+                !$callback($key, $value) ?: $items[$value] = $key;
+
+            }
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>

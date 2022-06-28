@@ -44,4 +44,16 @@ interface Collectable {
      */
     public function all ():array;
 
+    /**
+     * ### Filter elements of the Collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function filter (Closure $callback):self;
+
 }
