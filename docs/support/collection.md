@@ -24,6 +24,7 @@ nav_order: 1
 - - [# chunk](#-chunk)
 - - [# collapse](#-collapse)
 - - [# combine](#-combine)
+- - [# contains](#-contains)
 - - [# count](#-count)
 - - [# each](#-each)
 - - [# filter](#-filter)
@@ -453,6 +454,82 @@ print_r($combine->all());
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
 ```
 
+### # contains
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Determines whether the collection contains a given item.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3]);
+
+$contains = $collection->contains(function ($key, $value):bool {
+    return $value > 2;
+});
+
+var_dump($contains);
+
+// result:
+// true
+```
+
+Other than calling method with function, you can do it with any kind of data type.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$contains = $collection->contains('Doe');
+
+var_dump($contains);
+
+// result:
+// true
+```
+
+Example how to call method with Index Collection.
+
+```php
+$collection = Collection::index(function ($items):void {
+    $items[0] = 'one';
+    $items[1] = 'two';
+    $items[2] = 'three';
+}, size: 3);
+
+$contains = $collection->contains(function ($value):bool {
+    return $value === 'one';
+});
+
+var_dump($contains);
+
+// result:
+// true
+```
+
+Example how to call method with Object Collection.
+
+```php
+$collection = Collection::object(function ($items):void {
+    $items[new class{}] = 'first class';
+    $items[new class{}] = 'second class';
+    $items[new class{}] = 'third class';
+});
+
+$contains = $collection->contains(function ($object, $info):bool {
+    return $info === 'third class';
+});
+var_dump($contains);
+
+// result:
+// true
+```
+
 ### # count
 
 > Available on collection:
@@ -592,7 +669,7 @@ $collection = Collection::create(fn ():array => [
     'age' => 25
 ]);
 
-$filter = $collection->filter(function ($key, $value) {
+$filter = $collection->filter(function ($key, $value):bool {
     return $key === 'lastname';
 });
 
@@ -600,6 +677,20 @@ print_r($filter->all());
 
 // result:
 // Array ( [lastname] => Doe ) 
+```
+
+Example filtering object in object collection.
+
+```php
+$collection = Collection::object(function ($items):void {
+    $items[new class{}] = 'first class';
+    $items[new class{}] = 'second class';
+    $items[new class{}] = 'third class';
+});
+
+$filter = $collection->filter(function ($object, $info):bool {
+    return $info === 'second class';
+});
 ```
 
 ### # get
@@ -857,7 +948,7 @@ $collection = Collection::create(fn ():array => [
     'age' => 25
 ]);
 
-$filter = $collection->reject(function ($key, $value) {
+$filter = $collection->reject(function ($key, $value):bool {
     return $key === 'lastname';
 });
 
@@ -865,6 +956,20 @@ print_r($filter->all());
 
 // result:
 // Array ( [firstname] => John [age] => 25 ) 
+```
+
+Example rejecting object in object collection.
+
+```php
+$collection = Collection::object(function ($items):void {
+    $items[new class{}] = 'first class';
+    $items[new class{}] = 'second class';
+    $items[new class{}] = 'third class';
+});
+
+$filter = $collection->reject(function ($object, $info):bool {
+    return $info === 'second class';
+});
 ```
 
 ### # serialize

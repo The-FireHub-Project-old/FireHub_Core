@@ -18,8 +18,9 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplObjectStorage, Closure, Traversable, Error;
 
 use function iterator_to_array;
-use function is_object;
 use function sprintf;
+use function is_callable;
+use function is_object;
 use function serialize;
 use function json_encode;
 
@@ -258,10 +259,10 @@ final class Object_Type implements CollectableRewindable {
         return new self(function ($items) use ($callback):void {
 
             // iterate over current items
-            foreach ($this->items as $key => $value) {
+            foreach ($this->items as $object) {
 
                 // add items to array if callback is true
-                !$callback($key, $value) ?: $items[$value] = $key;
+                !$callback($object, $this->items->getInfo()) ?: $items[$object] = $this->items->getInfo();
 
             }
 
@@ -278,14 +279,54 @@ final class Object_Type implements CollectableRewindable {
         return new self(function ($items) use ($callback):void {
 
             // iterate over current items
-            foreach ($this->items as $key => $value) {
+            foreach ($this->items as $object) {
 
                 // add items to array if callback is false
-                $callback($key, $value) ?: $items[$value] = $key;
+                $callback($object, $this->items->getInfo()) ?: $items[$object] = $this->items->getInfo();
 
             }
 
         });
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function contains (mixed $search):bool {
+
+        if (is_callable($search)) { // $search is callable
+
+            // iterate over current items
+            foreach ($this->items as $object) {
+
+                // if callback is true return early true
+                if ($search($object, $this->items->getInfo())) {
+
+                    return true;
+
+                }
+
+            }
+
+        } else { // $search is not callable
+
+            // iterate over current items
+            foreach ($this->items as $object) {
+
+                // if callback is true return early true
+                if ($search === $object) {
+
+                    return true;
+
+                }
+
+            }
+
+        }
+
+        // if no condition was meet, return false
+        return false;
 
     }
 

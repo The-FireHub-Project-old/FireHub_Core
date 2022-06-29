@@ -18,6 +18,7 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function iterator_to_array;
+use function is_callable;
 use function is_int;
 use function sprintf;
 use function serialize;
@@ -343,6 +344,46 @@ final class Index_Type implements CollectableRewindable {
             $items->setSize($counter);
 
         });
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function contains (mixed $search):bool {
+
+        if (is_callable($search)) { // $search is callable
+
+            // iterate over current items
+            foreach ($this->items as $value) {
+
+                // if callback is true return early true
+                if ($search($value)) {
+
+                    return true;
+
+                }
+
+            }
+
+        } else { // $search is not callable
+
+            // iterate over current items
+            foreach ($this->items as $value) {
+
+                // if callback is true return early true
+                if ($search === $value) {
+
+                    return true;
+
+                }
+
+            }
+
+        }
+
+        // if no condition was meet, return false
+        return false;
 
     }
 

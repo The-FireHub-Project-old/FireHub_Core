@@ -18,6 +18,7 @@ use FireHub\Support\Collections\CollectableRewindable;
 use Closure, Traversable, Error;
 
 use function count;
+use function sprintf;
 use function array_shift;
 use function array_unshift;
 use function array_pop;
@@ -29,7 +30,8 @@ use function is_array;
 use function is_string;
 use function is_int;
 use function array_combine;
-use function sprintf;
+use function is_callable;
+use function array_search;
 use function serialize;
 use function json_encode;
 
@@ -438,6 +440,36 @@ final class Array_Type implements CollectableRewindable {
                 : array_combine($items ?? [], is_array($values) ? $values : $values->items);
 
         });
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function contains (mixed $search):bool {
+
+        if (is_callable($search)) { // $search is callable
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // if callback is true return early true
+                if ($search($key, $value)) {
+
+                    return true;
+
+                }
+
+            }
+
+        } else { // $search is not callable
+
+            return (bool)array_search($search, $this->items, true);
+
+        }
+
+        // if no condition was meet, return false
+        return false;
 
     }
 

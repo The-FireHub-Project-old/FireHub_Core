@@ -150,4 +150,16 @@ interface CollectableRewindable extends Collectable, Rewindable {
      */
     public function merge (Closure $callback):self;
 
+    /**
+     * ### Determines whether the collection contains a given item
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $search <p>
+     * Item to search.
+     * </p>
+     *
+     * @return bool True if item exists, false otherwise.
+     */
+    public function contains (mixed $search):bool;
+
 }
