@@ -22,6 +22,7 @@ nav_order: 1
 - [# Method Listing](#-method-listing)
 - - [# all](#-all)
 - - [# chunk](#-chunk)
+- - [# collapse](#-collapse)
 - - [# count](#-count)
 - - [# each](#-each)
 - - [# filter](#-filter)
@@ -378,6 +379,28 @@ $collection->chunk(2, function ($collection):void {
 // Array ( [firstname] => John [lastname] => Doe [info] => more info )
 // Array ( [age] => 25 [height] => 190cm [info] => more info ) 
 // Array ( [gender] => male [info] => more info ) 
+```
+
+### # collapse
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Collapses a collection of arrays into a single, flat collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]);
+
+$collapse = $collection->collapse();
+
+// result:
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 [8] => 9 )
 ```
 
 ### # count

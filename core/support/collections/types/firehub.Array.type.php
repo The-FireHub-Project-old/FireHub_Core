@@ -23,6 +23,8 @@ use function array_unshift;
 use function array_pop;
 use function array_push;
 use function array_merge_recursive;
+use function array_merge;
+use function array_filter;
 use function is_string;
 use function is_int;
 use function sprintf;
@@ -381,6 +383,24 @@ final class Array_Type implements CollectableRewindable {
 
             // return new items
             return $items ?? [];
+
+        });
+
+    }
+
+    /**
+     * ### Collapses a collection of arrays into a single, flat collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New filtered collection.
+     */
+    public function collapse ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            // collapse with all items that are array themselves
+            return array_merge(...array_filter($this->items, 'is_array'));
 
         });
 
