@@ -76,7 +76,7 @@ final class Array_Type implements CollectableRewindable {
      * ### Adds an item at the collection
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param string|int $key <p>
+     * @param int|string $key <p>
      * Collection item key.
      * </p>
      * @param mixed $value <p>
@@ -87,7 +87,7 @@ final class Array_Type implements CollectableRewindable {
      *
      * @return void
      */
-    public function add (string|int $key, mixed $value):void {
+    public function add (int|string $key, mixed $value):void {
 
         !$this->offsetExists($key) ? $this->offsetSet($key, $value) : throw new Error(sprintf('Key %s already exist.', $key));
 
@@ -96,7 +96,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param string|int $key <p>
+     * @param int|string $key <p>
      * Collection item key.
      * </p>
      *
@@ -111,7 +111,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param string|int $key <p>
+     * @param int|string $key <p>
      * Collection item key.
      * </p>
      * @param mixed $value <p>
@@ -129,7 +129,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param string|int $key <p>
+     * @param int|string $key <p>
      * Collection item key.
      * </p>
      *
@@ -144,7 +144,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @param string|int $key <p>
+     * @param int|string $key <p>
      * Collection item key.
      * </p>
      *
