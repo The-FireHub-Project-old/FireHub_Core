@@ -77,6 +77,8 @@ final class Lazy_Type implements CollectableNonRewindable {
 
             }
 
+            return [];
+
         });
 
     }
@@ -96,6 +98,8 @@ final class Lazy_Type implements CollectableNonRewindable {
                 $callback($key, $value) ?: yield $key => $value;
 
             }
+
+            return [];
 
         });
 

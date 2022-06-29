@@ -252,8 +252,6 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($callback):array {
 
-            $items = [];
-
             // iterate over current items
             foreach ($this->items as $key => $value) {
 
@@ -263,7 +261,7 @@ final class Array_Type implements CollectableRewindable {
             }
 
             // return new items
-            return $items;
+            return $items ?? [];
 
         });
 
@@ -350,8 +348,6 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($callback):array {
 
-            $items = [];
-
             // iterate over current items
             foreach ($this->items as $key => $value) {
 
@@ -361,7 +357,7 @@ final class Array_Type implements CollectableRewindable {
             }
 
             // return new items
-            return $items;
+            return $items ?? [];
 
         });
 
@@ -375,8 +371,6 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($callback):array {
 
-            $items = [];
-
             // iterate over current items
             foreach ($this->items as $key => $value) {
 
@@ -386,7 +380,7 @@ final class Array_Type implements CollectableRewindable {
             }
 
             // return new items
-            return $items;
+            return $items ?? [];
 
         });
 
