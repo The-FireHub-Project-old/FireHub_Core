@@ -23,6 +23,7 @@ nav_order: 1
 - - [# all](#-all)
 - - [# chunk](#-chunk)
 - - [# collapse](#-collapse)
+- - [# combine](#-combine)
 - - [# count](#-count)
 - - [# each](#-each)
 - - [# filter](#-filter)
@@ -399,8 +400,57 @@ $collection = Collection::create(fn ():array => [
 
 $collapse = $collection->collapse();
 
+print_r($collection->all());
+
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 [8] => 9 )
+```
+
+### # combine
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Creates a collection by using one collection or array for keys and another for its values.  
+Parameter `$values` can be new collection instance or normal PHP array.
+
+> note: Original collection values, the one that was used as keys for combined collection,
+> need to be either strings or integers.
+
+> note: Current and combined collection need to have the same number of items.
+
+```php
+$keys = Collection::create(fn ():array => [
+    'firstname', 'lastname', 'age'
+]);
+
+$values = Collection::create(fn ():array => [
+    'John', 'Doe', 25
+]);
+
+$combine = $collection->combine($values);
+
+print_r($combine->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
+```
+
+You can also use normal array to combine.
+
+```php
+$keys = Collection::create(fn ():array => [
+    'firstname', 'lastname', 'age'
+]);
+
+$combine = $collection->combine(['John', 'Doe', 25]);
+
+print_r($combine->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
 ```
 
 ### # count

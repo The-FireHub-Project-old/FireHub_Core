@@ -25,8 +25,10 @@ use function array_push;
 use function array_merge_recursive;
 use function array_merge;
 use function array_filter;
+use function is_array;
 use function is_string;
 use function is_int;
+use function array_combine;
 use function sprintf;
 use function serialize;
 use function json_encode;
@@ -401,6 +403,39 @@ final class Array_Type implements CollectableRewindable {
 
             // collapse with all items that are array themselves
             return array_merge(...array_filter($this->items, 'is_array'));
+
+        });
+
+    }
+
+    /**
+     * ### Creates a collection by using one collection or array for keys and another for its values
+     *
+     * Note that illegal values for keys from existing collection will be converted to string.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> $values <p>
+     * Collection or array of values to be used for combining.
+     * </p>
+     *
+     * @throws Error If current and combined collection don't have the same number of items.
+     *
+     * @return self New combined collection.
+     */
+    public function combine (self|array $values):self {
+
+        // return new collection
+        return new self(function () use ($values):array {
+
+            foreach ($this->items as $value) {
+
+                $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string or integer');
+
+            }
+
+            return $this->count() !== count($values) // check if array size is the same on both collections
+                ? throw new Error('Current and combined collection need to have the same number of items.')
+                : array_combine($items ?? [], is_array($values) ? $values : $values->items);
 
         });
 
