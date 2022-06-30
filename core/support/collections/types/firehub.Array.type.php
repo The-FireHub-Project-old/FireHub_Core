@@ -33,8 +33,9 @@ use function array_combine;
 use function is_callable;
 use function array_search;
 use function array_diff_key;
-use function array_diff_assoc;
 use function array_diff;
+use function array_diff_assoc;
+use function array_unique;
 use function serialize;
 use function json_encode;
 
@@ -561,6 +562,44 @@ final class Array_Type implements CollectableRewindable {
             }
 
             return array_diff_assoc($this->items, ...$excludes ?? []);
+
+        });
+
+    }
+
+    /**
+     * ### Removes unique values from an array
+     *
+     * Method validates only values, and ignores keys.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New collection with duplicated values.
+     */
+    public function duplicates ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            return array_diff_assoc($this->items, array_unique($this->items));
+
+        });
+
+    }
+
+    /**
+     * ### Removes duplicate values from an array
+     *
+     * Method validates only values, and ignores keys.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New collection with unique values.
+     */
+    public function unique ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            return array_unique($this->items);
 
         });
 

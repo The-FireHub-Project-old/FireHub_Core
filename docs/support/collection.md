@@ -29,6 +29,7 @@ nav_order: 1
 - - [# differenceAssoc](#-differenceassoc)
 - - [# differenceKeys](#-differencekeys)
 - - [# differenceValues](#-differencevalues)
+- - [# duplicated](#-duplicated)
 - - [# each](#-each)
 - - [# filter](#-filter)
 - - [# get](#-get)
@@ -45,6 +46,7 @@ nav_order: 1
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
 - - [# toJSON](#-tojson)
+- - [# unique](#-unique)
 - - [# unset](#-unset)
 - - [# unshift](#-unshift)
 - - [# walk](#-walk)
@@ -743,6 +745,32 @@ print_r($diff->all());
 ```
 ***
 
+### # duplicated
+```php
+> duplicated():self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Removes unique values from an array.
+
+> note: method validates only values, and ignores keys.
+
+```php
+$collection = Collection::create(fn ():array => [2,3,3,3,5,6,6]);
+
+$duplicates = $collection->duplicates();
+
+print_r($duplicates);
+
+// result:
+// Array ( [2] => 3 [3] => 3 [6] => 6 ) 
+```
+***
+
 ### # each
 
 ```php
@@ -1381,6 +1409,32 @@ echo $json_serialize;
 
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
+```
+***
+
+### # unique
+```php
+> unique():self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Removes duplicate values from an array.
+
+> note: method validates only values, and ignores keys.
+
+```php
+$collection = Collection::create(fn ():array => [2,3,3,3,5,6,6]);
+
+$unique = $collection->unique();
+
+print_r($unique);
+
+// result:
+// Array ( [0] => 2 [1] => 3 [4] => 5 [5] => 6 )  
 ```
 ***
 
