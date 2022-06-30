@@ -695,6 +695,39 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Separate elements that pass a given truth test from those that do not
+     *
+     * New partitioned collection will contain two child collections inside.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function partition (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):array {
+
+            $passed = new self(function () {return [];});
+            $failed = new self(function () {return [];});
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                $callback($key, $value) ? $passed->items[$key] = $value : $failed->items[$key] = $value;
+
+            }
+
+            return [$passed, $failed];
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

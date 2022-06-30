@@ -42,6 +42,7 @@ nav_order: 1
 - - [# mergeRecursive](#-mergerecursive)
 - - [# only](#-only)
 - - [# pad](#-pad)
+- - [# partition](#-partition)
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# reject](#-reject)
@@ -1278,6 +1279,37 @@ print_r($pad->all());
 
 // result:
 // Array ( [0] => one [1] => two [2] => three [3] => padded value [4] => padded value ) 
+```
+***
+
+### # partition
+
+```php
+> partition(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Separate elements that pass a given truth test from those that do not.
+
+> note: new partitioned collection will contain two child collections inside.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+[$passed, $failed] = $collection->partition(function ($key, $value):bool {
+    return $key > 3;
+});
+
+print_r($passed->all());
+print_r($failed->all());
+
+// result:
+// Array ( [4] => 5 ) 
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
 ```
 ***
 
