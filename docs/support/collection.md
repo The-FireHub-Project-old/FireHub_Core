@@ -31,6 +31,7 @@ nav_order: 1
 - - [# differenceValues](#-differencevalues)
 - - [# duplicated](#-duplicated)
 - - [# each](#-each)
+- - [# every](#-every)
 - - [# filter](#-filter)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
@@ -863,6 +864,55 @@ $collection->each(function ($value) {
 // I'm value: one
 // I'm value: two
 // I'm value: three
+```
+***
+
+### # every
+
+```php
+> every(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Perform function on each item from collection.
+
+> note: if you are working with large collections, it is better internal loop like `foreach`,
+> `while`, `for` etc. because of the performance benefits.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$every = $collection->every(function ($key, $value):bool {
+    return is_int($value);
+});
+
+echo $every;
+
+// result:
+// true
+```
+
+Example in object collection.
+
+```php
+$collection = Collection::object(function ($items):void {
+    $items[new class{}] = 'first class';
+    $items[new class{}] = 'second class';
+    $items[new class{}] = 'third class';
+});
+
+$every = $collection->every(function ($object, $info):bool {
+    return is_object($object);
+});
+
+echo $every;
+
+// result:
+// true
 ```
 ***
 

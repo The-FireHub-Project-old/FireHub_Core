@@ -606,6 +606,27 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function every (Closure $callback):bool {
+
+        // iterate over current items
+        foreach ($this->items as $key => $value) {
+
+            // if callback is true return early true
+            if (!$callback($key, $value)) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

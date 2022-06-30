@@ -331,6 +331,27 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function every (Closure $callback):bool {
+
+        // iterate over current items
+        foreach ($this->items as $object) {
+
+            // if callback is true return early true
+            if (!$callback($object, $this->items->getInfo())) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>

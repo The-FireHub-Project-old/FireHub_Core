@@ -388,6 +388,27 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function every (Closure $callback):bool {
+
+        // iterate over current items
+        foreach ($this->items as $key => $value) {
+
+            // if callback is true return early trues
+            if (!$callback($key, $value)) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *

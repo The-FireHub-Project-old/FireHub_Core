@@ -162,4 +162,16 @@ interface CollectableRewindable extends Collectable, Rewindable {
      */
     public function contains (mixed $search):bool;
 
+    /**
+     * ### Verify that all elements of a collection pass a given truth test
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return bool True all elements of a collection passed the test, false otherwise.
+     */
+    public function every (Closure $callback):bool;
+
 }
