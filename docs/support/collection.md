@@ -1301,15 +1301,15 @@ Separate elements that pass a given truth test from those that do not.
 $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 [$passed, $failed] = $collection->partition(function ($key, $value):bool {
-    return $key > 3;
+    return $value > 3;
 });
 
 print_r($passed->all());
 print_r($failed->all());
 
 // result:
-// Array ( [4] => 5 ) 
-// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
+// Array ( [3] => 4 [4] => 5 )
+// Array ( [0] => 1 [1] => 2 [2] => 3 ) 
 ```
 ***
 
