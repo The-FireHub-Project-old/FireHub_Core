@@ -1242,9 +1242,9 @@ $collection = Collection::create(fn ():array => [
     'age' => 25
 ]);
 
-$except = $collection->only('age', 'lastname');
+$only = $collection->only('age', 'lastname');
 
-print_r($except->all());
+print_r($only->all());
 
 // result:
 // Array ( [lastname] => Doe [age] => 25 ) Array ( [firstname] => John ) 
