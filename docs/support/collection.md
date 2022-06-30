@@ -64,14 +64,20 @@ All collections currently in FireHub are considered to be _lazy_, means that fun
 static method will not fill collection entities until you actually need them or ask for them.
 Our collections in examples bellow won't produce any results until we ask for collection items or try to do
 some other function on top of our initial function.
+***
 
 ## # Basic Collection
 
 Basic Collection type is collection that has main focus of performance and doesn't concern
 itself about memory consumption
 This collection can hold any type of data.
+***
 
 ### # Creating Basic Collection
+
+```php
+> Collection::create(callable $source):\FireHub\Support\Collections\Types\Array_Type
+```
 
 Basic Collection, or sometime called Array Collection can be instantiated when calling `create` static
 method.
@@ -92,6 +98,7 @@ $collection = Collection::create(function ():array {
     return $list ?? [];
 });
 ```
+***
 
 ### # Passing array to Collection
 
@@ -119,6 +126,7 @@ $collection = Collection::create(function () use ($example_array):array {
 // arrow function style collection
 $collection = Collection::create(fn ():array => $example_array);
 ```
+***
 
 ## # Index Collection
 
@@ -126,8 +134,13 @@ Index Collection allows only integers as keys, but it is faster and uses less me
 basic collection.  
 This collection type must be resized manually and allows only integers within the range
 as indexes.
+***
 
 ### # Creating Index Collection
+
+```php
+> Collection::index(callable $source):\FireHub\Support\Collections\Types\Index_Type
+```
 
 Index Collection can be instantiated when calling `index` static method.  
 `index` method accepts two arguments, anonymous or arrow function and size argument.
@@ -153,6 +166,7 @@ $collection = Collection::index(function ($items):void {
     }
 }, size: 1_000_000);
 ```
+***
 
 ## # Lazy Collection
 
@@ -161,8 +175,13 @@ and allow you to work with very large datasets while keeping memory usage low.
 
 While it will keep memory usage low at any array size, it will take a performance hit while
 doing so.
+***
 
 ### # Creating Lazy Collection
+
+```php
+> Collection::lazy(callable $source):\FireHub\Support\Collections\Types\Lazy_Type
+```
 
 Lazy Collection can be instantiated when calling `lazy` static method.  
 `index` method accepts two arguments, anonymous or arrow function and size argument.
@@ -181,12 +200,19 @@ $collection = Collection::lazy(function ():Generator {
     }
 });
 ```
+***
 
 ## # Object Collection
 
-While any collection can store objects, Object collection is specialized to store large amount of them.
+While any collection can store objects, Object collection is specialized to store large amount
+of them.
+***
 
 ### # Creating Object Collection
+
+```php
+> Collection::object(callable $source):\FireHub\Support\Collections\Types\Object_Type
+```
 
 Object Collection can be instantiated when calling `object` static method.  
 `index` method accepts two arguments, anonymous or arrow function and size argument.
@@ -208,6 +234,7 @@ $collection = Collection::object(function ($items):void {
     }
 });
 ```
+***
 
 ## # Iterating Over Collection
 
@@ -233,6 +260,7 @@ foreach ($collection as $key => $value) {
 // result:
 // key = firstname, value = John; key = lastname, value = Doe; key = age, value = 25; 
 ```
+***
 
 ## # Serialize and Unserialize Collection
 
@@ -271,6 +299,7 @@ foreach ($unserialize_collection as $key => $value) {
 // result:
 // key = 0, value = 1; key = 1, value = 2; key = 2, value = 3; 
 ```
+***
 
 ### # JSON Serialize
 
@@ -292,6 +321,7 @@ echo $json_serialize;
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
 ```
+***
 
 ## # Method Listing
 
@@ -299,8 +329,14 @@ Bellow is a list of all available methods you can use on the collections.
 
 Not all collection types will have available all these methods, so we will list all collection that
 can use each method in separate table.
+***
 
 ### # add
+
+```php
+> add(int|string $key, mixed $value):void // basic
+> add(object $key, mixed $info):void // object
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -325,8 +361,13 @@ print_r($collection->all());
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
 ```
+***
 
 ### # all
+
+```php
+> all():array
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -349,8 +390,13 @@ print_r($result);
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 ) 
 ```
+***
 
 ### # chunk
+
+```php
+> chunk(int $size, callable $callback):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -385,8 +431,13 @@ $collection->chunk(2, function ($collection):void {
 // Array ( [age] => 25 [height] => 190cm [info] => more info ) 
 // Array ( [gender] => male [info] => more info ) 
 ```
+***
 
 ### # collapse
+
+```php
+> collapse():self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -409,8 +460,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 [8] => 9 )
 ```
+***
 
 ### # combine
+
+```php
+> combine(self|array $values):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -456,8 +512,13 @@ print_r($combine->all());
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
 ```
+***
 
 ### # contains
+
+```php
+> contains(mixed $search):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -532,8 +593,13 @@ var_dump($contains);
 // result:
 // true
 ```
+***
 
 ### # count
+
+```php
+> count():int
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -565,8 +631,13 @@ echo count($collection);
 // result:
 // 3
 ```
+***
 
 ### # differenceAssoc
+
+```php
+> differenceAssoc(self|array ...$compares):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -594,8 +665,13 @@ print_r($diff->all());
 // result:
 Array ( [b] => brown [c] => blue [0] => red ) 
 ```
+***
 
 ### # differenceKeys
+
+```php
+> differenceKeys(self|array ...$compares):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -631,8 +707,13 @@ print_r($diff->all());
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
 ```
+***
 
 ### # differenceValues
+
+```php
+> differenceValues(self|array ...$compares):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -660,8 +741,13 @@ print_r($diff->all());
 // result:
 // Array ( [0] => 1 [1] => 2 ) 
 ```
+***
 
 ### # each
+
+```php
+> each(callable $callback):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -750,8 +836,13 @@ $collection->each(function ($value) {
 // I'm value: two
 // I'm value: three
 ```
+***
 
 ### # filter
+
+```php
+> filter(callable $callback):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -790,8 +881,15 @@ $filter = $collection->filter(function ($object, $info):bool {
     return $info === 'second class';
 });
 ```
+***
 
 ### # get
+
+```php
+> get(int|string $key):self // basic
+> get(int $key):self // index
+> get(object $key):self // object
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -827,8 +925,13 @@ echo $collection['age'];
 // result:
 // 25 
 ```
+***
 
 ### # getSize
+
+```php
+> getSize():int
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -849,8 +952,15 @@ echo $collection->getSize();
 // result:
 // 3 
 ```
+***
 
 ### # isset
+
+```php
+> isset(int|string $key):bool // basic
+> isset(int $key):bool // index
+> isset(object $key):bool // object
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -886,8 +996,13 @@ echo isset($collection['age']);
 // result:
 // true 
 ```
+***
 
 ### # map
+
+```php
+> map(callable $callback):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -909,8 +1024,13 @@ print_r($multiplied->all());
 // result:
 // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
 ```
+***
 
 ### # merge
+
+```php
+> merge(callable $callback):this
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -959,8 +1079,13 @@ $merge = $collection->merge(function ($items, $counter):void {
 // result:
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => 0 [4] => 1 ) 
 ```
+***
 
 ### # mergeRecursive
+
+```php
+> mergeRecursive(callable $callback):this
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -986,8 +1111,13 @@ $merge = $collection->mergeRecursive(fn ():array => [
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => Array ( [0] => female [1] => male ) [height] => 190cm )  
 ```
+***
 
 ### # pop
+
+```php
+> pop():void
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1006,9 +1136,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
 ```
-
+***
 
 ### # push
+
+```php
+> push(mixed ...$values):void
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1027,8 +1161,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
 ```
+***
 
 ### # reject
+
+```php
+> reject(callable $callback):self
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1069,8 +1208,13 @@ $filter = $collection->reject(function ($object, $info):bool {
     return $info === 'second class';
 });
 ```
+***
 
 ### # serialize
+
+```php
+> serialize():string
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1093,8 +1237,15 @@ echo $serialize;
 // result:
 // O:44:"FireHub\Support\Collections\Types\Array_Type":3:{s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:3:"age";i:25;}
 ```
+***
 
 ### # set
+
+```php
+> set(int|string $key, mixed $value):void // basic
+> set(int $key, mixed $value):void // index
+> set(object $key, mixed $value):void // object
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1136,8 +1287,13 @@ print_r($collection->all());
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
 ```
+***
 
 ### # setSize
+
+```php
+> setSize(int $size):bool
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1172,8 +1328,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => [4] => [5] => [6] => [7] => [8] => [9] => ) 
 ```
+***
 
 ### # shift
+
+```php
+> shift():void
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1192,8 +1353,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 2 [1] => 3 [2] => 4 [3] => 5 ) 
 ```
+***
 
 ### # toJSON
+
+```php
+> toJSON():string|false
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1216,8 +1382,15 @@ echo $json_serialize;
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
 ```
+***
 
 ### # unset
+
+```php
+> unset(int|string $key):void // basic
+> unset(int $key):void // index
+> unset(object $key):void // object
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1257,8 +1430,13 @@ print_r($collection->all());
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
 ```
+***
 
 ### # unshift
+
+```php
+> unshift(mixed ...$values):void
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1277,8 +1455,13 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 6 [1] => 7 [2] => 8 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 ) 
 ```
+***
 
 ### # walk
+
+```php
+> walk(callable $callback):this
+```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
@@ -1300,3 +1483,4 @@ print_r($collection->all());
 // result:
 // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
 ```
+***
