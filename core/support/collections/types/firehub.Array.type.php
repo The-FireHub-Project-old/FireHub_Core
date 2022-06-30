@@ -666,6 +666,35 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Pad array to the specified length with a value
+     *
+     * You will get a copy of the input padded to size specified by pad_size with value pad_value.
+     * If pad_size is positive then the array is padded on the right, if it's negative then on the left.
+     * If the absolute value of pad_size is less than or equal to the length of the input then no padding takes place.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $size <p>
+     * New size of the array.
+     * </p>
+     *
+     * @param mixed $value <p>
+     * Value to pad if input is less than pad_size.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function pad (int $size, mixed $value):self {
+
+        // return new collection
+        return new self(function () use ($size, $value):array {
+
+            return array_pad($this->items, $size, $value);
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
