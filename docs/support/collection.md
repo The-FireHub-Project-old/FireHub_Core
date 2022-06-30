@@ -26,6 +26,9 @@ nav_order: 1
 - - [# combine](#-combine)
 - - [# contains](#-contains)
 - - [# count](#-count)
+- - [# differenceAssoc](#-differenceassoc)
+- - [# differenceKeys](#-differencekeys)
+- - [# differenceValues](#-differencevalues)
 - - [# each](#-each)
 - - [# filter](#-filter)
 - - [# get](#-get)
@@ -561,6 +564,101 @@ echo count($collection);
 
 // result:
 // 3
+```
+
+### # differenceAssoc
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Computes the difference of collections or arrays with additional index check.
+
+Compare collections or arrays against collection or array and returns the difference.  
+Unlike [differenceValues](#-differencevalues), the keys are also used in the comparison.
+
+> note: method accepts boot collections and PHP arrays.
+
+> note: you can put as many as you like collections or arrays in this method.
+
+```php
+$collection = Collection::create(fn ():array => ["a" => "green", "b" => "brown", "c" => "blue", "red"]);
+
+$new_collection = Collection::create(fn ():array => ["a" => "green", "yellow", "red"]);
+
+$diff = $collection->differenceAssoc($new_collection);
+
+print_r($diff->all());
+
+// result:
+Array ( [b] => brown [c] => blue [0] => red ) 
+```
+
+### # differenceKeys
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Computes the difference of collections or arrays using keys for comparison.
+
+Compares the keys from array against the keys from collection or array and returns the difference.  
+This method is like [differenceValues](#-differencevalues), except the comparison is done on the keys instead of the values.
+
+> note: method accepts boot collections and PHP arrays.
+
+> note: you can put as many as you like collections or arrays in this method.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$new_collection = Collection::create(fn ():array => [
+    'myfirstname' => 'John',
+    'mylastname' => 'Doe',
+    'age' => 25
+]);
+
+$diff = $collection->differenceKeys($new_collection);
+
+print_r($diff->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe ) 
+```
+
+### # differenceValues
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Computes the difference of collections or arrays.
+
+Compares existing collection against one or more other collection or array
+and returns the values in the new collection that are not present in any of the other collections.
+
+> note: method accepts boot collections and PHP arrays.
+
+> note: you can put as many as you like collections or arrays in this method.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$new_collection = Collection::create(fn ():array => [3,4,5,6,7]);
+
+$diff = $collection->differenceValues($new_collection);
+
+print_r($diff->all());
+
+// result:
+// Array ( [0] => 1 [1] => 2 ) 
 ```
 
 ### # each

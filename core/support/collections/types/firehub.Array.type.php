@@ -32,6 +32,9 @@ use function is_int;
 use function array_combine;
 use function is_callable;
 use function array_search;
+use function array_diff_key;
+use function array_diff_assoc;
+use function array_diff;
 use function serialize;
 use function json_encode;
 
@@ -470,6 +473,96 @@ final class Array_Type implements CollectableRewindable {
 
         // if no condition was meet, return false
         return false;
+
+    }
+
+    /**
+     * ### Computes the difference of collections or arrays using keys for comparison
+     *
+     * Compares the keys from array against the keys from collection or array and returns the difference.
+     * This method is like differenceValues() except the comparison is done on the keys instead of the values.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
+     * Collection or array to compare against.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function differenceKeys (self|array ...$compares):self {
+
+        // return new collection
+        return new self(function () use ($compares):array {
+
+            foreach ($compares as $compare) {
+
+                $excludes[] = $compare instanceof self ? $compare->items : $compare;
+
+            }
+
+            return array_diff_key($this->items, ...$excludes ?? []);
+
+        });
+
+    }
+
+    /**
+     * ### Computes the difference of collections or arrays
+     *
+     * Compares existing collection against one or more other collection or array
+     * and returns the values in the new collection that are not present in any of the other collections.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
+     * Collection or array to compare against.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function differenceValues (self|array ...$compares):self {
+
+        // return new collection
+        return new self(function () use ($compares):array {
+
+            foreach ($compares as $compare) {
+
+                $excludes[] = $compare instanceof self ? $compare->items : $compare;
+
+            }
+
+            return array_diff($this->items, ...$excludes ?? []);
+
+        });
+
+    }
+
+    /**
+     * ### Computes the difference of collections or arrays with additional index check
+     *
+     * Compare collections or arrays against collection or array and returns the difference.
+     * Unlike differenceValues(), the keys are also used in the comparison.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
+     * Collection or array to compare against.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function differenceAssoc (self|array ...$compares):self {
+
+        // return new collection
+        return new self(function () use ($compares):array {
+
+            foreach ($compares as $compare) {
+
+                $excludes[] = $compare instanceof self ? $compare->items : $compare;
+
+            }
+
+            return array_diff_assoc($this->items, ...$excludes ?? []);
+
+        });
 
     }
 
