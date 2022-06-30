@@ -32,6 +32,7 @@ nav_order: 1
 - - [# duplicated](#-duplicated)
 - - [# each](#-each)
 - - [# every](#-every)
+- - [# except](#-except)
 - - [# filter](#-filter)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
@@ -39,6 +40,7 @@ nav_order: 1
 - - [# map](#-map)
 - - [# merge](#-merge)
 - - [# mergeRecursive](#-mergerecursive)
+- - [# only](#-only)
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# reject](#-reject)
@@ -916,6 +918,35 @@ echo $every;
 ```
 ***
 
+### # except
+
+```php
+> except(mixed ...$keys):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | yes
+
+Get all items in the collection except for those with the specified keys.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$except = $collection->except('age', 'lastname');
+
+print_r($except->all());
+
+// result:
+// Array ( [firstname] => John ) 
+```
+***
+
 ### # filter
 
 ```php
@@ -1188,6 +1219,35 @@ $merge = $collection->mergeRecursive(fn ():array => [
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => Array ( [0] => female [1] => male ) [height] => 190cm )  
+```
+***
+
+### # only
+
+```php
+> only(mixed ...$keys):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | yes
+
+Get all items in the collection with the specified keys.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$except = $collection->only('age', 'lastname');
+
+print_r($except->all());
+
+// result:
+// Array ( [lastname] => Doe [age] => 25 ) Array ( [firstname] => John ) 
 ```
 ***
 

@@ -18,6 +18,7 @@ use FireHub\Support\Collections\CollectableRewindable;
 use SplObjectStorage, Closure, Traversable, Error;
 
 use function iterator_to_array;
+use function in_array;
 use function sprintf;
 use function is_callable;
 use function is_object;
@@ -348,6 +349,52 @@ final class Object_Type implements CollectableRewindable {
         }
 
         return true;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function only (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function ($items) use ($keys):void {
+
+            foreach ($this->items as $object) {
+
+                // add items to array if callback is false
+                !in_array($object, $keys) ?: $items[$object] = $this->items->getInfo();
+
+            }
+
+        });
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param object ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function except (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function ($items) use ($keys):void {
+
+            foreach ($this->items as $object) {
+
+                // add items to array if callback is false
+                in_array($object, $keys) ?: $items[$object] = $this->items->getInfo();
+
+            }
+
+        });
 
     }
 

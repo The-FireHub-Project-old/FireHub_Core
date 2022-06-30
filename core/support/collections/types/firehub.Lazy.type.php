@@ -19,6 +19,7 @@ use Generator, Closure, Traversable, Error;
 
 use function iterator_to_array;
 use function iterator_count;
+use function in_array;
 use function serialize;
 use function json_encode;
 use function sprintf;
@@ -96,6 +97,58 @@ final class Lazy_Type implements CollectableNonRewindable {
 
                 // add items to array if callback is false
                 $callback($key, $value) ?: yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function only (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function () use ($keys):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is false
+                !in_array($key, $keys) ?: yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function except (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function () use ($keys):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is false
+                in_array($key, $keys) ?: yield $key => $value;
 
             }
 

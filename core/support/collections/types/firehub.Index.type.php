@@ -19,6 +19,7 @@ use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function iterator_to_array;
 use function is_callable;
+use function in_array;
 use function is_int;
 use function sprintf;
 use function serialize;
@@ -405,6 +406,68 @@ final class Index_Type implements CollectableRewindable {
         }
 
         return true;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function only (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function ($items) use ($keys):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            $counter = 0;
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is false
+                !in_array($key, $keys) ?: $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function except (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function ($items) use ($keys):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            $counter = 0;
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is false
+                in_array($key, $keys) ?: $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
 
     }
 

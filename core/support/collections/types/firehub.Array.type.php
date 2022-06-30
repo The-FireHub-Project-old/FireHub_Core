@@ -36,6 +36,8 @@ use function array_diff_key;
 use function array_diff;
 use function array_diff_assoc;
 use function array_unique;
+use function array_intersect_key;
+use function array_flip;
 use function serialize;
 use function json_encode;
 
@@ -623,6 +625,43 @@ final class Array_Type implements CollectableRewindable {
         }
 
         return true;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function only (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function () use ($keys):array {
+
+            return array_intersect_key($this->items, array_flip($keys));
+
+        });
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int|string ...$keys <p>
+     * List of keys to return.
+     * </p>
+     */
+    public function except (mixed ...$keys):self {
+
+        // return new collection
+        return new self(function () use ($keys):array {
+
+            //return array_diff_key($this->items, array_flip($keys));
+            return ($this->differenceKeys(array_flip($keys)))->all();
+
+        });
 
     }
 

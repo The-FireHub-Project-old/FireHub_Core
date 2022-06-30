@@ -70,4 +70,28 @@ interface Collectable {
      */
     public function reject (Closure $callback):self;
 
+    /**
+     * ### Get all items in the collection with the specified keys
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed ...$keys <p>
+     * List of keys to return.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function only (mixed ...$keys):self;
+
+    /**
+     * ### Get all items in the collection except for those with the specified keys
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed ...$keys <p>
+     * List of keys to remove.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function except (mixed ...$keys):self;
+
 }
