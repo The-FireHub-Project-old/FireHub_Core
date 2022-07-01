@@ -48,6 +48,7 @@ nav_order: 1
 - - [# push](#-push)
 - - [# pluck](#-pluck)
 - - [# random](#-random)
+- - [# replace](#-replace)
 - - [# reject](#-reject)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
@@ -1494,6 +1495,39 @@ $random = $collection->random(2);
 
 // result (random value):
 // Array ( [0] => Cypher [1] => Morpheus ) 
+```
+***
+
+### # replace
+
+```php
+> replace(int|string $key, mixed $value):void // basic
+> replace(int $key, mixed $value):void // index
+> replace(object $key, mixed $value):void // object
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Replaces an item at the collection.
+
+If key doesn't exist, it will throw error.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->replace('firstname', 'Jane');
+
+print_r($collection->all());
+
+// result:
+// Array ( [firstname] => Jane [lastname] => Doe [age] => 25 ) 
 ```
 ***
 

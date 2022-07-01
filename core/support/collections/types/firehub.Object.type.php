@@ -84,6 +84,25 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Replaces an item at the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param object $key <p>
+     * Collection item key.
+     * </p>
+     * @param mixed $value <p>
+     * Collection item value.
+     * </p>
+     *
+     * @throws Error If $offset is not int or string or does not exist.
+     */
+    public function replace (object $key, mixed $value):void {
+
+        $this->offsetExists($key) ? $this->offsetSet($key, $value) : throw new Error(sprintf('Key %s does not exist.', $key::class));
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $key <p>
