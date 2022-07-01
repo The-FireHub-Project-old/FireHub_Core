@@ -38,6 +38,7 @@ use function array_diff_assoc;
 use function array_unique;
 use function array_intersect_key;
 use function array_flip;
+use function array_column;
 use function serialize;
 use function json_encode;
 
@@ -751,6 +752,56 @@ final class Array_Type implements CollectableRewindable {
             return array_column($this->items, $column, $key);
 
         });
+
+    }
+
+    /**
+     * ### Pick one or more random values out of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $number [optional] <p>
+     * Specifies how many entries you want to pick.
+     * </p>
+     * @param bool $preserve_keys [optional]
+     *
+     * @throws Error If asked number of items is greater than total number of items in collection.
+     *
+     * @return mixed If you are picking only one entry, returns the key for a random entry. Otherwise, it returns an array of keys for the random entries.
+     */
+    public function random (int $number = 1, bool $preserve_keys = false):mixed {
+
+        // check if asked number of items is greater than total number of items in collection
+        $number > $this->count() ?? throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
+
+        // get the random keys from collection items
+        $keys = array_rand($this->items, $number);
+
+        // if keys are not array
+        if (!is_array($keys)) {
+
+            return $this->items[$keys];
+
+        }
+
+        if ($preserve_keys) { // if we turn on preserved key
+
+            foreach ($keys as $key) {
+
+                $items[$key] = $this->items[$key];
+
+            }
+
+        } else { // if we turn off preserved key
+
+            foreach ($keys as $key) {
+
+                $items[] = $this->items[$key];
+
+            }
+
+        }
+
+        return $items ?? [];
 
     }
 

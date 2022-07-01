@@ -46,6 +46,7 @@ nav_order: 1
 - - [# pop](#-pop)
 - - [# push](#-push)
 - - [# pluck](#-pluck)
+- - [# random](#-random)
 - - [# reject](#-reject)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
@@ -1406,7 +1407,6 @@ print_r($plucked->all());
 // result:
 // Array ( [100] => John [101] => Jane ) 
 ```
-***
 
 If duplicated key exist, the last matching element will be inserted.
 
@@ -1422,6 +1422,58 @@ print_r($plucked->all());
 
 // result:
 // Array ( [Doe] => Jane ) 
+```
+***
+
+### # random
+
+```php
+> random(int $number = 1, bool $preserve_keys = false):mixed
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Pick one or more random values out of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    "Neo", "Morpheus", "Trinity", "Cypher", "Tank"
+]);
+
+$random = $collection->random();
+
+// result (random value):
+// Morpheus
+```
+
+You can get more than one item from collection with first parameter.  
+Then your result will be an array.
+
+```php
+$collection = Collection::create(fn ():array => [
+    "Neo", "Morpheus", "Trinity", "Cypher", "Tank"
+]);
+
+$random = $collection->random(3);
+
+// result (random value):
+// Array ( [0] => Morpheus [1] => Trinity [2] => Tank )
+```
+
+You can also preserve your original keys with second parameter.
+
+```php
+$collection = Collection::create(fn ():array => [
+    "Neo", "Morpheus", "Trinity", "Cypher", "Tank"
+]);
+
+$random = $collection->random(3, true);
+
+// result (random value):
+// Array ( [2] => Trinity [3] => Cypher [4] => Tank ) 
 ```
 ***
 
