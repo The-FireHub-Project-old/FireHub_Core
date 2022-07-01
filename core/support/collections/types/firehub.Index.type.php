@@ -20,8 +20,10 @@ use SplFixedArray, Closure, Traversable, Throwable, Error;
 use function iterator_to_array;
 use function is_callable;
 use function in_array;
-use function is_int;
 use function sprintf;
+use function range;
+use function shuffle;
+use function is_int;
 use function serialize;
 use function json_encode;
 use function count;
@@ -468,6 +470,55 @@ final class Index_Type implements CollectableRewindable {
             $items->setSize($counter);
 
         });
+
+    }
+
+    /**
+     * ### Pick one or more random values out of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $number [optional] <p>
+     * Specifies how many entries you want to pick.
+     * </p>
+     *
+     * @throws Error If asked number of items is greater than total number of items in collection.
+     *
+     * @return mixed If you are picking only one entry, returns the key for a random entry. Otherwise, it returns an array of keys for the random entries.
+     */
+    public function random (int $number = 1):mixed {
+
+        // check if asked number of items is greater than total number of items in collection
+        !($number > $this->count()) ?: throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
+
+        // set the valid range for possible keys
+        $range = range(0, $this->count() - 1);
+
+        // shuffle an array
+        shuffle($range);
+
+        // if asked number is 1, we will not return array of values
+        if ($number === 1) {
+
+            // return first random key, this is why we shuffled our key range
+            return $this->items[$range[0]];
+
+        }
+
+        // fill keys based on our range and number of asked items
+        for ($counter = 0; $counter < $number; $counter++) {
+
+            $keys[$counter] = $range[$counter];
+
+        }
+
+        // iterate over keys and fill new array with matching records from out existing collection
+        foreach ($keys ?? [] as $key) {
+
+            $items[] = $this->items[$key];
+
+        }
+
+        return $items ?? [];
 
     }
 

@@ -39,6 +39,7 @@ use function array_unique;
 use function array_intersect_key;
 use function array_flip;
 use function array_column;
+use function array_rand;
 use function serialize;
 use function json_encode;
 
@@ -762,7 +763,9 @@ final class Array_Type implements CollectableRewindable {
      * @param int $number [optional] <p>
      * Specifies how many entries you want to pick.
      * </p>
-     * @param bool $preserve_keys [optional]
+     * @param bool $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original collection or not.
+     * </p>
      *
      * @throws Error If asked number of items is greater than total number of items in collection.
      *

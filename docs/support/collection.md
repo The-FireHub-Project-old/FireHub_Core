@@ -1428,13 +1428,14 @@ print_r($plucked->all());
 ### # random
 
 ```php
-> random(int $number = 1, bool $preserve_keys = false):mixed
+> random(int $number = 1, bool $preserve_keys = false):mixed // basic
+> random(int $number = 1):mixed // index
 ```
 
 > Available on collection:
 >> Basic | Index | Lazy | Object
 >> :---:|:---:|:---:|:---:
->> yes | no | no | no
+>> yes | yes | no | no
 
 Pick one or more random values out of the collection.
 
@@ -1474,6 +1475,24 @@ $random = $collection->random(3, true);
 
 // result (random value):
 // Array ( [2] => Trinity [3] => Cypher [4] => Tank ) 
+```
+
+Our next example is index collection.  
+Here there is no `$preserve_keys` parameter, because index collection is not key - value storage.
+
+```php
+$collection = Collection::index(function ($items):void {
+    $items[0] = "Neo";
+    $items[1] = "Morpheus";
+    $items[2] = "Trinity";
+    $items[3] = "Cypher";
+    $items[4] = "Tank";
+}, size: 5);
+
+$random = $collection->random(2);
+
+// result (random value):
+// Array ( [0] => Cypher [1] => Morpheus ) 
 ```
 ***
 
