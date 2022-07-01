@@ -45,6 +45,7 @@ nav_order: 1
 - - [# partition](#-partition)
 - - [# pop](#-pop)
 - - [# push](#-push)
+- - [# pluck](#-pluck)
 - - [# reject](#-reject)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
@@ -1360,6 +1361,50 @@ print_r($collection->all());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
+```
+***
+
+### # pluck
+
+```php
+> pluck(int|string $column, int|string|null $key = null):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Get the values from given key.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['user_id' => 100, 'firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['user_id' => 101, 'firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 22]
+]);
+
+$plucked = $collection->pluck('firstname');
+
+print_r($plucked->all());
+
+// result:
+// Array ( [0] => John [1] => Jane ) 
+```
+
+Second parameter can be used as key index for plunked array.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['user_id' => 100, 'firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['user_id' => 101, 'firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 22]
+]);
+
+$plucked = $collection->pluck('firstname', 'user_id');
+
+print_r($plucked->all());
+
+// result:
+// Array ( [100] => John [101] => Jane ) 
 ```
 ***
 

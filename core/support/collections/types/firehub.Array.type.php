@@ -728,6 +728,33 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Get the values from given key
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $column <p>
+     * The column of values to return. This value may be the integer key of the column you wish to retrieve,
+     * or it may be the string key name for an associative array.
+     * It may also be NULL to return complete arrays (useful together with index_key to reindex the array).
+     * </p>
+     * @param int|string|null $key [optional] <p>
+     * The column to use as the index/keys for the returned array.
+     * This value may be the integer key of the column, or it may be the string key name.
+     * </p>
+     *
+     * @return self New plucked collection.
+     */
+    public function pluck (int|string $column, int|string|null $key = null):self {
+
+        // return new collection
+        return new self(function () use ($column, $key):array {
+
+            return array_column($this->items, $column, $key);
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
