@@ -852,6 +852,27 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @param mixed $value <p>
+     * The searched value.
+     * If needle is a string, the comparison is done in a case-sensitive manner.
+     * </p>
+     * @param int|string|false $second_dimension_column [optional] <p>
+     * Allows you to search second dimension on multidimensional array.
+     * </p>
+     *
+     * @return int|string|false The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
+     */
+    public function search (mixed $value, int|string|false $second_dimension_column = false):int|string|false {
+
+        return $second_dimension_column
+            ? array_search($value, array_combine(array_keys($this->items), array_column($this->items, $second_dimension_column)), true)
+            : array_search($value, $this->items, true);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @throws Error If $offset is not int or string.
      */
     public function offsetExists (mixed $offset):bool {

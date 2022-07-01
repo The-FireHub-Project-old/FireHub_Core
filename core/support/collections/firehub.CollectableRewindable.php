@@ -174,4 +174,17 @@ interface CollectableRewindable extends Collectable, Rewindable {
      */
     public function every (Closure $callback):bool;
 
+    /**
+     * ### Searches the collection for a given value and returns the first corresponding key if successful
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * The searched value.
+     * If needle is a string, the comparison is done in a case-sensitive manner.
+     * </p>
+     *
+     * @return mixed The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
+     */
+    public function search (mixed $value):mixed;
+
 }

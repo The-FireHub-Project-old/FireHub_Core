@@ -542,6 +542,27 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @return int|false The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
+     */
+    public function search (mixed $value):int|false {
+
+        foreach ($this->items as $key => $val) {
+
+            if ($val === $value) {
+
+                return $key;
+
+            }
+
+        }
+        return false;
+
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *

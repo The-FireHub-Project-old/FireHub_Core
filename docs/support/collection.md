@@ -51,6 +51,7 @@ nav_order: 1
 - - [# replace](#-replace)
 - - [# reject](#-reject)
 - - [# reverse](#-reverse)
+- - [# search](#-search)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
 - - [# setSize](#-setsize)
@@ -1605,6 +1606,52 @@ print_r($reversed->all());
 
 // result:
 // Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
+```
+***
+
+### # search
+
+```php
+> search(mixed $value, int|string|false $second_dimension_column = false):int|string|false // basic
+> search(mixed $value):int|false // index
+> search(object $value):mixed // object
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Searches the collection for a given value and returns the first corresponding key if successful.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+$search = $collection->search('John');
+
+echo $search;
+
+// result:
+// firstname
+```
+
+On basic collection you can search second dimension on multidimensional array.
+
+```php
+$collection = Collection::create(fn ():array => [
+    100 => ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    101 => ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 22]
+]);
+
+$search = $collection->search('John', 'firstname');
+
+echo $search;
+
+// result:
+// 100
 ```
 ***
 

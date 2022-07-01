@@ -420,6 +420,32 @@ final class Object_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @param object $value <p>
+     * The searched value.
+     * If needle is a string, the comparison is done in a case-sensitive manner.
+     * </p>
+     *
+     * @return mixed The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
+     */
+    public function search (mixed $value):mixed {
+
+        foreach ($this->items as $object) {
+
+            if ($value === $object) {
+
+                return $this->items->getInfo();
+
+            }
+
+        }
+        return false;
+
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @param object $offset <p>
      * An offset to check for.
      * </p>
