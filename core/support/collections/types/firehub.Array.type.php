@@ -876,7 +876,7 @@ final class Array_Type implements CollectableRewindable {
      * ### Reverse the order of collection items
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param false $preserve_keys [optional] <p>
+     * @param bool $preserve_keys [optional] <p>
      * Whether you want to preserve keys from original collection or not.
      * </p>
      *
