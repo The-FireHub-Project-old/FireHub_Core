@@ -41,6 +41,7 @@ use function array_flip;
 use function array_column;
 use function array_rand;
 use function array_reverse;
+use function array_keys;
 use function serialize;
 use function json_encode;
 
