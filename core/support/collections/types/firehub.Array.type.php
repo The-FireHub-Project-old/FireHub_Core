@@ -771,7 +771,7 @@ final class Array_Type implements CollectableRewindable {
     public function random (int $number = 1, bool $preserve_keys = false):mixed {
 
         // check if asked number of items is greater than total number of items in collection
-        $number > $this->count() ?? throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
+        !($number > $this->count()) ?: throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
 
         // get the random keys from collection items
         $keys = array_rand($this->items, $number);
