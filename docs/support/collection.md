@@ -20,6 +20,7 @@ nav_order: 1
 - [# Serialize and Unserialize Collection](#-serialize-and-unserialize-collection)
 - - [# JSON Serialize](#-json-serialize)
 - [# Method Listing](#-method-listing)
+- - [# add](#-add)
 - - [# all](#-all)
 - - [# chunk](#-chunk)
 - - [# collapse](#-collapse)
