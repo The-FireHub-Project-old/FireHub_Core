@@ -42,6 +42,7 @@ use function array_column;
 use function array_rand;
 use function array_reverse;
 use function array_keys;
+use function shuffle;
 use function serialize;
 use function json_encode;
 
@@ -868,6 +869,46 @@ final class Array_Type implements CollectableRewindable {
         return $second_dimension_column
             ? array_search($value, array_combine(array_keys($this->items), array_column($this->items, $second_dimension_column)), true)
             : array_search($value, $this->items, true);
+
+    }
+
+    /**
+     * ### Reverse the order of collection items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param false $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original collection or not.
+     * </p>
+     *
+     * @return bool True if shuffled was successful, false otherwise.
+     */
+    public function shuffle (bool $preserve_keys = false):bool {
+
+        // if we want to preserve keys
+        if ($preserve_keys) {
+
+            // get of keys from collection
+            $keys = array_keys($this->items);
+
+            // shuffle out keys
+            shuffle($keys);
+
+            // add values from original items to shuffled one
+            foreach($keys as $key) {
+
+                $items[$key] = $this->items[$key];
+
+            }
+
+            // attach shuffled items back to collection
+            $this->items = $items ?? [];
+
+            return true;
+
+        }
+
+        // shuffle items without preserving keys
+        return shuffle($this->items);
 
     }
 

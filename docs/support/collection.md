@@ -1655,6 +1655,52 @@ echo $search;
 ```
 ***
 
+### # shuffle
+
+```php
+> shuffle(bool $preserve_keys = false):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Searches the collection for a given value and returns the first corresponding key if successful.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->shuffle();
+
+print_r($collection->all());
+
+// result (random value):
+// Array ( [0] => 25 [1] => John [2] => Doe ) 
+```
+
+If you want to preserve keys from original collection set shuffle parameter to true.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->shuffle(true);
+
+print_r($collection->all());
+
+// result (random value):
+// Array ( [age] => 25 [firstname] => John [lastname] => Doe )  
+```
+***
+
 ### # serialize
 
 ```php
