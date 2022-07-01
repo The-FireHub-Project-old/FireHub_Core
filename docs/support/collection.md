@@ -52,6 +52,7 @@ nav_order: 1
 - - [# reject](#-reject)
 - - [# reverse](#-reverse)
 - - [# search](#-search)
+- - [# shuffle](#-shuffle)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
 - - [# setSize](#-setsize)
