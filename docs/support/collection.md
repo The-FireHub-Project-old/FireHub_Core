@@ -50,6 +50,7 @@ nav_order: 1
 - - [# random](#-random)
 - - [# replace](#-replace)
 - - [# reject](#-reject)
+- - [# reverse](#-reverse)
 - - [# serialize](#-serialize)
 - - [# set](#-set)
 - - [# setSize](#-setsize)
@@ -1575,6 +1576,35 @@ $collection = Collection::object(function ($items):void {
 $filter = $collection->reject(function ($object, $info):bool {
     return $info === 'second class';
 });
+```
+***
+
+### # reverse
+
+```php
+> reverse(bool $preserve_keys = false):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Reverse the order of collection items.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$reversed = $collection->reverse();
+
+print_r($reversed->all());
+
+// result:
+// Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
 ```
 ***
 

@@ -40,6 +40,7 @@ use function array_intersect_key;
 use function array_flip;
 use function array_column;
 use function array_rand;
+use function array_reverse;
 use function serialize;
 use function json_encode;
 
@@ -824,6 +825,27 @@ final class Array_Type implements CollectableRewindable {
         }
 
         return $items ?? [];
+
+    }
+
+    /**
+     * ### Reverse the order of collection items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param bool $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original collection or not.
+     * </p>
+     *
+     * @return self New reversed collection.
+     */
+    public function reverse (bool $preserve_keys = false):self {
+
+        // return new collection
+        return new self(function () use ($preserve_keys):array {
+
+            return array_reverse($this->items, $preserve_keys);
+
+        });
 
     }
 
