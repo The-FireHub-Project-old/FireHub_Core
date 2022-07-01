@@ -1408,6 +1408,23 @@ print_r($plucked->all());
 ```
 ***
 
+If duplicated key exist, the last matching element will be inserted.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['user_id' => 100, 'firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['user_id' => 101, 'firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 22]
+]);
+
+$plucked = $collection->pluck('firstname', 'lastname');
+
+print_r($plucked->all());
+
+// result:
+// Array ( [Doe] => Jane ) 
+```
+***
+
 ### # reject
 
 ```php
