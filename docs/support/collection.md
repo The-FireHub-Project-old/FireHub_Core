@@ -57,6 +57,7 @@ nav_order: 1
 - - [# set](#-set)
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
+- - [# slice](#-slice)
 - - [# toJSON](#-tojson)
 - - [# unique](#-unique)
 - - [# unset](#-unset)
@@ -1844,6 +1845,94 @@ print_r($collection->all());
 
 // result:
 // Array ( [0] => 2 [1] => 3 [2] => 4 [3] => 5 ) 
+```
+***
+
+### # slice
+
+```php
+> slice(int $offset, int $length = null, bool $preserve_keys = false):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Extract a slice of the collection.
+
+> note: If offset is non-negative, the sequence will start at that offset in the collection.
+
+> note: If offset is negative, the sequence will start that far from the end of the collection
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$slice = $collection->slice(1);
+
+print_r($slice->all());
+
+// result:
+// Array ( [lastname] => Doe [age] => 25 ) 
+```
+
+Second optional parameter is length of the sliced collection.
+
+> note: If length is given and is positive, then the sequence will have that many elements in it.
+
+> note: If length is given and is negative then the sequence will stop that many elements from the end of the collection.
+
+> note: If it is omitted, then the sequence will have everything from offset up until the end of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$slice = $collection->slice(1, 1);
+
+print_r($slice->all());
+
+// result:
+// Array ( [lastname] => Doe ) 
+```
+
+Third optional parameter is preserve_keys.
+
+> note: `slice` method will reorder and reset the integer array indices by default.
+> This behaviour can be changed by setting preserve_keys to true.
+> String keys are always preserved, regardless of this parameter.
+> 
+$ar = array('a'=>'apple', 'b'=>'banana', '42'=>'pear', 'd'=>'orange');
+print_r(array_slice($ar, 0, 3));
+print_r(array_slice($ar, 0, 3, true));
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25,
+     10 => 'Male'
+]);
+
+$slice = $collection->slice(0, 4);
+
+print_r($slice->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [0] => Male ) 
+
+$slice = $collection->slice(0, 4, true);
+
+print_r($slice->all());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [10] => Male ) 
 ```
 ***
 

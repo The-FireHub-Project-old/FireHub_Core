@@ -43,6 +43,7 @@ use function array_rand;
 use function array_reverse;
 use function array_keys;
 use function shuffle;
+use function array_slice;
 use function serialize;
 use function json_encode;
 
@@ -909,6 +910,37 @@ final class Array_Type implements CollectableRewindable {
 
         // shuffle items without preserving keys
         return shuffle($this->items);
+
+    }
+
+    /**
+     * ### Extract a slice of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $offset <p>
+     * If offset is non-negative, the sequence will start at that offset in the collection.
+     * If offset is negative, the sequence will start that far from the end of the collection.
+     * </p>
+     * @param int|null $length [optional] <p>
+     * If length is given and is positive, then the sequence will have that many elements in it.
+     * If length is given and is negative then the sequence will stop that many elements from the end of the collection.
+     * If it is omitted, then the sequence will have everything from offset up until the end of the collection.
+     * </p>
+     * @param bool $preserve_keys [optional] <p>
+     * Note that array_slice will reorder and reset the collection indices by default.
+     * You can change this behaviour by setting preserve_keys to true
+     * </p>
+     *
+     * @return self New sliced collection.
+     */
+    public function slice (int $offset, int $length = null, bool $preserve_keys = false):self {
+
+        // return new collection
+        return new self(function () use ($offset, $length, $preserve_keys):array {
+
+            return array_slice($this->items, $offset, $length, $preserve_keys);
+
+        });
 
     }
 
