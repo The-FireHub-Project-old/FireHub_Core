@@ -23,12 +23,14 @@ namespace FireHub\Support\Enums;
 enum Order:string {
 
     /**
-     * Arranging items in ascending order
+     * ### Arranging items in ascending order
+     * @since 0.2.0.pre-alpha.M2
      */
     case ASC = 'ASC';
 
     /**
-     * Arranging items in descending order
+     * ### Arranging items in descending order
+     * @since 0.2.0.pre-alpha.M2
      */
     case DESC = 'DESC';
 
