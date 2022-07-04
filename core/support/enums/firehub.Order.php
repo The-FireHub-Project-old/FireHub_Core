@@ -15,12 +15,12 @@
 namespace FireHub\Support\Enums;
 
 /**
- * ### Sorting enum
+ * ### Ordering enum
  * @since 0.2.0.pre-alpha.M2
  *
  * @package FireHub\Support\Enums
  */
-enum Sort:string {
+enum Order:string {
 
     /**
      * Arranging items in ascending order
