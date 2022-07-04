@@ -173,13 +173,82 @@ final class Lazy_Type implements CollectableNonRewindable {
         // return new collection
         return new self(function () use ($offset):Generator {
 
-
             // iterate over current items
             $counter = 0;
             foreach ($this->items as $key => $value) {
 
                 if ($counter++ < $offset) continue;
 
+                yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * ### Remove number of elements from the beginning of the collection until the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skipUntil (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (!$callback($key, $value)) {
+
+                    continue;
+
+                }
+
+                // add items to array
+                yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * ### Remove number of elements from the beginning of the collection while the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skipWhile (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if ($callback($key, $value)) {
+
+                    continue;
+
+                }
+
+                // add items to array
                 yield $key => $value;
 
             }

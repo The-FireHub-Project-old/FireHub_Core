@@ -58,6 +58,8 @@ nav_order: 1
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
 - - [# skip](#-skip)
+- - [# skipUntil](#-skipuntil)
+- - [# skipWhile](#-skipwhile)
 - - [# slice](#-slice)
 - - [# splice](#-splice)
 - - [# toJSON](#-tojson)
@@ -1876,6 +1878,60 @@ print_r($skip->all());
 
 // result:
 // Array ( [lastname] => Doe [age] => 25 ) 
+```
+***
+
+### # skipUntil
+
+```php
+> skipUntil(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Remove number of elements from the beginning of the collection until the given callback returns true.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$skipUntil = $collection->skipUntil(function ($key, $value):bool {
+    return $value > 3;
+});
+
+print_r($skipUntil->all());
+
+// result:
+// Array ( [3] => 4 [4] => 5 ) 
+```
+***
+
+### # skipWhile
+
+```php
+> skipWhile(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Remove number of elements from the beginning of the collection while the given callback returns true.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$skipWhile = $collection->skipWhile(function ($key, $value):bool {
+    return $value <= 3;
+});
+
+print_r($skipWhile->all());
+
+// result:
+// Array ( [3] => 4 [4] => 5 ) 
 ```
 ***
 

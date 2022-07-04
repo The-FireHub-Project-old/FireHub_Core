@@ -597,6 +597,100 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Remove number of elements from the beginning of the collection until the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skipUntil (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (empty($new_items) && !$callback($key, $value)) {
+
+                    continue;
+
+                }
+
+                // add items to array
+                $new_items[] = $value;
+
+            }
+
+            $counter = 0;
+            foreach ($new_items ?? [] as $value) {
+
+                // add items to array
+                $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
+     * ### Remove number of elements from the beginning of the collection while the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skipWhile (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (empty($new_items) && $callback($key, $value)) {
+
+                    continue;
+
+                }
+
+                // add items to array
+                $new_items[] = $value;
+
+            }
+
+            $counter = 0;
+            foreach ($new_items ?? [] as $value) {
+
+                // add items to array
+                $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *
