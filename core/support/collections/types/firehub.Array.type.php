@@ -933,7 +933,7 @@ final class Array_Type implements CollectableRewindable {
      *
      * @return self New sliced collection.
      */
-    public function slice (int $offset, int $length = null, bool $preserve_keys = false):self {
+    public function slice (int $offset, ?int $length = null, bool $preserve_keys = false):self {
 
         // return new collection
         return new self(function () use ($offset, $length, $preserve_keys):array {
