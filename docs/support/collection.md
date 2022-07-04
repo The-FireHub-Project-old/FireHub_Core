@@ -58,6 +58,7 @@ nav_order: 1
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
 - - [# slice](#-slice)
+- - [# splice](#-splice)
 - - [# toJSON](#-tojson)
 - - [# unique](#-unique)
 - - [# unset](#-unset)
@@ -1863,7 +1864,7 @@ Extract a slice of the collection.
 
 > note: If offset is non-negative, the sequence will start at that offset in the collection.
 
-> note: If offset is negative, the sequence will start that far from the end of the collection
+> note: If offset is negative, the sequence will start that far from the end of the collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
@@ -1908,7 +1909,7 @@ Third optional parameter is preserve_keys.
 > note: `slice` method will reorder and reset the integer array indices by default.
 > This behaviour can be changed by setting preserve_keys to true.
 > String keys are always preserved, regardless of this parameter.
-> 
+
 $ar = array('a'=>'apple', 'b'=>'banana', '42'=>'pear', 'd'=>'orange');
 print_r(array_slice($ar, 0, 3));
 print_r(array_slice($ar, 0, 3, true));
@@ -1933,6 +1934,85 @@ print_r($slice->all());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [10] => Male ) 
+```
+***
+
+### # splice
+
+```php
+> splice(int $offset, ?int $length = null, array $replacement = []):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Remove a portion of the array and replace it with something else.
+
+> note: If offset is positive then the start of removed portion is at that offset from the beginning of the input collection.
+
+> note: If offset is negative then it starts that far from the end of the input collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$splice = $collection->splice(1);
+
+print_r($splice->all());
+
+// result:
+// Array ( [firstname] => John ) 
+```
+
+Second optional parameter is length, means number of elements that will be removed.
+
+> note: If length is omitted, removes everything from offset to the end of the collection.
+
+> note: If length is specified and is positive, then that many elements will be removed.
+
+> note: If length is specified and is negative then the end of the removed portion will be that many elements from the end of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$splice = $collection->splice(1, 1);
+
+print_r($splice->all());
+
+// result:
+// Array ( [firstname] => John [age] => 25 ) 
+```
+
+Third optional parameter is replacement array or collection.
+
+> note: If replacement array is specified, then the removed elements are replaced with elements from this collection.
+
+> note: If offset and length are such that nothing is removed, then the elements from the replacement array or collection are inserted in the place specified by the offset.
+
+> note: Keys in replacement array are not preserved.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$splice = $collection->splice(1, 2, ['male', 'tall']);
+
+print_r($splice->all());
+
+// result:
+// Array ( [firstname] => John [0] => male [1] => tall ) 
 ```
 ***
 

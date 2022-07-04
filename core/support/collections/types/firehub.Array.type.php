@@ -44,6 +44,7 @@ use function array_reverse;
 use function array_keys;
 use function shuffle;
 use function array_slice;
+use function array_splice;
 use function serialize;
 use function json_encode;
 
@@ -921,7 +922,7 @@ final class Array_Type implements CollectableRewindable {
      * If offset is non-negative, the sequence will start at that offset in the collection.
      * If offset is negative, the sequence will start that far from the end of the collection.
      * </p>
-     * @param int|null $length [optional] <p>
+     * @param null|int $length [optional] <p>
      * If length is given and is positive, then the sequence will have that many elements in it.
      * If length is given and is negative then the sequence will stop that many elements from the end of the collection.
      * If it is omitted, then the sequence will have everything from offset up until the end of the collection.
@@ -943,6 +944,41 @@ final class Array_Type implements CollectableRewindable {
         });
 
     }
+
+    /**
+     * ### Remove a portion of the array and replace it with something else
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $offset <p>
+     * If offset is positive then the start of removed portion is at that offset from the beginning of the input collection.
+     * If offset is negative then it starts that far from the end of the input collection.
+     * </p>
+     * @param null|int $length [optional] <p>
+     * If length is omitted, removes everything from offset to the end of the collection.
+     * If length is specified and is positive, then that many elements will be removed.
+     * If length is specified and is negative then the end of the removed portion will be that many elements from the end of the collection.
+     * </p>
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> $replacement [optional] <p>
+     * If replacement array is specified, then the removed elements are replaced with elements from this collection.
+     * If offset and length are such that nothing is removed, then the elements from the replacement array or collection are inserted in the place specified by the offset.
+     * Keys in replacement array are not preserved.
+     * </p>
+     *
+     * @return self New spliced collection.
+     */
+    public function splice (int $offset, ?int $length = null, self|array $replacement = []):self {
+
+        // return new collection
+        return new self(function () use ($offset, $length, $replacement):array {
+
+            array_splice($this->items, $offset, $length, $replacement instanceof self ? $replacement->items : $replacement);
+
+            return $this->items;
+
+        });
+
+    }
+
 
     /**
      * {@inheritDoc}
