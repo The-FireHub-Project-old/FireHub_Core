@@ -159,6 +159,38 @@ final class Lazy_Type implements CollectableNonRewindable {
     }
 
     /**
+     * ### Remove number of elements from the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $offset <p>
+     * Number of items to skip.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skip (int $offset):self {
+
+        // return new collection
+        return new self(function () use ($offset):Generator {
+
+
+            // iterate over current items
+            $counter = 0;
+            foreach ($this->items as $key => $value) {
+
+                if ($counter++ < $offset) continue;
+
+                yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function serialize ():string {

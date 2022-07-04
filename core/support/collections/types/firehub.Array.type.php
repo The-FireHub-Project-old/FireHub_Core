@@ -979,6 +979,21 @@ final class Array_Type implements CollectableRewindable {
 
     }
 
+    /**
+     * ### Remove number of elements from the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $offset <p>
+     * Number of items to skip.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skip (int $offset):self {
+
+        return $this->slice($offset);
+
+    }
 
     /**
      * {@inheritDoc}

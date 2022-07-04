@@ -563,6 +563,40 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Remove number of elements from the beginning of the collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $offset <p>
+     * Number of items to skip.
+     * </p>
+     *
+     * @return self New skipped collection.
+     */
+    public function skip (int $offset):self {
+
+        // return new collection
+        return new self(function ($items) use ($offset):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            $counter = 0;
+            foreach ($this->items as $key => $value) {
+
+                // add items to array
+                if ($key >= $offset) {$items[$counter++] = $value;}
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *

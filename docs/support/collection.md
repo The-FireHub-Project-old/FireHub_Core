@@ -57,6 +57,7 @@ nav_order: 1
 - - [# set](#-set)
 - - [# setSize](#-setsize)
 - - [# shift](#-shift)
+- - [# skip](#-skip)
 - - [# slice](#-slice)
 - - [# splice](#-splice)
 - - [# toJSON](#-tojson)
@@ -1846,6 +1847,35 @@ print_r($collection->all());
 
 // result:
 // Array ( [0] => 2 [1] => 3 [2] => 4 [3] => 5 ) 
+```
+***
+
+### # skip
+
+```php
+> skip(int $offset):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Remove number of elements from the beginning of the collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$skip = $collection->skip(1);
+
+print_r($skip->all());
+
+// result:
+// Array ( [lastname] => Doe [age] => 25 ) 
 ```
 ***
 
