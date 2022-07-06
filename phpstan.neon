@@ -4,4 +4,3 @@ parameters:
         - core/
 
     ignoreErrors:
-    		- '/Parameter #1 \$array of function array_multisort expects array, array<int\|string, mixed>\|int given./'

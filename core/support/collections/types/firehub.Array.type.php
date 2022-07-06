@@ -1197,9 +1197,11 @@ final class Array_Type implements CollectableRewindable {
         // attach items at the end of multi-sort
         $multi_sort[] = &$this->items;
 
-        return array_multisort(
-            ...$multi_sort
-        );
+        /**
+         * In this case we are using spread operator, and PHPStan thinks it is first parameter and complains that int might be used as first parameter.
+         * @phpstan-ignore-next-line
+         */
+        return array_multisort(...$multi_sort);
 
     }
 
