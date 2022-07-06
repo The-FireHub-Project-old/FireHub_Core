@@ -61,6 +61,11 @@ nav_order: 1
 - - [# skipUntil](#-skipuntil)
 - - [# skipWhile](#-skipwhile)
 - - [# slice](#-slice)
+- - [# sort](#-sort)
+- - [# sortBy+](#-sortby)
+- - [# sortByKey](#-sortbykey)
+- - [# sortByMany](#-sortbymany)
+- - [# sortKeyBy](#-sortkeyby)
 - - [# splice](#-splice)
 - - [# toJSON](#-tojson)
 - - [# unique](#-unique)
@@ -2020,6 +2025,317 @@ print_r($slice->all());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [10] => Male ) 
+```
+***
+
+### # sort
+
+```php
+> sort(\FireHub\Support\Enums\Order $order = Order::ASC, bool $preserve_keys = false, \FireHub\Support\Collections\Enums\Sort $sort = Sort::SORT_REGULAR):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Sorts collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sort();
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => 25 [1] => Doe [2] => John ) 
+```
+
+First parameter is order type.  
+You can choose from ascending or descending order.  
+It defaults to ascending order - `Order::ASC`.
+
+```php
+use FireHub\Support\Enums\Order;
+
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sort(Order::DESC);
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => John [1] => Doe [2] => 25 ) 
+```
+
+With second parameter you can choose whether you want to preserve original collection keys.  
+It defaults to false.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sort(preserve_keys: true);
+
+print_r($collection->all());
+
+// result:
+// Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
+```
+
+Third parameter is sorting type.
+
+> SORT_REGULAR - _Compare items normally._  
+> SORT_NUMERIC - _Compare items numerically._  
+> SORT_STRING - _Compare items as strings._  
+> SORT_LOCALE_STRING - _Compare items as strings, based on the current locale. It uses the locale, which can be changed using setlocale()._  
+> SORT_NATURAL - _Compare items as strings using "natural ordering" like natsort()._  
+> SORT_STRING_FLAG_CASE - _Sort strings case-insensitively._  
+> SORT_NATURAL_FLAG_CASE - _Sort natural case-insensitively._
+
+```php
+use FireHub\Support\Collections\Enums\SortFlag;
+
+$collection = Collection::create(fn ():array => ["JohnDoe1", "johndoe2", "JohnDoe3", "johndoe21"]);
+
+$collection->sort();
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => JohnDoe1 [1] => JohnDoe3 [2] => johndoe2 [3] => johndoe21 )  
+
+$collection->sort(SortFlag::SORT_NATURAL_FLAG_CASE);
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => JohnDoe1 [1] => johndoe2 [2] => JohnDoe3 [3] => johndoe21 ) 
+
+$collection->sort(SortFlag::SORT_STRING_FLAG_CASE);
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => JohnDoe1 [1] => johndoe2 [2] => johndoe21 [3] => JohnDoe3 ) 
+```
+
+With second parameter you can choose whether you want to preserve original collection keys.  
+It defaults to false.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sort(preserve_keys: true);
+
+print_r($collection->all());
+
+// result:
+// Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
+```
+***
+
+### # sortBy
+```php
+> sortBy(Closure $callback, bool $preserve_keys = false):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Sorts collection by values using a user-defined comparison function.
+
+The comparison function must return an integer less than, equal to,  
+or greater than zero if the first argument is considered to be respectively less than,  
+equal to, or greater than the second.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe'],
+    ['firstname' => 'Jane', 'lastname' => 'Doe'],
+    ['firstname' => 'Richard', 'lastname' => 'Roe']
+]);
+
+$collection->sortBy(function ($a, $b):int {
+    return [$a['lastname'], $a['firstname']] <=> [$b['lastname'], $b['firstname']];
+});
+
+print_r($collection->all());
+
+// result:
+// Array (
+//  [0] => Array ( [firstname] => Jane [lastname] => Doe )
+//  [1] => Array ( [firstname] => John [lastname] => Doe )
+//  [2] => Array ( [firstname] => Richard [lastname] => Roe )
+// ) 
+```
+
+With first parameter you can choose whether you want to preserve original collection keys.  
+It defaults to false.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe'],
+    ['firstname' => 'Jane', 'lastname' => 'Doe'],
+    ['firstname' => 'Richard', 'lastname' => 'Roe']
+]);
+
+$collection->sortBy(function ($a, $b):int {
+    return [$a['lastname'], $a['firstname']] <=> [$b['lastname'], $b['firstname']];
+}, true);
+
+print_r($collection->all());
+
+// result:
+// Array (
+//  [1] => Array ( [firstname] => Jane [lastname] => Doe )
+//  [0] => Array ( [firstname] => John [lastname] => Doe )
+//  [2] => Array ( [firstname] => Richard [lastname] => Roe )
+// ) 
+```
+***
+
+### # sortByKey
+
+```php
+> sortByKey(\FireHub\Support\Enums\Order $order = Order::ASC):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Sorts collection by key.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sortByKey();
+
+print_r($collection->all());
+
+// result:
+// Array ( [age] => 25 [firstname] => John [lastname] => Doe ) 
+```
+
+First parameter is order type.  
+You can choose from ascending or descending order.  
+It defaults to ascending order - `Order::ASC`.
+
+```php
+use FireHub\Support\Enums\Order;
+
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->sortByKey(Order::DESC);
+
+print_r($collection->all());
+
+// result:
+// Array ( [lastname] => Doe [firstname] => John [age] => 25 ) 
+```
+***
+
+### # sortByMany
+```php
+> sortByMany(array $fields):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Sorts collection by multiple fields.
+
+```php
+use FireHub\Support\Enums\Order;
+
+$collection = Collection::create(fn ():array => [
+    ['id' => 1, 'firstname' => 'John', 'lastname' => 'Doe', 'gender' => 'male', 'age' => 25],
+    ['id' => 2, 'firstname' => 'Jane', 'lastname' => 'Doe', 'gender' => 'female', 'age' => 23],
+    ['id' => 3, 'firstname' => 'Richard', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 27],
+    ['id' => 4, 'firstname' => 'Jane', 'lastname' => 'Roe', 'gender' => 'female', 'age' => 22],
+    ['id' => 5, 'firstname' => 'John', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 26],
+]);
+
+$collection->sortByMany([
+    ['lastname', Order::ASC],
+    ['gender', Order::ASC],
+    ['age', Order::DESC]
+]);
+
+// result:
+// Array (
+//  [0] => Array ( [id] => 2 [firstname] => Jane [lastname] => Doe [gender] => female [age] => 23 )
+//  [1] => Array ( [id] => 1 [firstname] => John [lastname] => Doe [gender] => male [age] => 25 )
+//  [2] => Array ( [id] => 4 [firstname] => Jane [lastname] => Roe [gender] => female [age] => 22 )
+//  [3] => Array ( [id] => 3 [firstname] => Richard [lastname] => Roe [gender] => male [age] => 27 )
+//  [4] => Array ( [id] => 5 [firstname] => John [lastname] => Roe [gender] => male [age] => 26 )
+// ) 
+```
+***
+
+### # sortKeyBy
+
+```php
+> sortKeyBy(Closure $callback):bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Sorts collection by key using a user-defined comparison function.
+
+The callback comparison function. Function cmp_function should accept two parameters which will be filled by pairs of array keys.  
+The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than, equal to, or greater than the second.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'a' => 4, 'b' => 2, 'c' => 8, 'd' => 6
+]);
+
+$collection->sortKeyBy(function ($a, $b):int {
+    if ($a === $b) {
+        return 0;
+    }
+    return ($a < $b) ? -1 : 1;
+
+});
+
+print_r($collection->all());
+
+// result:
+// Array ( [a] => 4 [b] => 2 [c] => 8 [d] => 6 ) 
 ```
 ***
 

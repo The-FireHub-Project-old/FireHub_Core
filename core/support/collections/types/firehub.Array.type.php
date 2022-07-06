@@ -15,6 +15,8 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
+use FireHub\Support\Collections\Enums\SortFlag;
+use FireHub\Support\Enums\Order;
 use Closure, Traversable, Error;
 
 use function count;
@@ -1064,6 +1066,140 @@ final class Array_Type implements CollectableRewindable {
             return $items ?? [];
 
         });
+
+    }
+
+    /**
+     * ### Sorts collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Enums\Order $order <p>
+     * Order type.
+     * </p>
+     * @param bool $preserve_keys <p>
+     * Whether you want to preserve keys from original collection or not.
+     * </p>
+     * @param \FireHub\Support\Collections\Enums\SortFlag $flag <p>
+     * Sorting flag.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public function sort (Order $order = Order::ASC, bool $preserve_keys = false, SortFlag $flag = SortFlag::SORT_REGULAR):bool {
+
+        return $order === Order::ASC
+            ? ($preserve_keys
+                ? asort($this->items, $flag->value)
+                : sort($this->items, $flag->value))
+            : ($preserve_keys
+                ? arsort($this->items, $flag->value)
+                : rsort($this->items, $flag->value));
+
+    }
+
+    /**
+     * ### Sorts collection by key
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Enums\Order $order <p>
+     * Order type.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public function sortByKey (Order $order = Order::ASC):bool {
+
+        return $order === Order::ASC ? ksort($this->items) : krsort($this->items);
+
+    }
+
+    /**
+     * ### Sorts collection by values using a user-defined comparison function
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than,
+     * equal to, or greater than the second.
+     * </p>
+     * @param bool $preserve_keys <p>
+     * Whether you want to preserve keys from original collection or not.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public function sortBy (Closure $callback, bool $preserve_keys = false):bool {
+
+        return $preserve_keys ? uasort($this->items, $callback) : usort($this->items, $callback);
+
+    }
+
+    /**
+     * ### Sorts collection by key using a user-defined comparison function
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * The callback comparison function. Function cmp_function should accept two parameters which will be filled by pairs of array keys.
+     * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than,
+     * equal to, or greater than the second.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public function sortKeyBy (Closure $callback):bool {
+
+        return uksort($this->items, $callback);
+
+    }
+
+    /**
+     * ### Sorts collection by multiple fields
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param array<int, array<int, string|\FireHub\Support\Enums\Order>> $fields <p>
+     * List of fields to sort by.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public function sortByMany (array $fields):bool {
+
+        foreach ($fields as $field) {
+
+            // check if both field name and sort value are present
+            isset($field[0]) && isset($field[1]) ?: throw new Error('Each field has to have both field name and sort value.');
+
+            $column = $field[0];
+            $order = $field[1];
+
+            // first key of each field must be string
+            is_string($column) ?: throw new Error('First key of each field must be integer or string.');
+
+            // when sorting by many your collection must be 2-dimensional array
+            is_array($this->items[0]) ?: throw new Error('When sorting by many your collection must be 2-dimensional array.');
+
+            // check if array key exists in the first array
+            array_key_exists($column, $this->items[0]) ?: throw new Error(sprintf('Key %s does not exist.', $column));
+
+            // field 1 will be converter to PHP order constants
+            // it will default to SORT_ASC is FireHub\Support\Enums\Order is not the type
+            $order = $order === Order::DESC ? SORT_DESC : SORT_ASC;
+
+            count(array_keys($this->items)) === count(array_column($this->items, $column)) ?: throw new Error(sprintf('Key %s is missing somewhere.', $column));
+
+            // first array is array of value from selected column
+            $multi_sort[] = [...array_column($this->items, $column)];
+
+            // second array is sort order
+            $multi_sort[] = $order;
+
+        }
+
+        // attach items at the end of multi-sort
+        $multi_sort[] = &$this->items;
+
+        return array_multisort(
+            ...$multi_sort
+        );
 
     }
 
