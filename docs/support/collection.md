@@ -2001,9 +2001,6 @@ Third optional parameter is preserve_keys.
 > This behaviour can be changed by setting preserve_keys to true.
 > String keys are always preserved, regardless of this parameter.
 
-$ar = array('a'=>'apple', 'b'=>'banana', '42'=>'pear', 'd'=>'orange');
-print_r(array_slice($ar, 0, 3));
-print_r(array_slice($ar, 0, 3, true));
 ```php
 $collection = Collection::create(fn ():array => [
     'firstname' => 'John',
@@ -2025,6 +2022,24 @@ print_r($slice->all());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [10] => Male ) 
+```
+
+You can also slice in the opposite direction to get last records.
+
+```php
+$collection = Collection::create(fn ():array => [
+'firstname' => 'John',
+'lastname' => 'Doe',
+'age' => 25,
+10 => 'Male'
+]);
+
+$slice = $collection->slice(-2, 2, true);
+
+print_r($slice->all());
+
+// result:
+// Array ( [age] => 25 [10] => Male ) 
 ```
 ***
 
