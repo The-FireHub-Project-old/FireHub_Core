@@ -47,6 +47,17 @@ use function array_keys;
 use function shuffle;
 use function array_slice;
 use function array_splice;
+use function asort;
+use function sort;
+use function arsort;
+use function rsort;
+use function ksort;
+use function krsort;
+use function uasort;
+use function usort;
+use function uksort;
+use function array_key_exists;
+use function array_multisort;
 use function serialize;
 use function json_encode;
 
