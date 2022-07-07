@@ -18,7 +18,6 @@ use FireHub\Support\Collections\CollectableRewindable;
 use FireHub\Support\Traits\Tappable;
 use SplFixedArray, Closure, Traversable, Throwable, Error;
 
-use function iterator_to_array;
 use function is_callable;
 use function in_array;
 use function sprintf;
@@ -26,6 +25,7 @@ use function range;
 use function shuffle;
 use function is_int;
 use function serialize;
+use function iterator_to_array;
 use function json_encode;
 use function count;
 
@@ -63,11 +63,11 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int, mixed> Array from collection.
+     * @return SplFixedArray<mixed> Items from collection.
      */
-    public function all ():array {
+    public function all ():SplFixedArray {
 
-        return iterator_to_array($this->items);
+        return $this->items;
 
     }
 
@@ -929,6 +929,17 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @return array<int, mixed> Array from collection.
+     */
+    public function toArray ():array {
+
+        return iterator_to_array($this->items);
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function toJSON ():string|false {
@@ -955,7 +966,7 @@ final class Index_Type implements CollectableRewindable {
      */
     public function __serialize ():array {
 
-        return $this->all();
+        return $this->toArray();
 
     }
 

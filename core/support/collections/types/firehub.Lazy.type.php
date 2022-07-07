@@ -18,10 +18,10 @@ use FireHub\Support\Collections\CollectableNonRewindable;
 use FireHub\Support\Traits\Tappable;
 use Generator, Closure, Traversable, Error;
 
-use function iterator_to_array;
 use function iterator_count;
 use function in_array;
 use function serialize;
+use function iterator_to_array;
 use function json_encode;
 use function sprintf;
 
@@ -48,11 +48,11 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int|string, mixed> Array from collection.
+     * @return Generator Items from collection.
      */
-    public function all ():array {
+    public function all ():Generator {
 
-        return iterator_to_array($this->invokeItems());
+        return $this->items;
 
     }
 
@@ -367,6 +367,17 @@ final class Lazy_Type implements CollectableNonRewindable {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @return array<int|string, mixed> Array from collection.
+     */
+    public function toArray ():array {
+
+        return iterator_to_array($this->invokeItems());
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function toJSON ():string|false {
@@ -382,7 +393,7 @@ final class Lazy_Type implements CollectableNonRewindable {
      */
     public function jsonSerialize():array {
 
-        return $this->all();
+        return $this->toArray();
 
     }
 
@@ -393,7 +404,7 @@ final class Lazy_Type implements CollectableNonRewindable {
      */
     public function __serialize ():array {
 
-        return $this->all();
+        return $this->toArray();
 
     }
 

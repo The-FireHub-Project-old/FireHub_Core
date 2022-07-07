@@ -40,9 +40,9 @@ interface Collectable {
      * ### Get entire collection as array
      * @since 0.2.0.pre-alpha.M2
      *
-     * @return array<int|string, mixed> Array from collection.
+     * @return mixed Items from collection.
      */
-    public function all ():array;
+    public function all ():mixed;
 
     /**
      * ### Filter elements of the Collection
@@ -108,5 +108,13 @@ interface Collectable {
      * @return self This collection.
      */
     public function tap (Closure $callback):self;
+
+    /**
+     * ### Get entire collection as array
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return array<int|string, mixed> Array from collection.
+     */
+    public function toArray ():array;
 
 }

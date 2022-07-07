@@ -86,7 +86,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int|string, mixed> Array from collection.
+     * @return array<int|string, mixed> Items from collection.
      */
     public function all ():array {
 
@@ -701,7 +701,7 @@ final class Array_Type implements CollectableRewindable {
         return new self(function () use ($keys):array {
 
             //return array_diff_key($this->items, array_flip($keys));
-            return ($this->differenceKeys(array_flip($keys)))->all();
+            return ($this->differenceKeys(array_flip($keys)))->toArray();
 
         });
 
@@ -1371,6 +1371,17 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @return array<int|string, mixed> Array from collection.
+     */
+    public function toArray ():array {
+
+        return $this->items;
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function toJSON ():string|false {
@@ -1386,7 +1397,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function jsonSerialize():array {
 
-        return $this->items;
+        return $this->toArray();
 
     }
 

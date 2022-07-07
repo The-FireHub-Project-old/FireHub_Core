@@ -18,12 +18,12 @@ use FireHub\Support\Collections\CollectableRewindable;
 use FireHub\Support\Traits\Tappable;
 use SplObjectStorage, Closure, Traversable, Error;
 
-use function iterator_to_array;
 use function in_array;
 use function sprintf;
 use function is_callable;
 use function is_object;
 use function serialize;
+use function iterator_to_array;
 use function json_encode;
 
 /**
@@ -48,11 +48,11 @@ final class Object_Type implements CollectableRewindable {
     /**
      * {@inheritDon}
      *
-     * @return array<int, object> Array from collection.
+     * @return SplObjectStorage<self, object> Items from collection.
      */
-    public function all ():array {
+    public function all ():SplObjectStorage {
 
-        return iterator_to_array($this->items);
+        return $this->items;
 
     }
 
@@ -516,6 +516,17 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * {@inheritDon}
+     *
+     * @return array<int, object> Array from collection.
+     */
+    public function toArray ():array {
+
+        return iterator_to_array($this->items);
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function toJSON ():string|false {
@@ -531,7 +542,7 @@ final class Object_Type implements CollectableRewindable {
      */
     public function jsonSerialize():array {
 
-        return $this->all();
+        return $this->toArray();
 
     }
 
@@ -542,7 +553,7 @@ final class Object_Type implements CollectableRewindable {
      */
     public function __serialize ():array {
 
-        return $this->all();
+        return $this->toArray();
 
     }
 
