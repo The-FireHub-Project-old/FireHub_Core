@@ -524,7 +524,7 @@ $values = Collection::create(fn ():array => [
 
 $combine = $collection->combine($values);
 
-print_r($combine-toArray());
+print_r($combine->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
@@ -539,7 +539,7 @@ $keys = Collection::create(fn ():array => [
 
 $combine = $collection->combine(['John', 'Doe', 25]);
 
-print_r($combine-toArray());
+print_r($combine->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 ) 
@@ -692,7 +692,7 @@ $new_collection = Collection::create(fn ():array => ["a" => "green", "yellow", "
 
 $diff = $collection->differenceAssoc($new_collection);
 
-print_r($diff-toArray());
+print_r($diff->toArray());
 
 // result:
 Array ( [b] => brown [c] => blue [0] => red ) 
@@ -734,7 +734,7 @@ $new_collection = Collection::create(fn ():array => [
 
 $diff = $collection->differenceKeys($new_collection);
 
-print_r($diff-toArray());
+print_r($diff->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
@@ -768,7 +768,7 @@ $new_collection = Collection::create(fn ():array => [3,4,5,6,7]);
 
 $diff = $collection->differenceValues($new_collection);
 
-print_r($diff-toArray());
+print_r($diff->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 ) 
@@ -967,7 +967,7 @@ $collection = Collection::create(fn ():array => [
 
 $except = $collection->except('age', 'lastname');
 
-print_r($except-toArray());
+print_r($except->toArray());
 
 // result:
 // Array ( [firstname] => John ) 
@@ -998,7 +998,7 @@ $filter = $collection->filter(function ($key, $value):bool {
     return $key === 'lastname';
 });
 
-print_r($filter-toArray());
+print_r($filter->toArray());
 
 // result:
 // Array ( [lastname] => Doe ) 
@@ -1155,7 +1155,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 $multiplied = $collection->map(function ($key, $value) {
     return $value * 2;
 });
-print_r($multiplied-toArray());
+print_r($multiplied->toArray());
 
 // result:
 // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
@@ -1278,7 +1278,7 @@ $collection = Collection::create(fn ():array => [
 
 $only = $collection->only('age', 'lastname');
 
-print_r($only-toArray());
+print_r($only->toArray());
 
 // result:
 // Array ( [lastname] => Doe [age] => 25 ) Array ( [firstname] => John ) 
@@ -1307,7 +1307,7 @@ $collection = Collection::create(fn ():array => ['one', 'two', 'three']);
 
 $pad = $collection->pad(5, 'padded value');
 
-print_r($pad-toArray());
+print_r($pad->toArray());
 
 // result:
 // Array ( [0] => one [1] => two [2] => three [3] => padded value [4] => padded value ) 
@@ -1336,8 +1336,8 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
     return $value > 3;
 });
 
-print_r($passed-toArray());
-print_r($failed-toArray());
+print_r($passed->toArray());
+print_r($failed->toArray());
 
 // result:
 // Array ( [3] => 4 [4] => 5 )
@@ -1416,7 +1416,7 @@ $collection = Collection::create(fn ():array => [
 
 $plucked = $collection->pluck('firstname');
 
-print_r($plucked-toArray());
+print_r($plucked->toArray());
 
 // result:
 // Array ( [0] => John [1] => Jane ) 
@@ -1432,7 +1432,7 @@ $collection = Collection::create(fn ():array => [
 
 $plucked = $collection->pluck('firstname', 'user_id');
 
-print_r($plucked-toArray());
+print_r($plucked->toArray());
 
 // result:
 // Array ( [100] => John [101] => Jane ) 
@@ -1448,7 +1448,7 @@ $collection = Collection::create(fn ():array => [
 
 $plucked = $collection->pluck('firstname', 'lastname');
 
-print_r($plucked-toArray());
+print_r($plucked->toArray());
 
 // result:
 // Array ( [Doe] => Jane ) 
@@ -1585,7 +1585,7 @@ $filter = $collection->reject(function ($key, $value):bool {
     return $key === 'lastname';
 });
 
-print_r($filter-toArray());
+print_r($filter->toArray());
 
 // result:
 // Array ( [firstname] => John [age] => 25 ) 
@@ -1628,7 +1628,7 @@ $collection = Collection::create(fn ():array => [
 
 $reversed = $collection->reverse();
 
-print_r($reversed-toArray());
+print_r($reversed->toArray());
 
 // result:
 // Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
@@ -1894,7 +1894,7 @@ $collection = Collection::create(fn ():array => [
 
 $skip = $collection->skip(1);
 
-print_r($skip-toArray());
+print_r($skip->toArray());
 
 // result:
 // Array ( [lastname] => Doe [age] => 25 ) 
@@ -1921,7 +1921,7 @@ $skipUntil = $collection->skipUntil(function ($key, $value):bool {
     return $value > 3;
 });
 
-print_r($skipUntil-toArray());
+print_r($skipUntil->toArray());
 
 // result:
 // Array ( [3] => 4 [4] => 5 ) 
@@ -1948,7 +1948,7 @@ $skipWhile = $collection->skipWhile(function ($key, $value):bool {
     return $value <= 3;
 });
 
-print_r($skipWhile-toArray());
+print_r($skipWhile->toArray());
 
 // result:
 // Array ( [3] => 4 [4] => 5 ) 
@@ -1981,7 +1981,7 @@ $collection = Collection::create(fn ():array => [
 
 $slice = $collection->slice(1);
 
-print_r($slice-toArray());
+print_r($slice->toArray());
 
 // result:
 // Array ( [lastname] => Doe [age] => 25 ) 
@@ -2004,7 +2004,7 @@ $collection = Collection::create(fn ():array => [
 
 $slice = $collection->slice(1, 1);
 
-print_r($slice-toArray());
+print_r($slice->toArray());
 
 // result:
 // Array ( [lastname] => Doe ) 
@@ -2026,14 +2026,14 @@ $collection = Collection::create(fn ():array => [
 
 $slice = $collection->slice(0, 4);
 
-print_r($slice-toArray());
+print_r($slice->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [0] => Male ) 
 
 $slice = $collection->slice(0, 4, true);
 
-print_r($slice-toArray());
+print_r($slice->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [10] => Male ) 
@@ -2051,7 +2051,7 @@ $collection = Collection::create(fn ():array => [
 
 $slice = $collection->slice(-2, 2, true);
 
-print_r($slice-toArray());
+print_r($slice->toArray());
 
 // result:
 // Array ( [age] => 25 [10] => Male ) 
@@ -2395,7 +2395,7 @@ $collection = Collection::create(fn ():array => [
 
 $splice = $collection->splice(1);
 
-print_r($splice-toArray());
+print_r($splice->toArray());
 
 // result:
 // Array ( [firstname] => John ) 
@@ -2418,7 +2418,7 @@ $collection = Collection::create(fn ():array => [
 
 $splice = $collection->splice(1, 1);
 
-print_r($splice-toArray());
+print_r($splice->toArray());
 
 // result:
 // Array ( [firstname] => John [age] => 25 ) 
@@ -2441,7 +2441,7 @@ $collection = Collection::create(fn ():array => [
 
 $splice = $collection->splice(1, 2, ['male', 'tall']);
 
-print_r($splice-toArray());
+print_r($splice->toArray());
 
 // result:
 // Array ( [firstname] => John [0] => male [1] => tall ) 
@@ -2470,7 +2470,7 @@ $collection = Collection::create(fn ():array => [
 
 $take = $collection->take(1);
 
-print_r($take-toArray());
+print_r($take->toArray());
 
 // result:
 // Array ( [firstname] => John ) 
@@ -2497,7 +2497,7 @@ $takeUntil = $collection->takeUntil(function ($key, $value):bool {
     return $key > 3;
 });
 
-print_r($takeUntil-toArray());
+print_r($takeUntil->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
@@ -2524,7 +2524,7 @@ $takeWhile = $collection->takeWhile(function ($key, $value):bool {
     return $value < 3;
 });
 
-print_r($takeWhile-toArray());
+print_r($takeWhile->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 ) 
