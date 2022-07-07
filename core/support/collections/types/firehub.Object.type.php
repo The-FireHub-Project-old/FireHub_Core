@@ -444,6 +444,17 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function tap (Closure $callback):self {
+
+        $callback($this);
+
+        return $this;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>

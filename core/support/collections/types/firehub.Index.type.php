@@ -819,6 +819,17 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function tap (Closure $callback):self {
+
+        $callback($this);
+
+        return $this;
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *

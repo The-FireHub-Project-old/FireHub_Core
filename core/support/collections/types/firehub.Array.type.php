@@ -1307,6 +1307,17 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function tap (Closure $callback):self {
+
+        $callback($this);
+
+        return $this;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

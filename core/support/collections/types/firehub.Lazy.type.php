@@ -357,6 +357,17 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * @inheritDoc
      */
+    public function tap (Closure $callback):self {
+
+        $callback($this);
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function serialize ():string {
 
         return serialize($this);

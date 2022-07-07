@@ -94,4 +94,19 @@ interface Collectable {
      */
     public function except (mixed ...$keys):self;
 
+    /**
+     * ### Tap the collection
+     *
+     * Passes the collection to the given callback, allowing you to "tap" into the collection at a specific point
+     * and do something with the items while not affecting the collection itself.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self This collection.
+     */
+    public function tap (Closure $callback):self;
+
 }

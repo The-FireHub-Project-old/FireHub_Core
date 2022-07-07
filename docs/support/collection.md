@@ -70,6 +70,7 @@ nav_order: 1
 - - [# take](#-take)
 - - [# takeUntil](#-takeuntil)
 - - [# takeWhile](#-takewhile)
+- - [# tap](#-tap)
 - - [# toJSON](#-tojson)
 - - [# unique](#-unique)
 - - [# unset](#-unset)
@@ -2516,6 +2517,33 @@ print_r($takeWhile->all());
 
 // result:
 // Array ( [0] => 1 [1] => 2 ) 
+```
+***
+
+### # tap
+
+```php
+> tap(Closure $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Passes the collection to the given callback, allowing you to "tap" into the collection at a specific point
+and do something with the items while not affecting the collection itself.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5])->take(3)->tap(function ($collection) {
+    print_r($collection->all());
+})->skip(1);
+
+print_r($collection->all());
+
+// result:
+// Array ( [0] => 1 [1] => 2 [2] => 3 ) 
+// Array ( [0] => 2 [1] => 3 ) 
 ```
 ***
 
