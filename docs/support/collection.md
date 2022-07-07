@@ -800,7 +800,7 @@ print_r($duplicates);
 ### # each
 
 ```php
-> each(callable $callback):self
+> each(callable $callback):this
 ```
 
 > Available on collection:
@@ -1161,7 +1161,8 @@ print_r($multiplied-toArray());
 ### # merge
 
 ```php
-> merge(callable $callback):this
+> merge(callable $callback):this // basic and object
+> merge(callable $callback, int $size = 1):this // index
 ```
 
 > Available on collection:
