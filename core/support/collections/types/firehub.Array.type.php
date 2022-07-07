@@ -1217,6 +1217,96 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Return new collection with specified number of items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $limit <p>
+     * If length is given and is positive, then the sequence will have that many elements in it.
+     * If length is given and is negative then the sequence will stop that many elements from the end of the collection.
+     * If it is omitted, then the sequence will have everything from offset up until the end of the collection.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function take (int $limit):self {
+
+        return $this->slice(0, $limit);
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items until the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeUntil (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):array {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if ($callback($key, $value)) {
+
+                    break;
+
+                }
+
+                // add items to array
+                $items[$key] = $value;
+
+            }
+
+            // return new items
+            return $items ?? [];
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items while the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeWhile (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):array {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (!$callback($key, $value)) {
+
+                    break;
+
+                }
+
+                // add items to array
+                $items[$key] = $value;
+
+            }
+
+            // return new items
+            return $items ?? [];
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.

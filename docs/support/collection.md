@@ -67,6 +67,9 @@ nav_order: 1
 - - [# sortByMany](#-sortbymany)
 - - [# sortKeyBy](#-sortkeyby)
 - - [# splice](#-splice)
+- - [# take](#-take)
+- - [# takeUntil](#-takeuntil)
+- - [# takeWhile](#-takewhile)
 - - [# toJSON](#-tojson)
 - - [# unique](#-unique)
 - - [# unset](#-unset)
@@ -2430,6 +2433,89 @@ print_r($splice->all());
 
 // result:
 // Array ( [firstname] => John [0] => male [1] => tall ) 
+```
+***
+
+### # take
+
+```php
+> take(int $offset):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Return new collection with specified number of items.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$take = $collection->take(1);
+
+print_r($take->all());
+
+// result:
+// Array ( [firstname] => John ) 
+```
+***
+
+### # takeUntil
+
+```php
+> takeUntil(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Return new collection with specified number of items until the given callback returns true.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$takeUntil = $collection->takeUntil(function ($key, $value):bool {
+    return $key > 3;
+});
+
+print_r($takeUntil->all());
+
+// result:
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
+```
+***
+
+### # takeWhile
+
+```php
+> takeWhile(callable $callback):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Return new collection with specified number of items while the given callback returns true.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$takeWhile = $collection->takeWhile(function ($key, $value):bool {
+    return $value < 3;
+});
+
+print_r($takeWhile->all());
+
+// result:
+// Array ( [0] => 1 [1] => 2 ) 
 ```
 ***
 

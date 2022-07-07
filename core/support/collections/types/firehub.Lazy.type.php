@@ -205,16 +205,18 @@ final class Lazy_Type implements CollectableNonRewindable {
         return new self(function () use ($callback):Generator {
 
             // iterate over current items
-            foreach ($this->items as $key => $value) {
+            while ($this->items->valid() && !$callback($this->items->key(), $this->items->current())) {
 
-                if (!$callback($key, $value)) {
+                $this->items->next();
 
-                    continue;
+            }
 
-                }
+            // iterate over other items
+            while ($this->items->valid()) {
 
-                // add items to array
-                yield $key => $value;
+                yield $this->items->key() => $this->items->current();
+
+                $this->items->next();
 
             }
 
@@ -240,16 +242,109 @@ final class Lazy_Type implements CollectableNonRewindable {
         return new self(function () use ($callback):Generator {
 
             // iterate over current items
+            while ($this->items->valid() && $callback($this->items->key(), $this->items->current())) {
+
+                $this->items->next();
+
+            }
+
+            // iterate over other items
+            while ($this->items->valid()) {
+
+                yield $this->items->key() => $this->items->current();
+
+                $this->items->next();
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $limit <p>
+     * Number of items to take.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function take (int $limit):self {
+
+        // return new collection
+        return new self(function () use ($limit):Generator {
+
+            // iterate over current items
+            $counter = 0;
             foreach ($this->items as $key => $value) {
 
-                if ($callback($key, $value)) {
+                if ($counter++ >= $limit) continue;
 
-                    continue;
-
-                }
-
-                // add items to array
                 yield $key => $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items until the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeUntil (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):Generator {
+
+            // iterate over current items
+            while ($this->items->valid() && !$callback($this->items->key(), $this->items->current())) {
+
+                yield $this->items->key() => $this->items->current();
+
+                $this->items->next();
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items while the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeWhile (Closure $callback):self {
+
+        // return new collection
+        return new self(function () use ($callback):Generator {
+
+            // iterate over current items
+            while ($this->items->valid() && $callback($this->items->key(), $this->items->current())) {
+
+                yield $this->items->key() => $this->items->current();
+
+                $this->items->next();
 
             }
 

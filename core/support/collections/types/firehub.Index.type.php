@@ -691,6 +691,134 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Return new collection with specified number of items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $limit <p>
+     * Number of items to take.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function take (int $limit):self {
+
+        // return new collection
+        return new self(function ($items) use ($limit):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            $counter = 0;
+            foreach ($this->items as $key => $value) {
+
+                // add items to array
+                if ($key < $limit) {$items[$counter++] = $value;}
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items until the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeUntil (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if ($callback($key, $value)) {
+
+                    break;
+
+                }
+
+                // add items to array
+                $new_items[] = $value;
+
+            }
+
+            $counter = 0;
+            foreach ($new_items ?? [] as $value) {
+
+                // add items to array
+                $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
+     * ### Return new collection with specified number of items while the given callback returns true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function takeWhile (Closure $callback):self {
+
+        // return new collection
+        return new self(function ($items) use ($callback):void {
+
+            // change the size of array to be same as current one
+            $items->setSize($this->items->getSize());
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (!$callback($key, $value)) {
+
+                    break;
+
+                }
+
+                // add items to array
+                $new_items[] = $value;
+
+            }
+
+            $counter = 0;
+            foreach ($new_items ?? [] as $value) {
+
+                // add items to array
+                $items[$counter++] = $value;
+
+            }
+
+            // change the size of array to match filtered results
+            $items->setSize($counter);
+
+        });
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *
