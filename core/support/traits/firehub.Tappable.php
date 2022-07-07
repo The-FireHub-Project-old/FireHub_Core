@@ -23,7 +23,7 @@ use Closure;
  * while not affecting the class itself.
  * @since 0.2.0.pre-alpha.M2
  *
- * @package FireHub\Support\Contracts
+ * @package FireHub\Support\Traits
  */
 trait Tappable {
 
