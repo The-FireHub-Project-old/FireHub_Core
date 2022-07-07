@@ -73,6 +73,7 @@ nav_order: 1
 - - [# tap](#-tap)
 - - [# toArray](#-toarray)
 - - [# toJSON](#-tojson)
+- - [# union](#-union)
 - - [# unique](#-unique)
 - - [# unset](#-unset)
 - - [# unshift](#-unshift)
@@ -1188,6 +1189,8 @@ $merge = $collection->merge(fn ():array => [
     'gender' => 'male'
 ]);
 
+print_r($collection->toArray());
+
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => male [height] => 190cm ) 
 ```
@@ -1204,10 +1207,12 @@ $collection = Collection::index(function ($items):void {
     $items[2] = 2;
 }, size: 3);
 
-$merge = $collection->merge(function ($items, $counter):void {
+$collection->merge(function ($items, $counter):void {
     $items[$counter] = 0;
     $items[++$counter] = 1;
 }, 2);
+
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => 0 [4] => 1 ) 
@@ -1236,10 +1241,12 @@ $collection = Collection::create(fn ():array => [
     'gender' => 'female'
 ]);
 
-$merge = $collection->mergeRecursive(fn ():array => [
+ $collection->mergeRecursive(fn ():array => [
     'height' => '190cm',
     'gender' => 'male'
 ]);
+
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => Array ( [0] => female [1] => male ) [height] => 190cm )  
@@ -2603,6 +2610,42 @@ echo $json_serialize;
 
 // result:
 // {"firstname":"John","lastname":"Doe","age":25}
+```
+***
+
+### # union
+
+```php
+> union(callable $callback):this
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Merge new collection with original one.
+
+> note: If there are same keys on both collections, keys from original collection
+will be preferred.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25,
+    'gender' => 'female'
+]);
+
+$collection->union(fn ():array => [
+    'height' => '190cm',
+    'gender' => 'male'
+]);
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [gender] => female [height] => 190cm ) 
 ```
 ***
 

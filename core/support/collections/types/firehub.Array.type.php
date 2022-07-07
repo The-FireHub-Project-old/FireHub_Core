@@ -374,6 +374,31 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Merge new collection with original one
+     *
+     * If there are same keys on both collections, keys from original collection
+     * will be preferred.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function union (Closure $callback):self {
+
+        foreach($callback() as $key => $value) {
+
+            $this->isset($key) ?: $this->items[$key] = $value;
+
+        }
+
+        return $this;
+
+    }
+
+    /**
      * ### Merge collection recursively
      * @since 0.2.0.pre-alpha.M2
      *
