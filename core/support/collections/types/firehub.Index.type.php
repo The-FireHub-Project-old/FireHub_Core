@@ -822,6 +822,34 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function when (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        $condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unless (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        !$condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
+
+    }
+
+    /**
      * ### Gets the size of the array
      * @since 0.2.0.pre-alpha.M2
      *

@@ -105,7 +105,7 @@ interface Collectable {
      * Data from callable source.
      * </p>
      *
-     * @return self This collection.
+     * @return $this This collection.
      */
     public function tap (Closure $callback):self;
 

@@ -384,7 +384,7 @@ final class Array_Type implements CollectableRewindable {
      * Data from callable source.
      * </p>
      *
-     * @return self New collection.
+     * @return $this New collection.
      */
     public function union (Closure $callback):self {
 
@@ -409,7 +409,7 @@ final class Array_Type implements CollectableRewindable {
      * Data from callable source.
      * </p>
      *
-     * @return self New collection
+     * @return $this This collection
      */
     public function mergeRecursive (Closure $callback):self {
 
@@ -1331,6 +1331,34 @@ final class Array_Type implements CollectableRewindable {
             return $items ?? [];
 
         });
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function when (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        $condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unless (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        !$condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
 
     }
 

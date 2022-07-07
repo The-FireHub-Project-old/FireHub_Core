@@ -146,7 +146,7 @@ interface CollectableRewindable extends Collectable, Rewindable {
      * Data from callable source.
      * </p>
      *
-     * @return self New collection.
+     * @return $this This collection.
      */
     public function merge (Closure $callback):self;
 
@@ -186,5 +186,41 @@ interface CollectableRewindable extends Collectable, Rewindable {
      * @return mixed The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
      */
     public function search (mixed $value):mixed;
+
+    /**
+     * ### Execute the given callback when the first argument given to the method evaluates to true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param bool $condition <p>
+     * Condition to meet.
+     * </p>
+     * @param Closure $condition_meet <p>
+     * Callback if condition is meet.
+     * </p>
+     * @param ?Closure $condition_not_meet [optional] <p>
+     * Callback if condition is not meet.
+     * </p>
+     *
+     * @return $this This collection.
+     */
+    public function when (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self;
+
+    /**
+     * ### Execute the given callback unless the first argument given to the method evaluates to true
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param bool $condition <p>
+     * Condition to meet.
+     * </p>
+     * @param Closure $condition_meet <p>
+     * Callback if condition is meet.
+     * </p>
+     * @param ?Closure $condition_not_meet [optional] <p>
+     * Callback if condition is not meet.
+     * </p>
+     *
+     * @return $this This collection.
+     */
+    public function unless (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self;
 
 }

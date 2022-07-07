@@ -75,9 +75,11 @@ nav_order: 1
 - - [# toJSON](#-tojson)
 - - [# union](#-union)
 - - [# unique](#-unique)
+- - [# unless](#-unless)
 - - [# unset](#-unset)
 - - [# unshift](#-unshift)
 - - [# walk](#-walk)
+- - [# when](#-when)
 
 ## # Introduction
 
@@ -386,7 +388,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->add('height', '190cm');
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
@@ -452,7 +454,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->chunk(2, function ($collection):void {
     $collection->add('info', 'more info');
-    print_r($collection-toArray());
+    print_r($collection->toArray());
 });
 
 // result:
@@ -484,7 +486,7 @@ $collection = Collection::create(fn ():array => [
 
 $collapse = $collection->collapse();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 [8] => 9 )
@@ -1360,7 +1362,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->pop();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 ) 
@@ -1385,7 +1387,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->push(6,7,8);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 [5] => 6 [6] => 7 [7] => 8 ) 
@@ -1549,7 +1551,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->replace('firstname', 'Jane');
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => Jane [lastname] => Doe [age] => 25 ) 
@@ -1700,7 +1702,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->shuffle();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result (random value):
 // Array ( [0] => 25 [1] => John [2] => Doe ) 
@@ -1717,7 +1719,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->shuffle(true);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result (random value):
 // Array ( [age] => 25 [firstname] => John [lastname] => Doe )  
@@ -1779,7 +1781,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->set('height', '190cm');
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
@@ -1796,7 +1798,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection['height'] = '190cm';
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
@@ -1837,7 +1839,7 @@ echo count($collection);
 // result:
 // 10
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 0 [1] => 1 [2] => 2 [3] => [4] => [5] => [6] => [7] => [8] => [9] => ) 
@@ -1862,7 +1864,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->shift();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 2 [1] => 3 [2] => 4 [3] => 5 ) 
@@ -2077,7 +2079,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sort();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 25 [1] => Doe [2] => John ) 
@@ -2098,7 +2100,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sort(Order::DESC);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => John [1] => Doe [2] => 25 ) 
@@ -2116,7 +2118,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sort(preserve_keys: true);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
@@ -2139,21 +2141,21 @@ $collection = Collection::create(fn ():array => ["JohnDoe1", "johndoe2", "JohnDo
 
 $collection->sort();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => JohnDoe1 [1] => JohnDoe3 [2] => johndoe2 [3] => johndoe21 )  
 
 $collection->sort(SortFlag::SORT_NATURAL_FLAG_CASE);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => JohnDoe1 [1] => johndoe2 [2] => JohnDoe3 [3] => johndoe21 ) 
 
 $collection->sort(SortFlag::SORT_STRING_FLAG_CASE);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => JohnDoe1 [1] => johndoe2 [2] => johndoe21 [3] => JohnDoe3 ) 
@@ -2171,7 +2173,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sort(preserve_keys: true);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [age] => 25 [lastname] => Doe [firstname] => John ) 
@@ -2205,7 +2207,7 @@ $collection->sortBy(function ($a, $b):int {
     return [$a['lastname'], $a['firstname']] <=> [$b['lastname'], $b['firstname']];
 });
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array (
@@ -2229,7 +2231,7 @@ $collection->sortBy(function ($a, $b):int {
     return [$a['lastname'], $a['firstname']] <=> [$b['lastname'], $b['firstname']];
 }, true);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array (
@@ -2262,7 +2264,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sortByKey();
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [age] => 25 [firstname] => John [lastname] => Doe ) 
@@ -2283,7 +2285,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->sortByKey(Order::DESC);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [lastname] => Doe [firstname] => John [age] => 25 ) 
@@ -2359,7 +2361,7 @@ $collection->sortKeyBy(function ($a, $b):int {
 
 });
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [a] => 4 [b] => 2 [c] => 8 [d] => 6 ) 
@@ -2544,10 +2546,10 @@ and do something with the items while not affecting the collection itself.
 
 ```php
 $collection = Collection::create(fn ():array => [1,2,3,4,5])->take(3)->tap(function ($collection) {
-    print_r($collection-toArray());
+    print_r($collection->toArray());
 })->skip(1);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 1 [1] => 2 [2] => 3 ) 
@@ -2575,7 +2577,7 @@ Instead, you can use this method to debug your collection.
 ```php
 $collection = Collection::create(fn ():array => [1,2,3]);
 
-$result = $collection-toArray();
+$result = $collection->toArray();
 
 print_r($result);
 
@@ -2675,6 +2677,58 @@ print_r($unique);
 ```
 ***
 
+### # unless
+
+```php
+> unless(bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):this
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Execute the given callback unless the first argument given to the method evaluates to true.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->unless(false, function (\FireHub\Support\Collections\Types\Array_Type $collection) {
+    $collection->add('height', '190cm');
+});
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm ) 
+```
+
+Third optional parameter is if condition is not meet.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->unless(true, function (\FireHub\Support\Collections\Types\Array_Type $collection) {
+    $collection->add('height', '190cm');
+}, function (\FireHub\Support\Collections\Types\Array_Type $collection) {
+    $collection->add('weight', '88kg');
+});
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [weight] => 88kg ) 
+```
+***
+
 ### # unset
 
 ```php
@@ -2699,7 +2753,7 @@ $collection = Collection::create(fn ():array => [
 
 $collection->unset('age');
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
@@ -2716,7 +2770,7 @@ $collection = Collection::create(fn ():array => [
 
 unset($collection['age']);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
@@ -2741,7 +2795,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $collection->unshift(6,7,8);
 
-print_r($collection-toArray());
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 6 [1] => 7 [2] => 8 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 ) 
@@ -2769,9 +2823,60 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 $collection->walk(function ($key, $value) {
     return $value * 2;
 });
-print_r($collection-toArray());
+
+print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
+```
+***
+
+### # when
+
+```php
+> when(bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):this
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | no | yes
+
+Execute the given callback when the first argument given to the method evaluates to true.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->when(true, function (\FireHub\Support\Collections\Types\Array_Type $collection) {
+    $collection->add('height', '190cm');
+});
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm ) 
+```
+
+Third optional parameter is if condition is not meet.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$collection->when(true, function (\FireHub\Support\Collections\Types\Array_Type $collection) {
+    $collection->add('height', '190cm');
+});
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [weight] => 88kg ) 
 ```
 ***

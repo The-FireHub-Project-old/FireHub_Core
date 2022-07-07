@@ -447,6 +447,34 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function when (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        $condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unless (bool $condition, Closure $condition_meet, ?Closure $condition_not_meet = null):self {
+
+        !$condition
+            ? $condition_meet($this)
+            : (is_null($condition_not_meet)
+                ?: $condition_not_meet($this));
+
+        return $this;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param object $offset <p>
