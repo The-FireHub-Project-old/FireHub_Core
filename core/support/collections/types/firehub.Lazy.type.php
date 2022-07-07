@@ -15,6 +15,7 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableNonRewindable;
+use FireHub\Support\Traits\Tappable;
 use Generator, Closure, Traversable, Error;
 
 use function iterator_to_array;
@@ -36,6 +37,8 @@ use function sprintf;
  * @package FireHub\Support\Collections
  */
 final class Lazy_Type implements CollectableNonRewindable {
+
+    use Tappable;
 
     /**
      * @inheritDoc
@@ -351,17 +354,6 @@ final class Lazy_Type implements CollectableNonRewindable {
             return [];
 
         });
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tap (Closure $callback):self {
-
-        $callback($this);
-
-        return $this;
 
     }
 

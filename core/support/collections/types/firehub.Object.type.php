@@ -15,6 +15,7 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
+use FireHub\Support\Traits\Tappable;
 use SplObjectStorage, Closure, Traversable, Error;
 
 use function iterator_to_array;
@@ -36,6 +37,8 @@ use function json_encode;
  * @package FireHub\Support\Collections
  */
 final class Object_Type implements CollectableRewindable {
+
+    use Tappable;
 
     /**
      * @inheritDoc
@@ -440,17 +443,6 @@ final class Object_Type implements CollectableRewindable {
         }
         return false;
 
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tap (Closure $callback):self {
-
-        $callback($this);
-
-        return $this;
 
     }
 

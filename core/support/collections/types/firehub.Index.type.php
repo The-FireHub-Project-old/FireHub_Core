@@ -15,6 +15,7 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
+use FireHub\Support\Traits\Tappable;
 use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function iterator_to_array;
@@ -42,6 +43,8 @@ use function count;
  * @package FireHub\Support\Collections
  */
 final class Index_Type implements CollectableRewindable {
+
+    use Tappable;
 
     /**
      * {@inheritDoc}
@@ -815,17 +818,6 @@ final class Index_Type implements CollectableRewindable {
             $items->setSize($counter);
 
         });
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tap (Closure $callback):self {
-
-        $callback($this);
-
-        return $this;
 
     }
 

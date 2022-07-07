@@ -2529,7 +2529,7 @@ print_r($takeWhile->all());
 > Available on collection:
 >> Basic | Index | Lazy | Object
 >> :---:|:---:|:---:|:---:
->> yes | yes | yes | no
+>> yes | yes | yes | yes
 
 Passes the collection to the given callback, allowing you to "tap" into the collection at a specific point
 and do something with the items while not affecting the collection itself.

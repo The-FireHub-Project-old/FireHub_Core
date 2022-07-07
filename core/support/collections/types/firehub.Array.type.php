@@ -15,6 +15,7 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
+use FireHub\Support\Traits\Tappable;
 use FireHub\Support\Collections\Enums\SortFlag;
 use FireHub\Support\Enums\Order;
 use Closure, Traversable, Error;
@@ -74,6 +75,8 @@ use function json_encode;
  * @package FireHub\Support\Collections
  */
 final class Array_Type implements CollectableRewindable {
+
+    use Tappable;
 
     /**
      * @inheritDoc
@@ -1303,17 +1306,6 @@ final class Array_Type implements CollectableRewindable {
             return $items ?? [];
 
         });
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tap (Closure $callback):self {
-
-        $callback($this);
-
-        return $this;
 
     }
 
