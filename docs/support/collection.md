@@ -78,6 +78,7 @@ nav_order: 1
 - - [# unless](#-unless)
 - - [# unset](#-unset)
 - - [# unshift](#-unshift)
+- - [# values](#-values)
 - - [# walk](#-walk)
 - - [# when](#-when)
 
@@ -2799,6 +2800,33 @@ print_r($collection->toArray());
 
 // result:
 // Array ( [0] => 6 [1] => 7 [2] => 8 [3] => 1 [4] => 2 [5] => 3 [6] => 4 [7] => 5 ) 
+```
+***
+
+### # values
+
+```php
+> values():self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | yes | no
+
+Retrieve only values from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+])->values();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [0] => John [1] => Doe [2] => 25 ) 
 ```
 ***
 

@@ -358,6 +358,30 @@ final class Lazy_Type implements CollectableNonRewindable {
     }
 
     /**
+     * ### Retrieve only values from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New collection with values only.
+     */
+    public function values ():self {
+
+        // return new collection
+        return new self(function ():Generator {
+
+            // iterate over current items
+            foreach ($this->items as $value) {
+
+                yield $value;
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
      * @inheritDoc
      */
     public function serialize ():string {

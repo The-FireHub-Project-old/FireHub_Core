@@ -1363,6 +1363,30 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Retrieve only values from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New collection with values only.
+     */
+    public function values ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            // iterate over current items
+            foreach ($this->items as $value) {
+
+                $items[] = $value;
+
+            }
+
+            return $items ?? [];
+
+        });
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
