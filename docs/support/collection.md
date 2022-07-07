@@ -537,7 +537,7 @@ $keys = Collection::create(fn ():array => [
     'firstname', 'lastname', 'age'
 ]);
 
-$combine = $collection->combine(['John', 'Doe', 25]);
+$combine = $keys->combine(['John', 'Doe', 25]);
 
 print_r($combine->toArray());
 
