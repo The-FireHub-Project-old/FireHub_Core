@@ -2377,6 +2377,8 @@ $collection->sortByMany([
     ['age', Order::DESC]
 ]);
 
+print_r($collection->toArray());
+
 // result:
 // Array (
 //  [0] => Array ( [id] => 2 [firstname] => Jane [lastname] => Doe [gender] => female [age] => 23 )
