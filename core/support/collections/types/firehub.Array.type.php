@@ -102,7 +102,11 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @param bool $multi_dimensional [optional] <p>
+     * Count multidimensional items.
+     * </p>
      */
     public function count (bool $multi_dimensional = false):int {
 
@@ -515,7 +519,8 @@ final class Array_Type implements CollectableRewindable {
      * Collection or array of values to be used for combining.
      * </p>
      *
-     * @throws Error If current and combined collection don't have the same number of items.
+     * @throws Error If one of the original key is neither string nor integer.
+     * @throws Error If current and combined collection need to have the same number of items.
      *
      * @return self New combined collection.
      */
@@ -526,7 +531,7 @@ final class Array_Type implements CollectableRewindable {
 
             foreach ($this->items as $value) {
 
-                $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string or integer');
+                $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string nor integer');
 
             }
 
@@ -680,6 +685,8 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Exchanges all keys with their associated values in collection
      * @since 0.2.0.pre-alpha.M2
+     *
+     * @throws Error If method flip requires that all values be either int or string.
      *
      * @return self New collection with flipped values.
      */
@@ -1244,6 +1251,12 @@ final class Array_Type implements CollectableRewindable {
      * List of fields to sort by.
      * </p>
      *
+     * @throws Error If each field has to have both field name and sort value.
+     * @throws Error If first key of each field is not integer nor string.
+     * @throws Error If sorting by many your collection is not 2-dimensional array.
+     * @throws Error If key does not exist.
+     * @throws Error If key is missing somewhere.
+     *
      * @return bool True on success, false otherwise.
      */
     public function sortByMany (array $fields):bool {
@@ -1574,6 +1587,8 @@ final class Array_Type implements CollectableRewindable {
      * @param array<int, mixed> $values <p>
      * List of values to search for.
      * </p>
+     *
+     * @throws Error If method whereDoesntContain() is not array of arrays, but value on key must be of type array.
      *
      * @return self New filtered collection.
      */

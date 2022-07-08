@@ -895,7 +895,8 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @throws Error If $offset does not exist in Collection or is not int.
+     * @throws Error If key is not int.
+     * @throws Error If key does not exist in Collection.
      */
     public function offsetGet (mixed $offset):mixed {
 
@@ -916,7 +917,8 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @throws Error If $offset is not int or string or does not exist in Collection.
+     * @throws Error If key is not int.
+     * @throws Error If key does not exist in Collection.
      */
     public function offsetSet (mixed $offset, mixed $value):void {
 
