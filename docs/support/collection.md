@@ -1008,21 +1008,9 @@ Example filtering 2-dimensional collection.
 
 ```php
 $collection = Collection::create(fn ():array => [
-    [
-        'firstname' => 'John',
-        'lastname' => 'Doe',
-        'age' => 25
-    ],
-    [
-        'firstname' => 'Jane',
-        'lastname' => 'Doe',
-        'age' => 21
-    ],
-    [
-        'firstname' => 'Richard',
-        'lastname' => 'Roe',
-        'age' => 27
-    ]
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
 ]);
 
 $filter = $collection->filter(function ($key, $value):bool {
