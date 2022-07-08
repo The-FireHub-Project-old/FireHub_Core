@@ -1406,7 +1406,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function where (int|string $key, Comparison $operator, mixed $value):self {
 
-        return $this->filter(function ($c_key, $c_value) use ($key, $operator, $value):bool {
+        return $this->filter(function ($c_key, $c_value) use ($key, $operator, $value):bool|int {
 
             return $operator->compare($c_value[$key], $value);
 
@@ -1432,7 +1432,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function whereNot (int|string $key, Comparison $operator, mixed $value):self {
 
-        return $this->reject(function ($c_key, $c_value) use ($key, $operator, $value):bool {
+        return $this->reject(function ($c_key, $c_value) use ($key, $operator, $value):bool|int {
 
             return $operator->compare($c_value[$key], $value);
 
@@ -1495,7 +1495,7 @@ final class Array_Type implements CollectableRewindable {
      * @param int|string $key <p>
      * Key to filter upon.
      * </p>
-     * @param array $values <p>
+     * @param array<int, mixed> $values <p>
      * List of values to search for.
      * </p>
      *
@@ -1527,7 +1527,7 @@ final class Array_Type implements CollectableRewindable {
      * @param int|string $key <p>
      * Key to filter upon.
      * </p>
-     * @param array $values <p>
+     * @param array<int, mixed> $values <p>
      * List of values to search for.
      * </p>
      *
@@ -1540,6 +1540,8 @@ final class Array_Type implements CollectableRewindable {
 
             // iterate over current items
             foreach ($this->items as $c_key => $c_value) {
+
+                is_array($c_value) ?: throw new Error(sprintf('Method whereDoesntContain() must be array of arrays, but value on key %s must be of type array', $c_key));
 
                 in_array($c_value[$key], $values) ?: $items[$c_key] = $c_value;
 
