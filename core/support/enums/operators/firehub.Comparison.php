@@ -64,7 +64,20 @@ enum Comparison {
      */
     case SPACESHIP;
 
-    public function compare (mixed $a, mixed $b):bool {
+    /**
+     * ### Compare current enum with provided values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $a <p>
+     * Value A to compare.
+     * </p>
+     * @param mixed $b <p>
+     * Value B to with value A.
+     * </p>
+     *
+     * @return bool|int Comparison result: true, false, -1, 0 or 1 if SPACESHIP is used
+     */
+    public function compare (mixed $a, mixed $b):bool|int {
 
         return match ($this) {
             self::EQUAL => $a === $b,
