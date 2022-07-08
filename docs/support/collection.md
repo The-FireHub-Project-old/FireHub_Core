@@ -637,7 +637,8 @@ var_dump($contains);
 ### # count
 
 ```php
-> count():int
+> count(bool $multi_dimensional = false):int // basic
+> count():int // index, lazy, object
 ```
 
 > Available on collection:
@@ -669,6 +670,21 @@ echo count($collection);
 
 // result:
 // 3
+```
+
+You can also count items in multidimensional collection using second parameter.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => ['name' => 'John', 'nickname' => 'Joe'], 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => ['name' => 'Jane', 'nickname' => 'Jan'], 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => ['name' => 'Richard', 'nickname' => 'Ricky'], 'lastname' => 'Roe', 'age' => 27]
+]);
+
+echo $collection->count(true);
+
+// result:
+// 18
 ```
 ***
 

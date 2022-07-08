@@ -21,6 +21,8 @@ use FireHub\Support\Enums\Order;
 use FireHub\Support\Enums\Operators\Comparison;
 use Closure, Traversable, Error;
 
+use const COUNT_RECURSIVE;
+use const COUNT_NORMAL;
 use const SORT_ASC;
 use const SORT_DESC;
 
@@ -102,9 +104,9 @@ final class Array_Type implements CollectableRewindable {
     /**
      * @inheritDoc
      */
-    public function count ():int {
+    public function count (bool $multi_dimensional = false):int {
 
-        return count($this->items);
+        return count($this->items, $multi_dimensional ? COUNT_RECURSIVE : COUNT_NORMAL);
 
     }
 
