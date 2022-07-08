@@ -40,8 +40,8 @@ use function array_diff_key;
 use function array_diff;
 use function array_diff_assoc;
 use function array_unique;
-use function array_intersect_key;
 use function array_flip;
+use function array_intersect_key;
 use function array_column;
 use function array_rand;
 use function array_reverse;
@@ -658,6 +658,23 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Exchanges all keys with their associated values in collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return self New collection with flipped values.
+     */
+    public function flip ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            return array_flip($this->items);
+
+        });
+
+    }
+
+    /**
      * ### Removes duplicate values from an array
      *
      * Method validates only values, and ignores keys.
@@ -727,7 +744,6 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($keys):array {
 
-            //return array_diff_key($this->items, array_flip($keys));
             return ($this->differenceKeys(array_flip($keys)))->toArray();
 
         });

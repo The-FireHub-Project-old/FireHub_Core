@@ -35,6 +35,7 @@ nav_order: 1
 - - [# every](#-every)
 - - [# except](#-except)
 - - [# filter](#-filter)
+- - [# flip](#-flip)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
 - - [# isset](#-isset)
@@ -1041,6 +1042,35 @@ $collection = Collection::object(function ($items):void {
 $filter = $collection->filter(function ($object, $info):bool {
     return $info === 'second class';
 });
+```
+***
+
+### # flip
+
+```php
+> flip():self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Exchanges all keys with their associated values in collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$flip = $collection->flip();
+
+print_r($flip->toArray());
+
+// result:
+// Array ( [John] => firstname [Doe] => lastname [25] => age ) 
 ```
 ***
 
