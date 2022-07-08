@@ -21,6 +21,9 @@ use FireHub\Support\Enums\Order;
 use FireHub\Support\Enums\Operators\Comparison;
 use Closure, Traversable, Error;
 
+use const SORT_ASC;
+use const SORT_DESC;
+
 use function count;
 use function sprintf;
 use function array_shift;
