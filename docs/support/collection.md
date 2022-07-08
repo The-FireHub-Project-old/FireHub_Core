@@ -38,6 +38,7 @@ nav_order: 1
 - - [# flip](#-flip)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
+- - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
 - - [# map](#-map)
 - - [# merge](#-merge)
@@ -1158,6 +1159,46 @@ echo $collection->getSize();
 
 // result:
 // 3 
+```
+***
+
+### # isMultiDimensional
+
+```php
+> isMultiDimensional():bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Checks if collection is multidimensional.
+
+> note: Any collection that has at least one item as array will be considered as multidimensional collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+var_dump($collection->isMultiDimensional());
+
+// result:
+// false 
+
+$collection = Collection::create(fn ():array => [
+    'firstname' => ['name' => 'John', 'nick' => 'Joe'],
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+var_dump($collection->isMultiDimensional());
+
+// result:
+// true 
 ```
 ***
 

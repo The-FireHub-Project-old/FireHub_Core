@@ -27,6 +27,8 @@ use const SORT_ASC;
 use const SORT_DESC;
 
 use function count;
+use function array_filter;
+use function is_array;
 use function sprintf;
 use function array_shift;
 use function array_unshift;
@@ -34,8 +36,6 @@ use function array_pop;
 use function array_push;
 use function array_merge_recursive;
 use function array_merge;
-use function array_filter;
-use function is_array;
 use function is_string;
 use function is_int;
 use function array_combine;
@@ -107,6 +107,21 @@ final class Array_Type implements CollectableRewindable {
     public function count (bool $multi_dimensional = false):int {
 
         return count($this->items, $multi_dimensional ? COUNT_RECURSIVE : COUNT_NORMAL);
+
+    }
+
+    /**
+     * ### Checks if collection is multidimensional
+     *
+     * Note that any collection that has at least one item as array
+     * will be considered as multidimensional collection.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return bool True if collection is multidimensional, false otherwise
+     */
+    public function isMultiDimensional ():bool {
+
+        return count(array_filter($this->items, 'is_array')) > 0;
 
     }
 
