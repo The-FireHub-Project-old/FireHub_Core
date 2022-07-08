@@ -81,6 +81,12 @@ nav_order: 1
 - - [# values](#-values)
 - - [# walk](#-walk)
 - - [# when](#-when)
+- - [# where](#-where)
+- - [# whereBetween](#-wherebetween)
+- - [# whereContains](#-wherecontains)
+- - [# whereDoesntContain](#-wheredoesntcontain)
+- - [# whereNot](#-wherenot)
+- - [# whereNotBetween](#-wherenotbetween)
 
 ## # Introduction
 
@@ -2925,5 +2931,200 @@ print_r($collection->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe [age] => 25 [weight] => 88kg ) 
+```
+***
+
+### # where
+
+```php
+> where(int|string $key, Comparison $operator, mixed $value):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and value.
+
+```php
+use FireHub\Support\Enums\Operators\Comparison;
+
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$where = $collection->where('age', Comparison::LESS_OR_EQUAL, 25);
+
+print_r($where->toArray());
+
+// result:
+// Array (
+//  [0] => Array ( [firstname] => John [lastname] => Doe [age] => 25 )
+//  [1] => Array ( [firstname] => Jane [lastname] => Doe [age] => 21 )
+// ) 
+```
+***
+
+### # whereBetween
+
+```php
+> whereBetween(int|string $key, int $greater_or_equal, int $less_or_equal):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and value between two values.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$whereBetween = $collection->whereBetween('age', 21, 26);
+
+print_r($whereBetween->toArray());
+
+// result:
+// Array (
+//  [0] => Array ( [firstname] => John [lastname] => Doe [age] => 25 )
+//  [1] => Array ( [firstname] => Jane [lastname] => Doe [age] => 21 )
+// ) 
+```
+***
+
+### # whereContains
+
+```php
+> whereContains(int|string $key, array $values):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and value that contains provider list of values.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$whereContains = $collection->whereContains('age', [21, 27]);
+
+print_r($whereContains->toArray());
+
+// result:
+// Array (
+//  [0] => Array ( [1] => Array ( [firstname] => Jane [lastname] => Doe [age] => 21 ) )
+//  [1] => Array ( [2] => Array ( [firstname] => Richard [lastname] => Roe [age] => 27 ) )
+// ) 
+```
+***
+
+### # whereDoesntContain
+
+```php
+> whereDoesntContain(int|string $key, array $values):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and values that doesn't contain in the list of values.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$whereDoesntContain = $collection->whereDoesntContain('age', [21, 27]);
+
+print_r($whereDoesntContain->toArray());
+
+// result:
+// Array (
+//  [0] => Array ( [firstname] => John [lastname] => Doe [age] => 25 )
+// ) 
+```
+***
+
+### # whereNot
+
+```php
+> whereNot(int|string $key, Comparison $operator, mixed $value):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and value to reject.
+
+```php
+use FireHub\Support\Enums\Operators\Comparison;
+
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$whereNot = $collection->whereNot('age', Comparison::LESS_OR_EQUAL, 24);
+
+print_r($whereNot->toArray());
+
+// result:
+// Array (
+//  [0] => Array ( [firstname] => John [lastname] => Doe [age] => 25 )
+//  [2] => Array ( [firstname] => Richard [lastname] => Roe [age] => 27 )
+// ) 
+```
+***
+
+### # whereNotBetween
+
+```php
+> whereNotBetween(int|string $key, int $greater_or_equal, int $less_or_equal):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Filters 2-dimensional collection by key and reject value between two values.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$whereNotBetween = $collection->whereNotBetween('age', 25, 26);
+
+print_r($whereNotBetween->toArray());
+
+// result:
+// Array (
+//  [1] => Array ( [firstname] => Jane [lastname] => Doe [age] => 21 )
+//  [2] => Array ( [firstname] => Richard [lastname] => Roe [age] => 27 )
+// ) 
 ```
 ***

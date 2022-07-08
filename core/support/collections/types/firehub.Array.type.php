@@ -18,6 +18,7 @@ use FireHub\Support\Collections\CollectableRewindable;
 use FireHub\Support\Traits\Tappable;
 use FireHub\Support\Collections\Enums\SortFlag;
 use FireHub\Support\Enums\Order;
+use FireHub\Support\Enums\Operators\Comparison;
 use Closure, Traversable, Error;
 
 use function count;
@@ -60,6 +61,7 @@ use function uksort;
 use function array_key_exists;
 use function array_multisort;
 use function serialize;
+use function in_array;
 use function json_encode;
 
 /**
@@ -1380,6 +1382,170 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
+            return $items ?? [];
+
+        });
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and value
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param \FireHub\Support\Enums\Operators\Comparison $operator <p>
+     * Comparison operator.
+     * </p>
+     * @param mixed $value <p>
+     * Value to search for.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function where (int|string $key, Comparison $operator, mixed $value):self {
+
+        return $this->filter(function ($c_key, $c_value) use ($key, $operator, $value):bool {
+
+            return $operator->compare($c_value[$key], $value);
+
+        });
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and value to reject
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param \FireHub\Support\Enums\Operators\Comparison $operator <p>
+     * Comparison operator.
+     * </p>
+     * @param mixed $value <p>
+     * Value to search for.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function whereNot (int|string $key, Comparison $operator, mixed $value):self {
+
+        return $this->reject(function ($c_key, $c_value) use ($key, $operator, $value):bool {
+
+            return $operator->compare($c_value[$key], $value);
+
+        });
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and value between two values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param int $greater_or_equal <p>
+     * Search values greater or equal to.
+     * </p>
+     * @param int $less_or_equal <p>
+     * Search values less or equal to.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function whereBetween (int|string $key, int $greater_or_equal, int $less_or_equal):self {
+
+        return $this->where($key, Comparison::GREATER_OR_EQUAL, $greater_or_equal)->where($key, Comparison::LESS_OR_EQUAL, $less_or_equal);
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and reject value between two values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param int $greater_or_equal <p>
+     * Search values greater or equal to.
+     * </p>
+     * @param int $less_or_equal <p>
+     * Search values less or equal to.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function whereNotBetween (int|string $key, int $greater_or_equal, int $less_or_equal):self {
+
+        return $this->filter(function ($c_key, $c_value) use ($key, $greater_or_equal, $less_or_equal):bool {
+
+            return Comparison::LESS->compare($c_value[$key], $greater_or_equal) || Comparison::GREATER->compare($c_value[$key], $less_or_equal);
+
+        });
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and value that contains provider list of values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param array $values <p>
+     * List of values to search for.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function whereContains (int|string $key, array $values):self {
+
+        $items = [];
+        foreach ($values as $value) {
+
+            $items[] = $this->where($key, Comparison::EQUAL, $value)->toArray();
+
+        }
+
+        // return new collection
+        return new self(function () use ($items):array {
+
+            // return new items
+            return $items;
+
+        });
+
+    }
+
+    /**
+     * ### Filters 2-dimensional collection by key and values that doesn't contain in the list of values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to filter upon.
+     * </p>
+     * @param array $values <p>
+     * List of values to search for.
+     * </p>
+     *
+     * @return self New filtered collection.
+     */
+    public function whereDoesntContain (int|string $key, array $values):self {
+
+        // return new collection
+        return new self(function () use ($key, $values):array {
+
+            // iterate over current items
+            foreach ($this->items as $c_key => $c_value) {
+
+                in_array($c_value[$key], $values) ?: $items[$c_key] = $c_value;
+
+            }
+
+            // return new items
             return $items ?? [];
 
         });
