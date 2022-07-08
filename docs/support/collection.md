@@ -1004,6 +1004,37 @@ print_r($filter->toArray());
 // Array ( [lastname] => Doe ) 
 ```
 
+Example filtering 2-dimensional collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    [
+        'firstname' => 'John',
+        'lastname' => 'Doe',
+        'age' => 25
+    ],
+    [
+        'firstname' => 'Jane',
+        'lastname' => 'Doe',
+        'age' => 21
+    ],
+    [
+        'firstname' => 'Richard',
+        'lastname' => 'Roe',
+        'age' => 27
+    ]
+]);
+
+$filter = $collection->filter(function ($key, $value):bool {
+    return $value['age'] >= '25';
+});
+
+print_r($filter->toArray());
+
+// result:
+// Array ( [0] => Array ( [firstname] => John [lastname] => Doe [age] => 25 ) [2] => Array ( [firstname] => Richard [lastname] => Roe [age] => 27 ) ) 
+```
+
 Example filtering object in object collection.
 
 ```php
