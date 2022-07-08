@@ -40,8 +40,8 @@ use function array_diff_key;
 use function array_diff;
 use function array_diff_assoc;
 use function array_unique;
-use function array_flip;
 use function array_intersect_key;
+use function array_flip;
 use function array_column;
 use function array_rand;
 use function array_reverse;
@@ -668,7 +668,15 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function ():array {
 
-            return array_flip($this->items);
+            foreach ($this->items as $key => $value) {
+
+                is_int($value) || is_string($value) ?: throw new Error('Method flip requires that all values be either int or string');
+
+                $items[$value] = $key;
+
+            }
+
+            return $items ?? [];
 
         });
 
