@@ -27,6 +27,7 @@ nav_order: 1
 - - [# combine](#-combine)
 - - [# contains](#-contains)
 - - [# count](#-count)
+- - [# countValues](#-countvalues)
 - - [# differenceAssoc](#-differenceassoc)
 - - [# differenceKeys](#-differencekeys)
 - - [# differenceValues](#-differencevalues)
@@ -686,6 +687,48 @@ echo $collection->count(true);
 
 // result:
 // 18
+```
+***
+
+### # countValues
+
+```php
+> countValues(null|int|string $key = null):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Count values from collection.
+
+```php
+$collection = Collection::create(fn ():array => [1,1,2,2,2,3,4,5,5,5,5]);
+
+$countValues = $collection->countValues();
+
+print_r($countValues->toArray());
+
+// result:
+// Array ( [1] => 2 [2] => 3 [3] => 1 [4] => 1 [5] => 4 ) 
+```
+
+You can also count individual items from multidimensional collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    ['firstname' => 'John', 'lastname' => 'Doe', 'age' => 25],
+    ['firstname' => 'Jane', 'lastname' => 'Doe', 'age' => 21],
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'age' => 27]
+]);
+
+$countValues = $collection->countValues('lastname');
+
+print_r($countValues->toArray());
+
+// result:
+// Array ( [Doe] => 2 [Roe] => 1 ) 
 ```
 ***
 

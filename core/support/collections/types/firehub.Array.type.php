@@ -34,6 +34,8 @@ use function array_shift;
 use function array_unshift;
 use function array_pop;
 use function array_push;
+use function array_count_values;
+use function array_column;
 use function array_merge_recursive;
 use function array_merge;
 use function is_string;
@@ -47,7 +49,6 @@ use function array_diff_assoc;
 use function array_unique;
 use function array_intersect_key;
 use function array_flip;
-use function array_column;
 use function array_rand;
 use function array_reverse;
 use function array_keys;
@@ -342,6 +343,37 @@ final class Array_Type implements CollectableRewindable {
 
             // return new items
             return $items ?? [];
+
+        });
+
+    }
+
+    /**
+     * ### Count values from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param null|int|string $key [optional] <p>
+     * Key to count if counting multidimensional array.
+     * </p>
+     *
+     * @throws Error If you have to provide key when counting multidimensional array.
+     *
+     * @return self New counted collection.
+     */
+    public function countValues (null|int|string $key = null):self {
+
+        // return new collection
+        return new self(function () use ($key):array {
+
+            if (!$this->isMultiDimensional()) {
+
+                return array_count_values($this->items);
+
+            }
+
+            return $key === null
+                ? throw new Error('You have to provide key when counting multidimensional array.')
+                : array_count_values(array_column($this->items, $key));
 
         });
 
