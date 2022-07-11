@@ -36,6 +36,8 @@ nav_order: 1
 - - [# every](#-every)
 - - [# except](#-except)
 - - [# filter](#-filter)
+- - [# first](#-first)
+- - [# firstKey](#-firstkey)
 - - [# flip](#-flip)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
@@ -45,6 +47,8 @@ nav_order: 1
 - - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
 - - [# keys](#-keys)
+- - [# last](#-last)
+- - [# lastKey](#-lastkey)
 - - [# map](#-map)
 - - [# merge](#-merge)
 - - [# mergeRecursive](#-mergerecursive)
@@ -1109,6 +1113,102 @@ $filter = $collection->filter(function ($object, $info):bool {
 ```
 ***
 
+### # first
+
+```php
+> first(Closure $callback = null):mixed
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Get first value from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$first = $collection->first();
+
+echo $first;
+
+// result:
+// John 
+```
+
+With optional parameter you can use function to get first value that passed truth test.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$first = $collection->first(function ($key):bool {
+    return $key === 'lastname';
+});
+
+echo $first;
+
+// result:
+// Doe 
+```
+***
+
+### # firstKey
+
+```php
+> firstKey(Closure $callback = null):null|int|string
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Get first key from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$firstKey = $collection->firstKey();
+
+echo $firstKey;
+
+// result:
+// firstname 
+```
+
+With optional parameter you can use function to get first key that passed truth test.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$firstKey = $collection->firstKey(function ($value):bool {
+    return $value === 'Doe';
+});
+
+echo $firstKey;
+
+// result:
+// lastname 
+```
+***
+
 ### # flip
 
 ```php
@@ -1438,6 +1538,102 @@ print_r($keys->toArray());
 
 // result:
 // Array ( [2] => age ) 
+```
+***
+
+### # last
+
+```php
+> last(Closure $callback = null):mixed
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Get last value from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$last = $collection->last();
+
+echo $last;
+
+// result:
+// 25 
+```
+
+With optional parameter you can use function to get last value that passed truth test.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$last = $collection->last(function ($key):bool {
+    return $key === 'lastname';
+});
+
+echo $last;
+
+// result:
+// Doe 
+```
+***
+
+### # lastKey
+
+```php
+> lastKey(Closure $callback = null):null|int|string
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Get last key from collection.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$lastKey = $collection->lastKey();
+
+echo $lastKey;
+
+// result:
+// age 
+```
+
+With optional parameter you can use function to get last key that passed truth test.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$lastKey = $collection->lastKey(function ($value):bool {
+    return $value === 'Doe';
+});
+
+echo $lastKey;
+
+// result:
+// lastname 
 ```
 ***
 

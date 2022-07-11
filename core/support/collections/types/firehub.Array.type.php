@@ -70,6 +70,8 @@ use function is_null;
 use function array_values;
 use function array_intersect;
 use function array_intersect_assoc;
+use function array_key_first;
+use function array_key_last;
 use function serialize;
 use function in_array;
 use function json_encode;
@@ -1741,6 +1743,134 @@ final class Array_Type implements CollectableRewindable {
             return array_intersect_assoc($this->items, ...$arrays ?? []);
 
         });
+
+    }
+
+    /**
+     * ### Get first value from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param ?Closure $callback [optional] <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return mixed First value from collection.
+     */
+    public function first (Closure $callback = null):mixed {
+
+        // if callback is invoked
+        if ($callback !== null) {
+
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is true
+                if ($callback($key)) return $value;
+
+            }
+
+            return null;
+
+        }
+
+        $first_key = array_key_first($this->items);
+
+        return !is_null($first_key) ? $this->get($first_key) : null;
+
+    }
+
+    /**
+     * ### Get first key from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param ?Closure $callback [optional] <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return null|int|string First key from collection.
+     */
+    public function firstKey (Closure $callback = null):null|int|string {
+
+        // if callback is invoked
+        if ($callback !== null) {
+
+            foreach ($this->items as $key => $value) {
+
+                // add items to array if callback is true
+                if ($callback($value)) return $key;
+
+            }
+
+            return null;
+
+        }
+
+        $first_key = array_key_first($this->items);
+
+        return !is_null($first_key) ? $first_key : null;
+
+    }
+
+    /**
+     * ### Get last value from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param ?Closure $callback [optional] <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return mixed Last value from collection.
+     */
+    public function last (Closure $callback = null):mixed {
+
+        // if callback is invoked
+        if ($callback !== null) {
+
+            foreach ($this->reverse(true) as $key => $value) {
+
+                // add items to array if callback is true
+                if ($callback($key)) return $value;
+
+            }
+
+            return null;
+
+        }
+
+        $last_key = array_key_last($this->items);
+
+        return !is_null($last_key) ? $this->get($last_key) : null;
+
+    }
+
+    /**
+     * ### Get last key from collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param ?Closure $callback [optional] <p>
+     * Data from callable source.
+     * </p>
+     *
+     * @return null|int|string Last key from collection.
+     */
+    public function lastKey (Closure $callback = null):null|int|string {
+
+        // if callback is invoked
+        if ($callback !== null) {
+
+            foreach ($this->reverse(true) as $key => $value) {
+
+                // add items to array if callback is true
+                if ($callback($value)) return $key;
+
+            }
+
+            return null;
+
+        }
+
+        $last_key = array_key_last($this->items);
+
+        return !is_null($last_key) ? $last_key : null;
 
     }
 
