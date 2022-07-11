@@ -59,6 +59,7 @@ nav_order: 1
 - - [# push](#-push)
 - - [# pluck](#-pluck)
 - - [# random](#-random)
+- - [# reduce](#-reduce)
 - - [# replace](#-replace)
 - - [# reject](#-reject)
 - - [# reverse](#-reverse)
@@ -2027,6 +2028,58 @@ $random = $collection->random(2);
 
 // result (random value):
 // Array ( [0] => Cypher [1] => Morpheus ) 
+```
+***
+
+### # reduce
+
+```php
+> reduce(Closure $callback, mixed $initial = null):mixed
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Iteratively reduce the array to a single value using a callback function.
+
+```php
+$collection = Collection::create(fn ():array => [1, 2, 3, 4, 5]);
+
+$reduce = $collection->reduce(function ($carry, $key, $value) {
+    return $carry + $value;
+});
+
+echo $reduce;
+
+// result (because: 1+2+3+4+5):
+// 15 
+
+$reduce = $collection->reduce(function ($carry, $key, $value) {
+    return $carry * $value;
+}, 10);
+
+echo $reduce;
+
+// result (because: 10*1*2*3*4*5):
+// 15 
+```
+
+The value for $carry on the first iteration is null.  
+However, you may specify its initial value by passing a second argument to reduce.
+
+```php
+$collection = Collection::create(fn ():array => [1, 2, 3, 4, 5]);
+
+$reduce = $collection->reduce(function ($carry, $key, $value) {
+    return $carry + $value;
+}, 5);
+
+echo $reduce;
+
+// result (because: 5+1+2+3+4+5):
+// 20 
 ```
 ***
 

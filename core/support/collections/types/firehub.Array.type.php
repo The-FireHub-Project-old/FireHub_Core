@@ -1875,6 +1875,33 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Iteratively reduce the array to a single value using a callback function
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param Closure $callback <p>
+     * Data from callable source.
+     * </p>
+     * @param mixed $initial [optional] <p>
+     * If the optional initial is available, it will be used at the beginning of the process, or as a final result in case the array is empty.
+     * </p>
+     *
+     * @return mixed The resulting value.
+     */
+    public function reduce (Closure $callback, mixed $initial = null):mixed {
+
+        $result = $initial;
+
+        foreach ($this->items as $key => $value) {
+
+            $result = $callback($result, $key, $value);
+
+        }
+
+        return $result;
+
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @throws Error If $offset is not int or string.
