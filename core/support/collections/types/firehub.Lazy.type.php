@@ -358,6 +358,42 @@ final class Lazy_Type implements CollectableNonRewindable {
     }
 
     /**
+     * ### Return new collection with keys as values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $filter [optional] <p>
+     * If specified, then only keys containing these values are returned.
+     * </p>
+     *
+     * @return self New collection from keys.
+     */
+    public function keys (mixed $filter = null):self {
+
+        // return new collection
+        return new self(function () use ($filter):Generator {
+
+            // iterate over current items
+            foreach ($this->items as $key => $value) {
+
+                if (is_null($filter)) { // if filter is not set
+
+                    yield $key;
+
+                } else if ($value === $filter) { // if value is equal to filter
+
+                    yield $key;
+
+                }
+
+            }
+
+            return [];
+
+        });
+
+    }
+
+    /**
      * ### Retrieve only values from collection
      * @since 0.2.0.pre-alpha.M2
      *

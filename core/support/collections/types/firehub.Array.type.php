@@ -66,6 +66,7 @@ use function usort;
 use function uksort;
 use function array_key_exists;
 use function array_multisort;
+use function is_null;
 use function array_values;
 use function array_intersect;
 use function array_intersect_assoc;
@@ -1453,6 +1454,27 @@ final class Array_Type implements CollectableRewindable {
                 ?: $condition_not_meet($this));
 
         return $this;
+
+    }
+
+    /**
+     * ### Return new collection with keys as values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $filter [optional] <p>
+     * If specified, then only keys containing these values are returned.
+     * </p>
+     *
+     * @return self New collection from keys.
+     */
+    public function keys (mixed $filter = null):self {
+
+        // return new collection
+        return new self(function () use ($filter):array {
+
+            return is_null($filter) ? array_keys($this->items) : array_keys($this->items, $filter, true);
+
+        });
 
     }
 

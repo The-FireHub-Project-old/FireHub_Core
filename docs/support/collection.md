@@ -44,6 +44,7 @@ nav_order: 1
 - - [# intersectKey](#-intersectkey)
 - - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
+- - [# keys](#-keys)
 - - [# map](#-map)
 - - [# merge](#-merge)
 - - [# mergeRecursive](#-mergerecursive)
@@ -1394,6 +1395,52 @@ echo isset($collection['age']);
 ```
 ***
 
+### # keys
+
+```php
+> keys(mixed $filter = null):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | yes | no
+
+Return new collection with keys as values.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$keys = $collection->keys();
+
+print_r($keys->toArray());
+
+// result:
+// Array ( [0] => firstname [1] => lastname [2] => age ) 
+```
+
+You can use parameter to filter only keys with specific value.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+$keys = $collection->keys(25);
+
+print_r($keys->toArray());
+
+// result:
+// Array ( [2] => age ) 
+```
+***
+
 ### # map
 
 ```php
@@ -1415,10 +1462,11 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 $multiplied = $collection->map(function ($key, $value) {
     return $value * 2;
 });
+
 print_r($multiplied->toArray());
 
 // result:
-// Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 )
+// Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 [4] => 10 ) 
 ```
 ***
 
