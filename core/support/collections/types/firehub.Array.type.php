@@ -66,6 +66,8 @@ use function usort;
 use function uksort;
 use function array_key_exists;
 use function array_multisort;
+use function array_intersect;
+use function array_intersect_assoc;
 use function serialize;
 use function in_array;
 use function json_encode;
@@ -606,6 +608,36 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * ### Computes the difference of collections or arrays
+     *
+     * Compares existing collection against one or more other collection or array
+     * and returns the values in the new collection that are not present in any of the other collections.
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
+     * Collection or array to compare against.
+     * </p>
+     *
+     * @return self New collection.
+     */
+    public function difference (self|array ...$compares):self {
+
+        // return new collection
+        return new self(function () use ($compares):array {
+
+            foreach ($compares as $compare) {
+
+                $excludes[] = $compare instanceof self ? $compare->items : $compare;
+
+            }
+
+            return array_diff($this->items, ...$excludes ?? []);
+
+        });
+
+    }
+
+    /**
      * ### Computes the difference of collections or arrays using keys for comparison
      *
      * Compares the keys from array against the keys from collection or array and returns the difference.
@@ -630,36 +662,6 @@ final class Array_Type implements CollectableRewindable {
             }
 
             return array_diff_key($this->items, ...$excludes ?? []);
-
-        });
-
-    }
-
-    /**
-     * ### Computes the difference of collections or arrays
-     *
-     * Compares existing collection against one or more other collection or array
-     * and returns the values in the new collection that are not present in any of the other collections.
-     * @since 0.2.0.pre-alpha.M2
-     *
-     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
-     * Collection or array to compare against.
-     * </p>
-     *
-     * @return self New collection.
-     */
-    public function differenceValues (self|array ...$compares):self {
-
-        // return new collection
-        return new self(function () use ($compares):array {
-
-            foreach ($compares as $compare) {
-
-                $excludes[] = $compare instanceof self ? $compare->items : $compare;
-
-            }
-
-            return array_diff($this->items, ...$excludes ?? []);
 
         });
 
@@ -1640,6 +1642,87 @@ final class Array_Type implements CollectableRewindable {
 
             // return new items
             return $items ?? [];
+
+        });
+
+    }
+
+    /**
+     * ### Computes the intersection of collections with values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
+     * Collections or arrays to compare values against.
+     * </p>
+     *
+     * @return self New intersected collection that contains the values in original collection whose values exist in all collections from parameter.
+     */
+    public function intersect (self|array ...$collections):self {
+
+        // return new collection
+        return new self(function () use ($collections):array {
+
+            foreach ($collections as $collection) {
+
+                $arrays[] = $collection instanceof self ? $collection->items : $collection;
+
+            }
+
+            return array_intersect($this->items, ...$arrays ?? []);
+
+        });
+
+    }
+
+    /**
+     * ### Computes the intersection of collections with keys
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
+     * Collections or arrays to compare values against.
+     * </p>
+     *
+     * @return self New intersected collection that contains all the values in original collection whose keys exist in all collections from parameter.
+     */
+    public function intersectKey (self|array ...$collections):self {
+
+        // return new collection
+        return new self(function () use ($collections):array {
+
+            foreach ($collections as $collection) {
+
+                $arrays[] = $collection instanceof self ? $collection->items : $collection;
+
+            }
+
+            return array_intersect_key($this->items, ...$arrays ?? []);
+
+        });
+
+    }
+
+    /**
+     * ### Computes the intersection of collections with additional index check
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
+     * Collections or arrays to compare values against.
+     * </p>
+     *
+     * @return self New intersected collection that contains the values in original collection whose keys and values exist in all collections from parameter.
+     */
+    public function intersectAssoc (self|array ...$collections):self {
+
+        // return new collection
+        return new self(function () use ($collections):array {
+
+            foreach ($collections as $collection) {
+
+                $arrays[] = $collection instanceof self ? $collection->items : $collection;
+
+            }
+
+            return array_intersect_assoc($this->items, ...$arrays ?? []);
 
         });
 

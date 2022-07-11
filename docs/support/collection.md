@@ -28,9 +28,9 @@ nav_order: 1
 - - [# contains](#-contains)
 - - [# count](#-count)
 - - [# countValues](#-countvalues)
+- - [# difference](#-difference)
 - - [# differenceAssoc](#-differenceassoc)
 - - [# differenceKeys](#-differencekeys)
-- - [# differenceValues](#-differencevalues)
 - - [# duplicated](#-duplicated)
 - - [# each](#-each)
 - - [# every](#-every)
@@ -39,6 +39,9 @@ nav_order: 1
 - - [# flip](#-flip)
 - - [# get](#-get)
 - - [# getSize](#-getsize)
+- - [# intersect](#-intersect)
+- - [# intersectAssoc](#-intersectassoc)
+- - [# intersectKey](#-intersectkey)
 - - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
 - - [# map](#-map)
@@ -732,6 +735,40 @@ print_r($countValues->toArray());
 ```
 ***
 
+### # difference
+
+```php
+> difference(self|array ...$compares):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Computes the difference of collections or arrays.
+
+Compares existing collection against one or more other collection or array
+and returns the values in the new collection that are not present in any of the other collections.
+
+> note: method accepts boot collections and PHP arrays.
+
+> note: you can put as many as you like collections or arrays in this method.
+
+```php
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+$new_collection = Collection::create(fn ():array => [3,4,5,6,7]);
+
+$diff = $collection->differenceValues($new_collection);
+
+print_r($diff->toArray());
+
+// result:
+// Array ( [0] => 1 [1] => 2 ) 
+```
+***
+
 ### # differenceAssoc
 
 ```php
@@ -805,40 +842,6 @@ print_r($diff->toArray());
 
 // result:
 // Array ( [firstname] => John [lastname] => Doe ) 
-```
-***
-
-### # differenceValues
-
-```php
-> differenceValues(self|array ...$compares):self
-```
-
-> Available on collection:
->> Basic | Index | Lazy | Object
->> :---:|:---:|:---:|:---:
->> yes | no | no | no
-
-Computes the difference of collections or arrays.
-
-Compares existing collection against one or more other collection or array
-and returns the values in the new collection that are not present in any of the other collections.
-
-> note: method accepts boot collections and PHP arrays.
-
-> note: you can put as many as you like collections or arrays in this method.
-
-```php
-$collection = Collection::create(fn ():array => [1,2,3,4,5]);
-
-$new_collection = Collection::create(fn ():array => [3,4,5,6,7]);
-
-$diff = $collection->differenceValues($new_collection);
-
-print_r($diff->toArray());
-
-// result:
-// Array ( [0] => 1 [1] => 2 ) 
 ```
 ***
 
@@ -1202,6 +1205,108 @@ echo $collection->getSize();
 
 // result:
 // 3 
+```
+***
+
+### # intersect
+
+```php
+> intersect(self|array ...$collections):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> Yes | no | no | no
+
+Computes the intersection of collections that contains the values in original collection
+whose values exist in all collections from parameter.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'gender' => 'male',
+    'age' => 25
+]);
+
+$intersected = $collection->intersect(
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 27],
+    Collection::create(fn ():array => ['name' => 'John', 'surname' => 'Roe', 'sex' => 'male', 'age' => 26])
+);
+
+print_r($intersected->toArray());
+
+// result:
+// Array ( [gender] => male )
+```
+***
+
+### # intersectAssoc
+
+```php
+> intersectAssoc(self|array ...$collections):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> Yes | no | no | no
+
+Computes the intersection of collections that contains the values in original collection
+whose keys and values exist in all collections from parameter.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'gender' => 'male',
+    'age' => 25
+]);
+
+$intersected = $collection->intersectAssoc(
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 27],
+    Collection::create(fn ():array => ['firstname' => 'John', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 26])
+);
+
+print_r($intersected->toArray());
+
+// result:
+// Array ( [gender] => male )
+```
+***
+
+### # intersectKey
+
+```php
+> intersectKey(self|array ...$collections):self
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> Yes | no | no | no
+
+Computes the intersection of collections that contains all the values in original collection
+whose keys exist in all collections from parameter.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'gender' => 'male',
+    'age' => 25
+]);
+
+$intersected = $collection->intersectKey(
+    ['firstname' => 'Richard', 'lastname' => 'Roe', 'gender' => 'male', 'age' => 27],
+    Collection::create(fn ():array => ['name' => 'John', 'surname' => 'Roe', 'sex' => 'male', 'age' => 26])
+);
+
+print_r($intersected->toArray());
+
+// result:
+// Array ( [age] => 25 ) 
 ```
 ***
 
