@@ -66,6 +66,7 @@ use function usort;
 use function uksort;
 use function array_key_exists;
 use function array_multisort;
+use function array_values;
 use function array_intersect;
 use function array_intersect_assoc;
 use function serialize;
@@ -1466,14 +1467,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function ():array {
 
-            // iterate over current items
-            foreach ($this->items as $value) {
-
-                $items[] = $value;
-
-            }
-
-            return $items ?? [];
+            return array_values($this->items);
 
         });
 
