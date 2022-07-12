@@ -124,4 +124,23 @@ final class Collection {
 
     }
 
+    /**
+     * ### Fill the collection with values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * Value to use for filling.
+     * </p>
+     * @param int $length <p>
+     * Number of elements to insert.
+     * </p>
+     *
+     * @return \FireHub\Support\Collections\Predefined\Fill
+     */
+    public static function fill (mixed $value, int $length):Fill {
+
+        return new Fill($value, $length);
+
+    }
+
 }
