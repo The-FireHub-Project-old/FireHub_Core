@@ -28,6 +28,8 @@ use const SORT_DESC;
 
 use function count;
 use function array_filter;
+use function range;
+use function array_keys;
 use function is_array;
 use function sprintf;
 use function array_shift;
@@ -51,7 +53,6 @@ use function array_intersect_key;
 use function array_flip;
 use function array_rand;
 use function array_reverse;
-use function array_keys;
 use function shuffle;
 use function array_slice;
 use function array_splice;
@@ -133,6 +134,20 @@ final class Array_Type implements CollectableRewindable {
     public function isMultiDimensional ():bool {
 
         return count(array_filter($this->items, 'is_array')) > 0;
+
+    }
+
+    /**
+     * ### Checks if collection is associative
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return bool True if collection is associative, false otherwise
+     */
+    public function isAssociative ():bool {
+
+        if ($this->count() === 0) return false;
+
+        return array_keys($this->items) !== range(0, count($this->items) - 1);
 
     }
 

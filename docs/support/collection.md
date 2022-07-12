@@ -49,6 +49,7 @@ nav_order: 1
 - - [# intersect](#-intersect)
 - - [# intersectAssoc](#-intersectassoc)
 - - [# intersectKey](#-intersectkey)
+- - [# isAssociative](#-isassociative)
 - - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
 - - [# keys](#-keys)
@@ -1539,6 +1540,40 @@ print_r($intersected->toArray());
 
 // result:
 // Array ( [age] => 25 ) 
+```
+***
+
+### # isAssociative
+
+```php
+> isAssociative():bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Checks if collection is associative.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+var_dump($collection->isAssociative());
+
+// result:
+// true 
+
+$collection = Collection::create(fn ():array => [1,2,3,4,5]);
+
+var_dump($collection->isAssociative());
+
+// result:
+// false 
 ```
 ***
 
