@@ -15,8 +15,8 @@
 namespace FireHub\Support\Collections\Predefined;
 
 use FireHub\Support\Collections\Collection;
-use FireHub\Support\Collections\Types\ {Array_Type};
-use \Error;
+use FireHub\Support\Collections\Types\Array_Type;
+use Error;
 
 /**
  * ### Fill the collection with keys and values
