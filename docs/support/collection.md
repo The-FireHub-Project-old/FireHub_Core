@@ -22,6 +22,7 @@ nav_order: 1
 - [# Predefined collections](#-predefined-collections)
 - - [# fill](#-fill)
 - - [# fillAssoc](#-fillassoc)
+- - [# fillKeys](#-fillkeys)
 - [# Method Listing](#-method-listing)
 - - [# add](#-add)
 - - [# all](#-all)
@@ -440,6 +441,29 @@ print_r($collection->toArray());
 
 // result:
 // Array ( [1] => a [2] => b [3] => c [4] => d ) 
+```
+***
+
+### # fillKeys
+
+```php
+> fillKeys (array $keys, mixed $value):fillKeys
+```
+
+> Available for collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | yes | no
+
+Fill an array with values, specifying keys.
+
+```php
+$collection = Collection::FillKeys([1,2,3,4], 'bananas')->asBasic();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [1] => bananas [2] => bananas [3] => bananas [4] => bananas ) 
 ```
 ***
 
