@@ -51,9 +51,7 @@ final class FillAssoc {
      */
     public function asBasic ():Array_Type {
 
-        return Collection::create(function ():array {
-            return $this->keys;
-        });
+        return Collection::create(fn():array => $this->keys)->combine($this->values);
 
     }
 
