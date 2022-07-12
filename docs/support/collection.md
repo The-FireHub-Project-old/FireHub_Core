@@ -117,6 +117,7 @@ All collections currently in FireHub are considered to be _lazy_, means that fun
 static method will not fill collection entities until you actually need them or ask for them.
 Our collections in examples bellow won't produce any results until we ask for collection items or try to do
 some other function on top of our initial function.
+
 ***
 
 ## # Basic Collection
@@ -124,6 +125,7 @@ some other function on top of our initial function.
 Basic Collection type is collection that has main focus of performance and doesn't concern
 itself about memory consumption
 This collection can hold any type of data.
+
 ***
 
 ### # Creating Basic Collection
@@ -187,6 +189,7 @@ Index Collection allows only integers as keys, but it is faster and uses less me
 basic collection.  
 This collection type must be resized manually and allows only integers within the range
 as indexes.
+
 ***
 
 ### # Creating Index Collection
@@ -228,6 +231,7 @@ and allow you to work with very large datasets while keeping memory usage low.
 
 While it will keep memory usage low at any array size, it will take a performance hit while
 doing so.
+
 ***
 
 ### # Creating Lazy Collection
@@ -259,6 +263,7 @@ $collection = Collection::lazy(function ():Generator {
 
 While any collection can store objects, Object collection is specialized to store large amount
 of them.
+
 ***
 
 ### # Creating Object Collection
@@ -382,6 +387,7 @@ There are number of predefined collections made for quickly creating some basic 
 
 All of these methods bellow will have a choice to create some collection type as next method in
 chain, and you will have new collection ready for you.
+
 ***
 
 ### # fill
@@ -420,6 +426,7 @@ Bellow is a list of all available methods you can use on the collections.
 
 Not all collection types will have available all these methods, so we will list all collection that
 can use each method in separate table.
+
 ***
 
 ### # add
