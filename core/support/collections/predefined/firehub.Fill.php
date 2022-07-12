@@ -16,7 +16,7 @@ namespace FireHub\Support\Collections\Predefined;
 
 use FireHub\Support\Collections\Collection;
 use FireHub\Support\Collections\Types\ {
-    Array_Type, Index_Type, Lazy_Type
+    Array_Type, Index_Type, Lazy_Type, Object_Type
 };
 use Generator;
 
@@ -82,6 +82,22 @@ final class Fill {
         return Collection::lazy(function ():Generator {
             for ($counter = 0; $counter < $this->length; $counter++) {
                 yield $this->value;
+            }
+        });
+
+    }
+
+    /**
+     * ### Fill as Object Collection
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return \FireHub\Support\Collections\Types\Object_Type
+     */
+    public function asObject ():Object_Type {
+
+        return Collection::object(function ($items):void {
+            for ($counter = 0; $counter < $this->length; $counter++) {
+                $items[new $this->value] = $counter;
             }
         });
 
