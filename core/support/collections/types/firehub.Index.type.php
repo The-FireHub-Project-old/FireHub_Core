@@ -81,6 +81,15 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isEmpty ():bool {
+
+        return $this->count() === 0;
+
+    }
+
+    /**
      * ### Replaces an item at the collection
      * @since 0.2.0.pre-alpha.M2
      *

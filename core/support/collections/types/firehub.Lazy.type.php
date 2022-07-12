@@ -68,6 +68,15 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * @inheritDoc
      */
+    public function isEmpty ():bool {
+
+        return $this->count() === 0;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function filter (Closure $callback):self {
 
         // return new collection

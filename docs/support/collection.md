@@ -50,6 +50,7 @@ nav_order: 1
 - - [# intersectAssoc](#-intersectassoc)
 - - [# intersectKey](#-intersectkey)
 - - [# isAssociative](#-isassociative)
+- -  [# isEmpty](#-isempty)
 - - [# isMultiDimensional](#-ismultidimensional)
 - - [# isset](#-isset)
 - - [# keys](#-keys)
@@ -1574,6 +1575,33 @@ var_dump($collection->isAssociative());
 
 // result:
 // false 
+```
+***
+
+### # isEmpty
+
+```php
+> isEmpty():bool
+```
+
+> Available on collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | yes
+
+Checks if collection is empty.
+
+```php
+$collection = Collection::create(fn ():array => [
+    'firstname' => 'John',
+    'lastname' => 'Doe',
+    'age' => 25
+]);
+
+var_dump($collection->isEmpty());
+
+// result:
+// false
 ```
 ***
 

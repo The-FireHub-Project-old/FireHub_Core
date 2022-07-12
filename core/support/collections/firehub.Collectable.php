@@ -45,6 +45,14 @@ interface Collectable {
     public function all ():mixed;
 
     /**
+     * ### Checks if collection is empty
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @return bool True if collection is empty, false otherwise
+     */
+    public function isEmpty ():bool;
+
+    /**
      * ### Filter elements of the Collection
      * @since 0.2.0.pre-alpha.M2
      *

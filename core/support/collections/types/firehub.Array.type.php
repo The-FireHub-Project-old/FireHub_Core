@@ -123,6 +123,15 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isEmpty ():bool {
+
+        return $this->count() === 0;
+
+    }
+
+    /**
      * ### Checks if collection is multidimensional
      *
      * Note that any collection that has at least one item as array
@@ -145,7 +154,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function isAssociative ():bool {
 
-        if ($this->count() === 0) return false;
+        if ($this->isEmpty()) return false;
 
         return array_keys($this->items) !== range(0, count($this->items) - 1);
 
