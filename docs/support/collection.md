@@ -21,6 +21,7 @@ nav_order: 1
 - - [# JSON Serialize](#-json-serialize)
 - [# Predefined collections](#-predefined-collections)
 - - [# fill](#-fill)
+- - [# fillAssoc](#-fillassoc)
 - [# Method Listing](#-method-listing)
 - - [# add](#-add)
 - - [# all](#-all)
@@ -416,6 +417,29 @@ print_r($collection->toArray());
 
 // result:
 // Array ( [0] => bananas [1] => bananas [2] => bananas [3] => bananas [4] => bananas ) 
+```
+***
+
+### # fillAssoc
+
+```php
+> fillAssoc (array $keys, array $values):FillAssoc
+```
+
+> Available for collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | no | no | no
+
+Fill the collection with keys and values.
+
+```php
+$collection = Collection::FillAssoc([1,2,3,4], ['a','b','c','d'])->asBasic();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [1] => a [2] => b [3] => c [4] => d ) 
 ```
 ***
 
