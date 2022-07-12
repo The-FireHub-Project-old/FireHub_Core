@@ -53,7 +53,7 @@ final class FillAssoc {
 
         return Collection::create(function ():array {
             return $this->keys;
-        })->combine($this->values);
+        });
 
     }
 
