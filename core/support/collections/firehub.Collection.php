@@ -18,7 +18,7 @@ use FireHub\Support\Collections\Types\ {
     Array_Type, Index_Type, Lazy_Type, Object_Type
 };
 use FireHub\Support\Collections\Predefined\ {
-    Fill, FillKeys, FillAssoc
+    Fill, FillKeys
 };
 use Closure;
 
@@ -140,6 +140,26 @@ final class Collection {
     public static function fill (mixed $value, int $length):Fill {
 
         return new Fill($value, $length);
+
+    }
+
+    /**
+     * ### Fill an array with values, specifying keys
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param array<int|string, int|string> $keys <p>
+     * Array of values that will be used as keys.
+     * Illegal values for key will be converted to string.
+     * </p>
+     * @param mixed $value <p>
+     * Value to use for filling.
+     * </p>
+     *
+     * @return \FireHub\Support\Collections\Predefined\FillKeys
+     */
+    public static function fillKeys (array $keys, mixed $value):FillKeys {
+
+        return new FillKeys($keys, $value);
 
     }
 
