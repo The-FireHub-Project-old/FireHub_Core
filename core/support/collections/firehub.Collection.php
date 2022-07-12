@@ -18,9 +18,9 @@ use FireHub\Support\Collections\Types\ {
     Array_Type, Index_Type, Lazy_Type, Object_Type
 };
 use FireHub\Support\Collections\Predefined\ {
-    Fill, FillKeys, FillAssoc
+    Fill, FillKeys, FillAssoc, Range
 };
-use Closure;
+use Closure, Error;
 
 /**
  * ### Data collection
@@ -180,6 +180,32 @@ final class Collection {
     public static function FillAssoc (array $keys, array $values):FillAssoc {
 
         return new FillAssoc($keys, $values);
+
+    }
+
+    /**
+     * ### Creates the collection containing a range of items
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param string|int|float $start <p>
+     * First value of the sequence.
+     * </p>
+     * @param string|int|float $end <p>
+     * The sequence is ended upon reaching the end value.
+     * </p>
+     * @param int|float $step [optional] <p>
+     * If a step value is given, it will be used as the increment between elements in the sequence.
+     * Step should be given as a positive number. If not specified, step will default to 1.
+     * </p>
+     *
+     * @throws Error If Your start is bigger then the end of collection.
+     * @throws Error If Your step is bigger then the end of collection.
+     *
+     * @return \FireHub\Support\Collections\Predefined\Range
+     */
+    public static function range (string|int|float $start, string|int|float $end, int|float $step = 1):Range {
+
+        return new Range($start, $end, $step);
 
     }
 

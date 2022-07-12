@@ -23,6 +23,7 @@ nav_order: 1
 - - [# fill](#-fill)
 - - [# fillAssoc](#-fillassoc)
 - - [# fillKeys](#-fillkeys)
+- - [# range](#-range)
 - [# Method Listing](#-method-listing)
 - - [# add](#-add)
 - - [# all](#-all)
@@ -464,6 +465,41 @@ print_r($collection->toArray());
 
 // result:
 // Array ( [1] => bananas [2] => bananas [3] => bananas [4] => bananas ) 
+```
+***
+
+### # range
+
+```php
+> range (string|int|float $start, string|int|float $end, int|float $step = 1):Range
+```
+
+> Available for collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Creates the collection containing a range of items.
+
+```php
+$collection = Collection::range(1, 5)->asBasic();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [0] => 1 [1] => 2 [2] => 3 [3] => 4 [4] => 5 ) 
+```
+
+There is an optional third parameter where you can specify step,
+and it will be used as the increment between elements in the sequence.
+
+```php
+$collection = Collection::range('a', 'z', 5)->asBasic();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [0] => a [1] => f [2] => k [3] => p [4] => u [5] => z ) 
 ```
 ***
 
