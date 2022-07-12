@@ -19,6 +19,8 @@ nav_order: 1
 - [# Iterating Over Collection](#-iterating-over-collection)
 - [# Serialize and Unserialize Collection](#-serialize-and-unserialize-collection)
 - - [# JSON Serialize](#-json-serialize)
+- [# Predefined collections](#-predefined-collections)
+- - [# fill](#-fill)
 - [# Method Listing](#-method-listing)
 - - [# add](#-add)
 - - [# all](#-all)
@@ -374,6 +376,44 @@ echo $json_serialize;
 ```
 ***
 
+## # Predefined collections
+
+There are number of predefined collections made for quickly creating some basic collection shapes.
+
+All of these methods bellow will have a choice to create some collection type as next method in
+chain, and you will have new collection ready for you.
+***
+
+### # fill
+
+```php
+> fill (int $start_index, int $length, mixed $value):Fill
+```
+
+> Available for collection:
+>> Basic | Index | Lazy | Object
+>> :---:|:---:|:---:|:---:
+>> yes | yes | yes | no
+
+Fill the collection with values.
+
+First parameter is the first index of the returned collection.  
+> note: Supports non-negative indexes only.
+
+Second parameter is number of elements to insert.
+
+Third parameter is value to use for filling.
+
+```php
+$collection = Collection::fill(1, 5, 'bananas')->asBasic();
+
+print_r($collection->toArray());
+
+// result:
+// Array ( [1] => bananas [2] => bananas [3] => bananas [4] => bananas [5] => bananas ) 
+```
+***
+
 ## # Method Listing
 
 Bellow is a list of all available methods you can use on the collections.
@@ -410,7 +450,7 @@ $collection->add('height', '190cm');
 print_r($collection->toArray());
 
 // result:
-// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm )
+// Array ( [firstname] => John [lastname] => Doe [age] => 25 [height] => 190cm ) 
 ```
 ***
 

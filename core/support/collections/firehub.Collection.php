@@ -17,6 +17,7 @@ namespace FireHub\Support\Collections;
 use FireHub\Support\Collections\Types\ {
     Array_Type, Index_Type, Lazy_Type, Object_Type
 };
+use FireHub\Support\Collections\Predefined\Fill;
 use Closure;
 
 /**
@@ -118,6 +119,29 @@ final class Collection {
     public static function object (Closure $source):Collectable {
 
         return new Object_Type($source);
+
+    }
+
+    /**
+     * ### Fill the collection with values
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param int $start_index <p>
+     * The first index of the returned collection.
+     * Supports non-negative indexes only.
+     * <p>
+     * @param int $length <p>
+     * Number of elements to insert.
+     * </p>
+     * @param mixed $value <p>
+     * Value to use for filling.
+     * </p>
+     *
+     * @return \FireHub\Support\Collections\Predefined\Fill
+     */
+    public static function fill (int $start_index, int $length, mixed $value):Fill {
+
+        return new Fill($start_index, $length, $value);
 
     }
 
