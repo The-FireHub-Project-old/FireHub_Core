@@ -143,44 +143,4 @@ final class Collection {
 
     }
 
-    /**
-     * ### Fill an array with values, specifying keys
-     * @since 0.2.0.pre-alpha.M2
-     *
-     * @param array<int|string, int|string> $keys <p>
-     * Array of values that will be used as keys.
-     * Illegal values for key will be converted to string.
-     * </p>
-     * @param mixed $value <p>
-     * Value to use for filling.
-     * </p>
-     *
-     * @return \FireHub\Support\Collections\Predefined\FillKeys
-     */
-    public static function fillKeys (array $keys, mixed $value):FillKeys {
-
-        return new FillKeys($keys, $value);
-
-    }
-
-    /**
-     * ### Fill the collection with keys and values
-     * @since 0.2.0.pre-alpha.M2
-     *
-     * @param array<int|string, mixed> $keys <p>
-     * Array of values that will be used as keys.
-     * Illegal values for key will be converted to string.
-     * <p>
-     * @param array<int|string, mixed> $values <p>
-     * Values to use for filling.
-     * </p>
-     *
-     * @return \FireHub\Support\Collections\Predefined\FillAssoc
-     */
-    public static function FillAssoc (array $keys, array $values):FillAssoc {
-
-        return new FillAssoc($keys, $values);
-
-    }
-
 }
