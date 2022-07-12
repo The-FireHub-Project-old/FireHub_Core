@@ -393,30 +393,29 @@ chain, and you will have new collection ready for you.
 ### # fill
 
 ```php
-> fill (int $start_index, int $length, mixed $value):Fill
+> fill (mixed $value, int $length):Fill
 ```
 
 > Available for collection:
 >> Basic | Index | Lazy | Object
 >> :---:|:---:|:---:|:---:
->> yes | yes | yes | no
+>> yes | yes | yes | yes
 
 Fill the collection with values.
 
-First parameter is the first index of the returned collection.  
-> note: Supports non-negative indexes only.
+First parameter is value to use for filling.
 
 Second parameter is number of elements to insert.
 
-Third parameter is value to use for filling.
+> note: When filling Object Collection, first parameter ($value) need to be class fully qualified name.
 
 ```php
-$collection = Collection::fill(1, 5, 'bananas')->asBasic();
+$collection = Collection::fill('bananas', 5)->asBasic();
 
 print_r($collection->toArray());
 
 // result:
-// Array ( [1] => bananas [2] => bananas [3] => bananas [4] => bananas [5] => bananas ) 
+// Array ( [0] => bananas [1] => bananas [2] => bananas [3] => bananas [4] => bananas ) 
 ```
 ***
 

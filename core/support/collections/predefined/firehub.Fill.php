@@ -34,18 +34,14 @@ final class Fill {
      * ### Constructor
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param int $start_index <p>
-     * The first index of the returned collection.
-     * Supports non-negative indexes only.
-     * <p>
-     * @param int $length <p>
-     * Number of elements to insert.
-     * </p>
      * @param mixed $value <p>
      * Value to use for filling.
      * </p>
+     * @param int $length <p>
+     * Number of elements to insert.
+     * </p>
      */
-    public function __construct (private int $start_index, private int $length, private mixed $value) {}
+    public function __construct (private mixed $value, private int $length) {}
 
     /**
      * ### Fill as Basic Collection
@@ -55,7 +51,7 @@ final class Fill {
      */
     public function asBasic ():Array_Type {
 
-        return Collection::create(fn():array => array_fill($this->start_index, $this->length, $this->value));
+        return Collection::create(fn():array => array_fill(0, $this->length, $this->value));
 
     }
 
@@ -65,11 +61,11 @@ final class Fill {
      *
      * @return \FireHub\Support\Collections\Types\Index_Type
      */
-    public function asIndex():Index_Type {
+    public function asIndex ():Index_Type {
 
         return Collection::index(function ($items):void {
-            for ($counter = $this->start_index; $counter < $this->length; $counter++) {
-                $items[$counter++] = $this->value;
+            for ($counter = 0; $counter < $this->length; $counter++) {
+                $items[$counter] = $this->value;
             }
         }, $this->length);
 
@@ -81,10 +77,10 @@ final class Fill {
      *
      * @return \FireHub\Support\Collections\Types\Lazy_Type
      */
-    public function asLazy():Lazy_Type {
+    public function asLazy ():Lazy_Type {
 
         return Collection::lazy(function ():Generator {
-            for ($counter = $this->start_index; $counter < $this->length; $counter++) {
+            for ($counter = 0; $counter < $this->length; $counter++) {
                 yield $this->value;
             }
         });

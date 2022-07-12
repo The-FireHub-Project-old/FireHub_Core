@@ -17,7 +17,9 @@ namespace FireHub\Support\Collections;
 use FireHub\Support\Collections\Types\ {
     Array_Type, Index_Type, Lazy_Type, Object_Type
 };
-use FireHub\Support\Collections\Predefined\Fill;
+use FireHub\Support\Collections\Predefined\ {
+    Fill, FillKeys
+};
 use Closure;
 
 /**
@@ -126,22 +128,38 @@ final class Collection {
      * ### Fill the collection with values
      * @since 0.2.0.pre-alpha.M2
      *
-     * @param int $start_index <p>
-     * The first index of the returned collection.
-     * Supports non-negative indexes only.
-     * <p>
-     * @param int $length <p>
-     * Number of elements to insert.
-     * </p>
      * @param mixed $value <p>
      * Value to use for filling.
+     * </p>
+     * @param int $length <p>
+     * Number of elements to insert.
      * </p>
      *
      * @return \FireHub\Support\Collections\Predefined\Fill
      */
-    public static function fill (int $start_index, int $length, mixed $value):Fill {
+    public static function fill (mixed $value, int $length):Fill {
 
-        return new Fill($start_index, $length, $value);
+        return new Fill($value, $length);
+
+    }
+
+    /**
+     * ### Fill the collection with values, specifying keys
+     * @since 0.2.0.pre-alpha.M2
+     *
+     * @param array $keys <p>
+     * Array of values that will be used as keys.
+     * Illegal values for key will be converted to string.
+     * <p>
+     * @param mixed $value <p>
+     * Value to use for filling.
+     * </p>
+     *
+     * @return \FireHub\Support\Collections\Predefined\FillKeys
+     */
+    public static function fillKeys (array $keys, mixed $value):FillKeys {
+
+        return new FillKeys($keys, $value);
 
     }
 
