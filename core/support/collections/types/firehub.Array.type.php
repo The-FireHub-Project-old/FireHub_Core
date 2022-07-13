@@ -9,7 +9,9 @@
  * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
  *
  * @package FireHub\Support\Collections
+ *
  * @version 1.0
+ * @version 1.1 Added low-level Arr functions.
  */
 
 namespace FireHub\Support\Collections\Types;
@@ -19,24 +21,17 @@ use FireHub\Support\Traits\Tappable;
 use FireHub\Support\Collections\Enums\SortFlag;
 use FireHub\Support\Enums\Order;
 use FireHub\Support\Enums\Operators\Comparison;
+use FireHub\Support\LowLevel\Arr;
 use Closure, Traversable, Error;
 
-use const COUNT_RECURSIVE;
-use const COUNT_NORMAL;
 use const SORT_ASC;
 use const SORT_DESC;
 
 use function count;
 use function array_filter;
-use function range;
 use function array_keys;
 use function is_array;
 use function sprintf;
-use function array_shift;
-use function array_unshift;
-use function array_pop;
-use function array_push;
-use function array_count_values;
 use function array_column;
 use function array_merge_recursive;
 use function array_merge;
@@ -112,22 +107,27 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param bool $multi_dimensional [optional] <p>
      * Count multidimensional items.
      * </p>
      */
     public function count (bool $multi_dimensional = false):int {
 
-        return count($this->items, $multi_dimensional ? COUNT_RECURSIVE : COUNT_NORMAL);
+        return Arr::count($this->items, $multi_dimensional);
 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      */
     public function isEmpty ():bool {
 
-        return $this->count() === 0;
+        return Arr::isEmpty($this->items);
 
     }
 
@@ -137,26 +137,26 @@ final class Array_Type implements CollectableRewindable {
      * Note that any collection that has at least one item as array
      * will be considered as multidimensional collection.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return bool True if collection is multidimensional, false otherwise
      */
     public function isMultiDimensional ():bool {
 
-        return count(array_filter($this->items, 'is_array')) > 0;
+        return Arr::isMultiDimensional($this->items);
 
     }
 
     /**
      * ### Checks if collection is associative
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return bool True if collection is associative, false otherwise
      */
     public function isAssociative ():bool {
 
-        if ($this->isEmpty()) return false;
-
-        return array_keys($this->items) !== range(0, count($this->items) - 1);
+        return Arr::isAssociative($this->items);
 
     }
 
@@ -266,20 +266,22 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Removes an item at the beginning of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return void
      */
     public function shift ():void {
 
-        array_shift($this->items);
+        Arr::shift($this->items);
 
     }
 
     /**
      * ### Push items at the beginning of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
-     * @param mixed ...$values <p>
+     * @param mixed ...$values [optional] <p>
      * List of values to unshift.
      * </p>
      *
@@ -287,27 +289,29 @@ final class Array_Type implements CollectableRewindable {
      */
     public function unshift (mixed ...$values):void {
 
-        array_unshift($this->items, ...$values);
+        Arr::unshift($this->items, ...$values);
 
     }
 
     /**
      * ### Removes an item at the end of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return void
      */
     public function pop ():void {
 
-        array_pop($this->items);
+        Arr::pop($this->items);
 
     }
 
     /**
      * ### Push items at the end of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
-     * @param mixed ...$values <p>
+     * @param mixed ...$values [optional] <p>
      * List of values to push.
      * </p>
      *
@@ -315,7 +319,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function push (mixed ...$values):void {
 
-        array_push($this->items, ...$values);
+        Arr::push($this->items, ...$values);
 
     }
 
@@ -381,6 +385,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Count values from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param null|int|string $key [optional] <p>
      * Key to count if counting multidimensional array.
@@ -395,15 +400,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($key):array {
 
-            if (!$this->isMultiDimensional()) {
-
-                return array_count_values($this->items);
-
-            }
-
-            return $key === null
-                ? throw new Error('You have to provide key when counting multidimensional array.')
-                : array_count_values(array_column($this->items, $key));
+            return Arr::countValues($this->items, $key);
 
         });
 
