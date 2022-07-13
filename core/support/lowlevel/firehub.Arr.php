@@ -23,7 +23,6 @@ use const ARRAY_FILTER_USE_KEY;
 
 use function is_array;
 use function count;
-use function array_keys;
 use function array_count_values;
 use function array_shift;
 use function array_unshift;
@@ -35,6 +34,9 @@ use function array_merge_recursive;
 use function is_string;
 use function is_int;
 use function array_combine;
+use function array_search;
+use function array_diff;
+use function array_keys;
 use function is_null;
 use function range;
 use function array_filter;
@@ -355,6 +357,63 @@ final class Arr {
             throw new Error($error->getMessage());
 
         }
+
+    }
+
+    /**
+     * ### Searches the array for a given value and returns the first corresponding key if successful
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * The searched value.
+     * </p>
+     * @param array<int|string, mixed> $array <p>
+     * Array to search.
+     * </p>
+     *
+     * @return false|int|string The key for needle if it is found in the array, false otherwise.
+     */
+    public static function search (mixed $value, array $array):false|int|string {
+
+        return array_search($value, $array, true);
+
+    }
+
+    /**
+     * ### Searches the array for a given value and returns the list of corresponding keys if successful
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * The searched value.
+     * </p>
+     * @param array<int|string, mixed> $array <p>
+     * Array to search.
+     * </p>
+     *
+     * @return array<int, int|string> The keys for needle if it is found in the array.
+     */
+    public static function searchAll (mixed $value, array $array):array {
+
+        return self::keys($array, $value);
+
+    }
+
+    /**
+     * ### Computes the difference of arrays
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to compare from.
+     * </p>
+     * @param array<int|string, mixed> ...$excludes [optional] <p>
+     * An array to compare against.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     */
+    public static function difference (array $array, array ...$excludes):array {
+
+        return array_diff($array, ...$excludes);
 
     }
 

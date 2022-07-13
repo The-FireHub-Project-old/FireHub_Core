@@ -38,7 +38,6 @@ use function array_combine;
 use function is_callable;
 use function array_search;
 use function array_diff_key;
-use function array_diff;
 use function array_diff_assoc;
 use function array_unique;
 use function array_intersect_key;
@@ -574,6 +573,7 @@ final class Array_Type implements CollectableRewindable {
      *
      * Note that illegal values for keys from existing collection will be converted to string.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> $values <p>
      * Collection or array of values to be used for combining.
@@ -596,7 +596,10 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      */
     public function contains (mixed $search):bool {
 
@@ -616,7 +619,7 @@ final class Array_Type implements CollectableRewindable {
 
         } else { // $search is not callable
 
-            return (bool)array_search($search, $this->items, true);
+            return (bool)Arr::search($search, $this->items);
 
         }
 
@@ -649,7 +652,7 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_diff($this->items, ...$excludes ?? []);
+            return Arr::difference($this->items, ...$excludes ?? []);
 
         });
 
