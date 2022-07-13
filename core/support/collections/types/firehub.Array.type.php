@@ -589,15 +589,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($values):array {
 
-            foreach ($this->items as $value) {
-
-                $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string nor integer');
-
-            }
-
-            return $this->count() !== count($values) // check if array size is the same on both collections
-                ? throw new Error('Current and combined collection need to have the same number of items.')
-                : array_combine($items ?? [], is_array($values) ? $values : $values->items);
+            return Arr::combine($this->items, is_array($values) ? $values : $values->items);
 
         });
 

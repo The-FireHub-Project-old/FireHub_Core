@@ -32,6 +32,9 @@ use function array_push;
 use function array_column;
 use function array_merge;
 use function array_merge_recursive;
+use function is_string;
+use function is_int;
+use function array_combine;
 use function is_null;
 use function range;
 use function array_filter;
@@ -314,6 +317,36 @@ final class Arr {
         return self::isMultiDimensional($array)
             ? self::merge(...Arr::filter($array, [self::class, 'isArray'])) // @phpstan-ignore-line
             : throw new Error('Array need to be multi-dimensional to be able to collapse.');
+
+    }
+
+    /**
+     * ### Creates an array by using one array for keys and another for its values
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $keys <p>
+     * Array of keys to be used. Illegal values for key will be converted to string.
+     * </p>
+     * @param array<int|string, mixed> $values <p>
+     * Array of values to be used.
+     * </p>
+     *
+     * @throws Error If one of the original key is neither string nor integer.
+     * @throws Error If current and combined arrays need to have the same number of items.
+     *
+     * @return array<int|string, mixed> The combined array, false if the number of elements for each array isn't equal or if the arrays are empty.
+     */
+    public static function combine (array $keys, array $values):array {
+
+        foreach ($keys as $value) {
+
+            $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string nor integer');
+
+        }
+
+        return self::count($keys) !== self::count($values) // check if array size is the same on both arrays
+            ? throw new Error('Current and combined collection need to have the same number of items.')
+            : array_combine($items ?? [], $values);
 
     }
 
