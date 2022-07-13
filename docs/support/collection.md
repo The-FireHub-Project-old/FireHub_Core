@@ -672,7 +672,7 @@ $values = Collection::create(fn ():array => [
     'John', 'Doe', 25
 ]);
 
-$combine = $collection->combine($values);
+$combine = $keys->combine($values);
 
 print_r($combine->toArray());
 
