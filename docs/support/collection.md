@@ -898,7 +898,7 @@ $collection = Collection::create(fn ():array => [1,2,3,4,5]);
 
 $new_collection = Collection::create(fn ():array => [3,4,5,6,7]);
 
-$diff = $collection->differenceValues($new_collection);
+$diff = $collection->difference($new_collection);
 
 print_r($diff->toArray());
 
