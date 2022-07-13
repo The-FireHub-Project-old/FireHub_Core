@@ -1,0 +1,343 @@
+<?php declare(strict_types = 1);
+
+/**
+ * This file is part of FireHub Web Application Framework package.
+ * @since 0.2.1.pre-alpha.M2
+ *
+ * @author Danijel Galić
+ * @copyright 2022 FireHub Web Application Framework
+ * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
+ *
+ * @package FireHub\Support\Collections
+ * @version 1.0
+ */
+
+namespace FireHub\Support\LowLevel;
+
+use Error;
+
+use const COUNT_RECURSIVE;
+use const COUNT_NORMAL;
+use const ARRAY_FILTER_USE_BOTH;
+use const ARRAY_FILTER_USE_KEY;
+
+use function is_array;
+use function count;
+use function array_keys;
+use function array_count_values;
+use function array_column;
+use function array_shift;
+use function array_unshift;
+use function array_pop;
+use function array_push;
+use function is_null;
+use function range;
+use function array_filter;
+
+/**
+ * ### Array low level class
+ * @since 0.2.1.pre-alpha.M2
+ *
+ * @package FireHub\Support\Collections
+ */
+final class Arr {
+
+    /**
+     * ### Checks if value is array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * Value to check.
+     * </p>
+     *
+     * @return bool True if value is array, false otherwise
+     */
+    public static function isArray (mixed $value):bool {
+
+        return is_array($value);
+
+    }
+
+    /**
+     * ### Checks if array is empty
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to check.
+     * </p>
+     *
+     * @return bool True if array is empty, false otherwise
+     */
+    public static function isEmpty (array $array):bool {
+
+        return self::count($array) === 0;
+
+    }
+
+    /**
+     * ### Checks if array is multidimensional
+     *
+     * Note that any collection that has at least one item as array
+     * will be considered as multidimensional collection.
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to check.
+     * </p>
+     *
+     * @return bool True if array is multidimensional, false otherwise
+     */
+    public static function isMultiDimensional (array $array):bool {
+
+        return Arr::count(Arr::filter($array, array(self::class, 'isArray'))) > 0;
+
+    }
+
+    /**
+     * ### Checks if collection is associative
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to check.
+     * </p>
+     *
+     * @return bool True if collection is associative, false otherwise
+     */
+    public static function isAssociative (array $array):bool {
+
+        if (self::isEmpty($array)) return false;
+
+        return self::keys($array) !== self::range(0, self::count($array) - 1);
+
+    }
+
+    /**
+     * ### Counts all elements in the array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to count.
+     * </p>
+     * @param bool $multi_dimensional [optional] <p>
+     * Count multidimensional items.
+     * </p>
+     *
+     * @return int Number of elements in array.
+     */
+    public static function count (array $array, bool $multi_dimensional = false):int {
+
+        return count($array, $multi_dimensional ? COUNT_RECURSIVE : COUNT_NORMAL);
+
+    }
+
+    /**
+     * ### Counts all the values of an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array of values to count.
+     * </p>
+     * @param null|int|string $key [optional] <p>
+     * Key to count if counting multidimensional array.
+     * </p>
+     *
+     * @throws Error If you have to provide key when counting multidimensional array.
+     *
+     * @return array<int|string, int> An associative array of values from input as keys and their count as value.
+     */
+    public static function countValues (array $array, null|int|string $key = null):array {
+
+        if (!self::isMultiDimensional($array)) {
+
+            return array_count_values($array);
+
+        }
+
+        return $key === null
+            ? throw new Error('You have to provide key when counting multidimensional array.')
+            : array_count_values(self::column($array, $key));
+
+    }
+
+    /**
+     * ### Removes an item at the beginning of an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> &$array <p>
+     * Array to shift.
+     * </p>
+     *
+     * @return mixed he shifted value, or null if array is empty or is not an array.
+     */
+    public static function shift (array &$array):mixed {
+
+        return array_shift($array);
+
+    }
+
+    /**
+     * ### Prepend elements to the beginning of an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> &$array <p>
+     * Array to unshift.
+     * </p>
+     * @param mixed ...$values [optional] <p>
+     * The prepended variables.
+     * </p>
+     *
+     * @return int The number of elements in the array.
+     */
+    public static function unshift (array &$array, mixed ...$values):int {
+
+        return array_unshift($array, $values);
+
+    }
+
+    /**
+     * ### Pop the element off the end of array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> &$array <p>
+     * Array to pop.
+     * </p>
+     *
+     * @return mixed The last value of array. If array is empty (or is not an array), null will be returned.
+     */
+    public static function pop (array &$array):mixed {
+
+        return array_pop($array);
+
+    }
+
+    /**
+     * ### Push elements onto the end of array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> &$array <p>
+     * Array to unshift.
+     * </p>
+     * @param mixed ...$values [optional] <p>
+     * The prepended variables.
+     * </p>
+     *
+     * @return int The number of elements in the array.
+     */
+    public static function push (array &$array, mixed ...$values):int {
+
+        return array_push($array, ...$values);
+
+    }
+
+    /**
+     * ### Push elements onto the end of array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * A multi-dimensional array (record set) from which to pull a column of values.
+     * </p>
+     * @param int|string|null $key <p>
+     * The column of values to return.
+     * This value may be the integer key of the column you wish to retrieve, or it may be the string key name for an associative array.
+     * It may also be NULL to return complete arrays (useful together with index_key to reindex the array).
+     * </p>
+     * @param int|string|null $index [optional] <p>
+     * The column to use as the index/keys for the returned array.
+     * This value may be the integer key of the column, or it may be the string key name.
+     * The value is cast as usual for array keys.
+     * </p>
+     *
+     * @return array<int|string, mixed> Array of values representing a single column from the input array.
+     */
+    public static function column (array $array, int|string|null $key, int|string|null $index = null) {
+
+        return array_column($array, $key, $index);
+
+    }
+
+    /**
+     * ### Return all the keys or a subset of the keys of an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * An array containing keys to return.
+     * </p>
+     * @param mixed $filter [optional] <p>
+     * If specified, then only keys containing these values are returned.
+     * </p>
+     *
+     * @return array<int, int|string> An array of all the keys in input.
+     */
+    public static function keys (array $array, mixed $filter = null) {
+
+        return is_null($filter) ? array_keys($array) : array_keys($array, $filter, true);
+
+    }
+
+    /**
+     * ### Counts all elements in an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to iterate over.
+     * </p>
+     * @param null|callable $callback [optional] <p>
+     * The callback function to use.
+     * If no callback is supplied, all entries of input equal to false (see converting to boolean) will be removed.
+     * </p>
+     * @param bool $pass_key [optional] <p>
+     * Pass key as the argument to callback.
+     * </p>
+     * @param bool $pass_value [optional] <p>
+     * Pass value as the argument to callback.
+     * </p>
+     *
+     * @return array<int|string, mixed> Filtered array.
+     */
+    public static function filter (array $array, ?callable $callback = null, bool $pass_key = false, bool $pass_value = true):array {
+
+        $mode = $pass_key && $pass_value
+            ? ARRAY_FILTER_USE_BOTH
+            : ($pass_key
+                ? ARRAY_FILTER_USE_KEY
+                : 0);
+
+        /**
+         * PHPStan stan reports that callback cannot be null.
+         * @phpstan-ignore-next-line
+         */
+        return array_filter($array, $callback, $mode);
+
+    }
+
+    /**
+     * ### Counts all elements in an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param string|int|float $start <p>
+     * First value of the sequence.
+     * </p>
+     * @param string|int|float $end <p>
+     * The sequence is ended upon reaching the end value.
+     * </p>
+     * @param int|float $step [optional] <p>
+     * If a step value is given, it will be used as the increment between elements in the sequence.
+     * Step should be given as a positive number. If not specified, step will default to 1.
+     * </p>
+     *
+     * @throws Error If Your start is bigger then the end of collection.
+     * @throws Error If Your step is bigger then the end of collection.
+     *
+     * @return array<int, mixed> An array of elements from start to end, inclusive.
+     */
+    public static function range (string|int|float $start, string|int|float $end, int|float $step = 1):array {
+
+        if ($start > $end) throw new Error(sprintf('Your start %d is bigger then the end of collection %d.', $start, $end));
+
+        if ($end < $step) throw new Error(sprintf('Your step %d is bigger then the end of collection %d.', $end, $step));
+
+        return range($start, $end, $step);
+
+    }
+
+}
