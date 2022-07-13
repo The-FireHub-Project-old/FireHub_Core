@@ -14,7 +14,7 @@
 
 namespace FireHub\Support\LowLevel;
 
-use Error;
+use Throwable, Error;
 
 use const COUNT_RECURSIVE;
 use const COUNT_NORMAL;
@@ -338,15 +338,23 @@ final class Arr {
      */
     public static function combine (array $keys, array $values):array {
 
-        foreach ($keys as $value) {
+        try {
 
-            $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string nor integer');
+            foreach ($keys as $value) {
+
+                $items[] = is_string($value) || is_int($value) ? $value : throw new Error('One of the original key is neither string nor integer');
+
+            }
+
+            return array_combine($items ?? [], $values);
+
+        } catch (Throwable $error) {
+
+            if (self::count($keys) !== self::count($values)) throw new Error('Current and combined collection need to have the same number of items');
+
+            throw new Error($error->getMessage());
 
         }
-
-        return self::count($keys) !== self::count($values) // check if array size is the same on both arrays
-            ? throw new Error('Current and combined collection need to have the same number of items.')
-            : array_combine($items ?? [], $values);
 
     }
 
@@ -427,11 +435,19 @@ final class Arr {
      */
     public static function range (string|int|float $start, string|int|float $end, int|float $step = 1):array {
 
-        if ($start > $end) throw new Error(sprintf('Your start %d is bigger then the end of collection %d.', $start, $end));
+        try {
 
-        if ($end < $step) throw new Error(sprintf('Your step %d is bigger then the end of collection %d.', $end, $step));
+            return range($start, $end, $step);
 
-        return range($start, $end, $step);
+        } catch (Throwable $error) {
+
+            if ($start > $end) throw new Error(sprintf('Your start %d is bigger then the end of collection %d.', $start, $end));
+
+            if ($end < $step) throw new Error(sprintf('Your step %d is bigger then the end of collection %d.', $end, $step));
+
+            throw new Error($error->getMessage());
+
+        }
 
     }
 
