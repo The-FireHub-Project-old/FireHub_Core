@@ -28,13 +28,10 @@ use const SORT_ASC;
 use const SORT_DESC;
 
 use function count;
-use function array_filter;
 use function array_keys;
 use function is_array;
 use function sprintf;
 use function array_column;
-use function array_merge_recursive;
-use function array_merge;
 use function is_string;
 use function is_int;
 use function array_combine;
@@ -486,6 +483,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Merge collection recursively
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * Merges the elements of one or more arrays together so that the values of one are appended
      * to the end of the previous one.
@@ -498,7 +496,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function mergeRecursive (Closure $callback):self {
 
-        $this->items = array_merge_recursive($this->items, $callback());
+        $this->items = Arr::mergeRecursive($this->items, $callback());
 
         return $this;
 
@@ -553,6 +551,9 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Collapses a collection of arrays into a single, flat collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
+     * @throws Error If array is not multi-dimensional.
      *
      * @return self New filtered collection.
      */
@@ -562,7 +563,7 @@ final class Array_Type implements CollectableRewindable {
         return new self(function ():array {
 
             // collapse with all items that are array themselves
-            return array_merge(...array_filter($this->items, 'is_array'));
+            return Arr::collapse($this->items);
 
         });
 

@@ -25,11 +25,13 @@ use function is_array;
 use function count;
 use function array_keys;
 use function array_count_values;
-use function array_column;
 use function array_shift;
 use function array_unshift;
 use function array_pop;
 use function array_push;
+use function array_column;
+use function array_merge;
+use function array_merge_recursive;
 use function is_null;
 use function range;
 use function array_filter;
@@ -89,7 +91,7 @@ final class Arr {
      */
     public static function isMultiDimensional (array $array):bool {
 
-        return Arr::count(Arr::filter($array, array(self::class, 'isArray'))) > 0;
+        return Arr::count(Arr::filter($array, [self::class, 'isArray'])) > 0;
 
     }
 
@@ -252,6 +254,66 @@ final class Arr {
     public static function column (array $array, int|string|null $key, int|string|null $index = null) {
 
         return array_column($array, $key, $index);
+
+    }
+
+    /**
+     * ### Merges the elements of one or more arrays together
+     *
+     * If the input arrays have the same string keys, then the later value for that key will overwrite the previous one.
+     * If the arrays contain numeric keys, the later value will be appended.
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int, mixed> ...$arrays [optional] <p>
+     * Variable list of arrays to merge.
+     * </p>
+     *
+     * @return array<int, mixed> The resulting array.
+     */
+    public static function merge (array ...$arrays):array {
+
+        return array_merge(...$arrays);
+
+    }
+
+    /**
+     * ### Merge two or more arrays recursively
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> ...$arrays [optional] <p>
+     * Variable list of arrays to recursively merge.
+     * </p>
+     *
+     * @return array<int|string, mixed> The resulting array.
+     */
+    public static function mergeRecursive (array ...$arrays):array {
+
+        return array_merge_recursive(...$arrays);
+
+    }
+
+
+    /**
+     * ### Collapses array of arrays into a single, flat array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Multidimensional array to collapse.
+     * </p>
+     *
+     * @throws Error If array is not multi-dimensional.
+     *
+     * @return array<int|string, mixed> The resulting array.
+     */
+    public static function collapse (array $array) {
+
+        /**
+         * PHPStan stan reports that self::merge expects array<int, mixed>, but that
+         * is already evaluated in self::isMultiDimensional method.
+         */
+        return self::isMultiDimensional($array)
+            ? self::merge(...Arr::filter($array, [self::class, 'isArray'])) // @phpstan-ignore-line
+            : throw new Error('Array need to be multi-dimensional to be able to collapse.');
 
     }
 
