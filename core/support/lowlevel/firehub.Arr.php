@@ -14,10 +14,14 @@
 
 namespace FireHub\Support\LowLevel;
 
-use Throwable, Error;
+use FireHub\Support\Collections\Enums\SortFlag;
+use FireHub\Support\Enums\Order;
+use Closure, Throwable, Error;
 
 use const COUNT_RECURSIVE;
 use const COUNT_NORMAL;
+use const SORT_ASC;
+use const SORT_DESC;
 use const ARRAY_FILTER_USE_BOTH;
 use const ARRAY_FILTER_USE_KEY;
 
@@ -48,6 +52,17 @@ use function array_intersect_assoc;
 use function shuffle;
 use function array_slice;
 use function array_splice;
+use function asort;
+use function sort;
+use function arsort;
+use function rsort;
+use function ksort;
+use function krsort;
+use function uasort;
+use function usort;
+use function uksort;
+use function array_multisort;
+use function array_key_exists;
 use function array_keys;
 use function is_null;
 use function range;
@@ -855,6 +870,188 @@ final class Arr {
     public static function skip (array $array, int $offset) {
 
         return self::slice($array, $offset);
+
+    }
+
+    /**
+     * ### Sorts array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     * @param \FireHub\Support\Enums\Order $order <p>
+     * Order type.
+     * </p>
+     * @param bool $preserve_keys <p>
+     * Whether you want to preserve keys from original array or not.
+     * </p>
+     * @param \FireHub\Support\Collections\Enums\SortFlag $flag <p>
+     * Sorting flag.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public static function sort (array &$array, Order $order = Order::ASC, bool $preserve_keys = false, SortFlag $flag = SortFlag::SORT_REGULAR):bool {
+
+        return $order === Order::ASC
+            ? ($preserve_keys
+                ? asort($array, $flag->value)
+                : sort($array, $flag->value))
+            : ($preserve_keys
+                ? arsort($array, $flag->value)
+                : rsort($array, $flag->value));
+
+    }
+
+    /**
+     * ### Sorts array by key
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     * @param \FireHub\Support\Enums\Order $order <p>
+     * Order type.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public static function sortByKey (array &$array, Order $order = Order::ASC):bool {
+
+        return $order === Order::ASC ? ksort($array) : krsort($array);
+
+    }
+
+    /**
+     * ### Sorts array by values using a user-defined comparison function
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     * @param Closure $callback <p>
+     * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than,
+     * equal to, or greater than the second.
+     * </p>
+     * @param bool $preserve_keys <p>
+     * Whether you want to preserve keys from original array or not.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public static function sortBy (array &$array, Closure $callback, bool $preserve_keys = false):bool {
+
+        return $preserve_keys ? uasort($array, $callback) : usort($array, $callback);
+
+    }
+
+    /**
+     * ### Sorts array by key using a user-defined comparison function
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     * @param Closure $callback <p>
+     * The callback comparison function. Function cmp_function should accept two parameters which will be filled by pairs of array keys.
+     * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than,
+     * equal to, or greater than the second.
+     * </p>
+     *
+     * @return bool True on success, false otherwise.
+     */
+    public static function sortKeyBy (array &$array, Closure $callback):bool {
+
+        return uksort($array, $callback);
+
+    }
+
+    /**
+     * ### Sorts array by multiple fields
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     * @param array<int, array<int, string|\FireHub\Support\Enums\Order>> $fields <p>
+     * List of fields to sort by.
+     * </p>
+     *
+     * @throws Error If each field has to have both field name and sort value.
+     * @throws Error If first key of each field is not integer nor string.
+     * @throws Error If sorting by many your array is not 2-dimensional array.
+     * @throws Error If key does not exist.
+     * @throws Error If key is missing somewhere.
+     *
+     * @return array<int|string, mixed> Sorter array.
+     */
+    public static function sortByMany (array $array, array $fields):array {
+
+        foreach ($fields as $field) {
+
+            // check if both field name and sort value are present
+            isset($field[0]) && isset($field[1]) ?: throw new Error('Each field has to have both field name and sort value.');
+
+            $column = $field[0];
+            $order = $field[1];
+
+            // first key of each field must be string
+            is_string($column) ?: throw new Error('First key of each field must be integer or string.');
+
+            // when sorting by many your collection must be 2-dimensional array
+            self::isArray($array[0]) ?: throw new Error('When sorting by many your collection must be 2-dimensional array.');
+
+            /**
+             * Check if array key exists in the first array.
+             * $array[0] is already checked in isArray method.
+             * @phpstan-ignore-next-line
+             */
+            self::keyExist($column, $array[0]) ?: throw new Error(sprintf('Key %s does not exist.', $column));
+
+            // field 1 will be converter to PHP order constants
+            // it will default to SORT_ASC is FireHub\Support\Enums\Order is not the type
+            $order = $order === Order::DESC ? SORT_DESC : SORT_ASC;
+
+            self::count(self::keys($array)) === self::count(self::column($array, $column)) ?: throw new Error(sprintf('Key %s is missing somewhere.', $column));
+
+            // first array is array of value from selected column
+            $multi_sort[] = [...self::column($array, $column)];
+
+            // second array is sort order
+            $multi_sort[] = $order;
+
+        }
+
+        // attach items at the end of multi-sort
+        $multi_sort[] = &$array;
+
+        /**
+         * In this case we are using spread operator, and PHPStan thinks it is first parameter and complains that int might be used as first parameter.
+         * @phpstan-ignore-next-line
+         */
+        array_multisort(...$multi_sort);
+
+        return $array;
+
+    }
+
+    /**
+     * ### Checks if the given key or index exists in the array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param int|string $key <p>
+     * Key to check.
+     * </p>
+     * @param array<int|string, mixed> $array <p>
+     * Array to sort.
+     * </p>
+     *
+     * @return bool True if key exist in array, false otherwise.
+     */
+    public static function keyExist (int|string $key,  array $array):bool {
+
+        return array_key_exists($key, $array);
 
     }
 

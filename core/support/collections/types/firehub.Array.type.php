@@ -24,28 +24,12 @@ use FireHub\Support\Enums\Operators\Comparison;
 use FireHub\Support\LowLevel\Arr;
 use Closure, Traversable, Error;
 
-use const SORT_ASC;
-use const SORT_DESC;
-
-use function count;
 use function array_keys;
 use function is_array;
 use function sprintf;
-use function array_column;
 use function is_string;
 use function is_int;
 use function is_callable;
-use function asort;
-use function sort;
-use function arsort;
-use function rsort;
-use function ksort;
-use function krsort;
-use function uasort;
-use function usort;
-use function uksort;
-use function array_key_exists;
-use function array_multisort;
 use function is_null;
 use function array_values;
 use function array_key_first;
@@ -1078,6 +1062,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Remove number of items from the beginning of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $offset <p>
      * Number of items to skip.
@@ -1171,6 +1156,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Sorts collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Enums\Order $order <p>
      * Order type.
@@ -1186,19 +1172,14 @@ final class Array_Type implements CollectableRewindable {
      */
     public function sort (Order $order = Order::ASC, bool $preserve_keys = false, SortFlag $flag = SortFlag::SORT_REGULAR):bool {
 
-        return $order === Order::ASC
-            ? ($preserve_keys
-                ? asort($this->items, $flag->value)
-                : sort($this->items, $flag->value))
-            : ($preserve_keys
-                ? arsort($this->items, $flag->value)
-                : rsort($this->items, $flag->value));
+        return Arr::sort($this->items, $order, $preserve_keys, $flag);
 
     }
 
     /**
      * ### Sorts collection by key
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Enums\Order $order <p>
      * Order type.
@@ -1208,13 +1189,14 @@ final class Array_Type implements CollectableRewindable {
      */
     public function sortByKey (Order $order = Order::ASC):bool {
 
-        return $order === Order::ASC ? ksort($this->items) : krsort($this->items);
+        return Arr::sortByKey($this->items, $order);
 
     }
 
     /**
      * ### Sorts collection by values using a user-defined comparison function
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param Closure $callback <p>
      * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than,
@@ -1228,13 +1210,14 @@ final class Array_Type implements CollectableRewindable {
      */
     public function sortBy (Closure $callback, bool $preserve_keys = false):bool {
 
-        return $preserve_keys ? uasort($this->items, $callback) : usort($this->items, $callback);
+        return Arr::sortBy($this->items, $callback, $preserve_keys);
 
     }
 
     /**
      * ### Sorts collection by key using a user-defined comparison function
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param Closure $callback <p>
      * The callback comparison function. Function cmp_function should accept two parameters which will be filled by pairs of array keys.
@@ -1246,13 +1229,14 @@ final class Array_Type implements CollectableRewindable {
      */
     public function sortKeyBy (Closure $callback):bool {
 
-        return uksort($this->items, $callback);
+        return Arr::sortKeyBy($this->items, $callback);
 
     }
 
     /**
      * ### Sorts collection by multiple fields
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param array<int, array<int, string|\FireHub\Support\Enums\Order>> $fields <p>
      * List of fields to sort by.
@@ -1268,45 +1252,9 @@ final class Array_Type implements CollectableRewindable {
      */
     public function sortByMany (array $fields):bool {
 
-        foreach ($fields as $field) {
+        $this->items = Arr::sortByMany($this->items, $fields);
 
-            // check if both field name and sort value are present
-            isset($field[0]) && isset($field[1]) ?: throw new Error('Each field has to have both field name and sort value.');
-
-            $column = $field[0];
-            $order = $field[1];
-
-            // first key of each field must be string
-            is_string($column) ?: throw new Error('First key of each field must be integer or string.');
-
-            // when sorting by many your collection must be 2-dimensional array
-            is_array($this->items[0]) ?: throw new Error('When sorting by many your collection must be 2-dimensional array.');
-
-            // check if array key exists in the first array
-            array_key_exists($column, $this->items[0]) ?: throw new Error(sprintf('Key %s does not exist.', $column));
-
-            // field 1 will be converter to PHP order constants
-            // it will default to SORT_ASC is FireHub\Support\Enums\Order is not the type
-            $order = $order === Order::DESC ? SORT_DESC : SORT_ASC;
-
-            count(array_keys($this->items)) === count(array_column($this->items, $column)) ?: throw new Error(sprintf('Key %s is missing somewhere.', $column));
-
-            // first array is array of value from selected column
-            $multi_sort[] = [...array_column($this->items, $column)];
-
-            // second array is sort order
-            $multi_sort[] = $order;
-
-        }
-
-        // attach items at the end of multi-sort
-        $multi_sort[] = &$this->items;
-
-        /**
-         * In this case we are using spread operator, and PHPStan thinks it is first parameter and complains that int might be used as first parameter.
-         * @phpstan-ignore-next-line
-         */
-        return array_multisort(...$multi_sort);
+        return true;
 
     }
 
