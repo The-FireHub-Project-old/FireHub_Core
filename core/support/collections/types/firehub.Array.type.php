@@ -37,7 +37,6 @@ use function is_int;
 use function array_combine;
 use function is_callable;
 use function array_search;
-use function array_intersect_key;
 use function array_flip;
 use function array_rand;
 use function array_reverse;
@@ -57,8 +56,6 @@ use function array_key_exists;
 use function array_multisort;
 use function is_null;
 use function array_values;
-use function array_intersect;
-use function array_intersect_assoc;
 use function array_key_first;
 use function array_key_last;
 use function serialize;
@@ -761,6 +758,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Exchanges all keys with their associated values in collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @throws Error If method flip requires that all values be either int or string.
      *
@@ -771,15 +769,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function ():array {
 
-            foreach ($this->items as $key => $value) {
-
-                is_int($value) || is_string($value) ?: throw new Error('Method flip requires that all values be either int or string');
-
-                $items[$value] = $key;
-
-            }
-
-            return $items ?? [];
+            return Arr::flip($this->items);
 
         });
 
@@ -809,6 +799,9 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param int|string ...$keys <p>
      * List of keys to return.
      * </p>
@@ -818,7 +811,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($keys):array {
 
-            return array_intersect_key($this->items, array_flip($keys));
+            return Arr::only($this->items, $keys);
 
         });
 
@@ -1687,6 +1680,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Computes the intersection of collections with values
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
      * Collections or arrays to compare values against.
@@ -1705,7 +1699,7 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_intersect($this->items, ...$arrays ?? []);
+            return Arr::intersect($this->items, ...$arrays ?? []);
 
         });
 
@@ -1714,6 +1708,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Computes the intersection of collections with keys
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
      * Collections or arrays to compare values against.
@@ -1732,7 +1727,7 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_intersect_key($this->items, ...$arrays ?? []);
+            return Arr::intersectKey($this->items, ...$arrays ?? []);
 
         });
 
@@ -1741,6 +1736,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Computes the intersection of collections with additional index check
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$collections <p>
      * Collections or arrays to compare values against.
@@ -1759,7 +1755,7 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_intersect_assoc($this->items, ...$arrays ?? []);
+            return Arr::intersectAssoc($this->items, ...$arrays ?? []);
 
         });
 

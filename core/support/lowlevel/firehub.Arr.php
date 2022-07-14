@@ -39,6 +39,9 @@ use function array_diff;
 use function array_diff_key;
 use function array_diff_assoc;
 use function array_unique;
+use function array_intersect;
+use function array_intersect_key;
+use function array_intersect_assoc;
 use function array_keys;
 use function is_null;
 use function range;
@@ -466,7 +469,7 @@ final class Arr {
      * The array to remove duplicates.
      * </p>
      *
-     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     * @return array<int|string, mixed> The filtered array.
      */
     public static function unique (array $array):array {
 
@@ -486,7 +489,111 @@ final class Arr {
      */
     public static function duplicates (array $array):array {
 
-        return self::differenceAssoc($array, array_unique($array));
+        return self::differenceAssoc($array, self::unique($array));
+
+    }
+
+    /**
+     * ### Exchanges all keys with their associated values in array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to flip.
+     * </p>
+     *
+     * @throws Error If method flip requires that all values be either int or string.
+     *
+     * @return array<int|string, mixed> The flipped array.
+     */
+    public static function flip (array $array):array {
+
+        foreach ($array as $key => $value) {
+
+            is_int($value) || is_string($value) ?: throw new Error('Method flip requires that all values be either int or string');
+
+            $items[$value] = $key;
+
+        }
+
+        return $items ?? [];
+
+    }
+
+    /**
+     * ### Get all items from array with the specified keys
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to filter items.
+     * </p>
+     * @param array<int|string, mixed> $keys <p>
+     * List of keys to return.
+     * </p>
+     *
+     * @throws Error If method flip requires that all values be either int or string.
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function only (array $array, array $keys):array {
+
+        return self::intersectKey($array, self::flip($keys));
+
+    }
+
+    /**
+     * ### Computes the intersection of arrays
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array with main values to check.
+     * </p>
+     * @param array<int|string, mixed> ...$arrays <p>
+     * An array to compare values against.
+     * </p>
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function intersect (array $array, array ...$arrays):array {
+
+        return array_intersect($array, ...$arrays);
+
+    }
+
+    /**
+     * ### Computes the intersection of arrays using keys for comparison
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array with main values to check.
+     * </p>
+     * @param array<int|string, mixed> ...$arrays <p>
+     * An array to compare values against.
+     * </p>
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function intersectKey (array $array, array ...$arrays):array {
+
+        return array_intersect_key($array, ...$arrays);
+
+    }
+
+    /**
+     * ### Computes the intersection of arrays with additional index check
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array with main values to check.
+     * </p>
+     * @param array<int|string, mixed> ...$arrays <p>
+     * An array to compare values against.
+     * </p>
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function intersectAssoc (array $array, array ...$arrays):array {
+
+        return array_intersect_assoc($array, ...$arrays);
 
     }
 
