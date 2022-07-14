@@ -28,6 +28,7 @@ use const ARRAY_FILTER_USE_KEY;
 use function is_array;
 use function count;
 use function array_count_values;
+use function in_array;
 use function array_shift;
 use function array_unshift;
 use function array_pop;
@@ -193,6 +194,25 @@ final class Arr {
         return $key === null
             ? throw new Error('You have to provide key when counting multidimensional array.')
             : array_count_values(self::column($array, $key));
+
+    }
+
+    /**
+     * ### Checks if a value exists in an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param mixed $value <p>
+     * The searched value.
+     * </p>
+     * @param array<int|string, mixed> $array <p>
+     * The array.
+     * </p>
+     *
+     * @return bool True if value is found in the array, false otherwise.
+     */
+    public static function inArray (mixed $value, array $array):bool {
+
+        return in_array($value, $array, true);
 
     }
 

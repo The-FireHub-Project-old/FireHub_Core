@@ -31,7 +31,6 @@ use function is_int;
 use function is_callable;
 use function is_null;
 use function serialize;
-use function in_array;
 use function json_encode;
 
 /**
@@ -1573,9 +1572,13 @@ final class Array_Type implements CollectableRewindable {
             // iterate over current items
             foreach ($this->items as $c_key => $c_value) {
 
-                is_array($c_value) ?: throw new Error(sprintf('Method whereDoesntContain() must be array of arrays, but value on key %s must be of type array', $c_key));
+                Arr::isArray($c_value) ?: throw new Error(sprintf('Method whereDoesntContain() must be array of arrays, but value on key %s must be of type array', $c_key));
 
-                in_array($c_value[$key], $values) ?: $items[$c_key] = $c_value;
+                /**
+                 * PHPStan stan reports that keys might not be an array, but with method Arr::isArray it is already checked.
+                 * @phpstan-ignore-next-line
+                 */
+                Arr::inArray($c_value[$key], $values) ?: $items[$c_key] = $c_value;
 
             }
 
