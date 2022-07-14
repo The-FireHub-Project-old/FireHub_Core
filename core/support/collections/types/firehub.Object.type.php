@@ -16,14 +16,15 @@ namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
 use FireHub\Support\Traits\Tappable;
+use FireHub\Support\LowLevel\ {
+    Iterator, Arr
+};
 use SplObjectStorage, Closure, Traversable, Error;
 
-use function in_array;
 use function sprintf;
 use function is_callable;
 use function is_object;
 use function serialize;
-use function iterator_to_array;
 use function json_encode;
 
 /**
@@ -57,20 +58,26 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function count ():int {
 
-        return $this->items->count();
+        return Iterator::count($this->items);
 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function isEmpty ():bool {
 
-        return $this->count() === 0;
+        return Iterator::isEmpty($this->items);
 
     }
 
@@ -386,6 +393,9 @@ final class Object_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param object ...$keys <p>
      * List of keys to return.
      * </p>
@@ -398,7 +408,7 @@ final class Object_Type implements CollectableRewindable {
             foreach ($this->items as $object) {
 
                 // add items to array if callback is false
-                !in_array($object, $keys) ?: $items[$object] = $this->items->getInfo();
+                !Arr::inArray($object, $keys) ?: $items[$object] = $this->items->getInfo();
 
             }
 
@@ -408,6 +418,9 @@ final class Object_Type implements CollectableRewindable {
 
     /**
      * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param object ...$keys <p>
      * List of keys to return.
@@ -421,7 +434,7 @@ final class Object_Type implements CollectableRewindable {
             foreach ($this->items as $object) {
 
                 // add items to array if callback is false
-                in_array($object, $keys) ?: $items[$object] = $this->items->getInfo();
+                Arr::inArray($object, $keys) ?: $items[$object] = $this->items->getInfo();
 
             }
 
@@ -553,13 +566,16 @@ final class Object_Type implements CollectableRewindable {
     }
 
     /**
-     * {@inheritDon}
+     * {@inheritDoc}
      *
-     * @return array<int, object> Array from collection.
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
+     *
+     * @return array<int|string, mixed> Array from collection.
      */
     public function toArray ():array {
 
-        return iterator_to_array($this->items);
+        return Iterator::toArray($this->items);
 
     }
 
@@ -575,7 +591,7 @@ final class Object_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int, object> Array from collection.
+     * @return array<int|string, mixed> Array from collection.
      */
     public function jsonSerialize():array {
 
@@ -586,7 +602,7 @@ final class Object_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int, object> Array from collection.
+     * @return array<int|string, mixed> Array from collection.
      */
     public function __serialize ():array {
 
