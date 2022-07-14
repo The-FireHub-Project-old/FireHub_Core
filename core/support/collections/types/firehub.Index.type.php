@@ -15,18 +15,17 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;;
+
 use FireHub\Support\Traits\Tappable;
-use FireHub\Support\LowLevel\Iterator;
+use FireHub\Support\LowLevel\ {
+    Iterator, Arr
+};
 use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function is_callable;
-use function in_array;
 use function sprintf;
-use function range;
-use function shuffle;
 use function is_int;
 use function serialize;
-use function iterator_to_array;
 use function json_encode;
 use function count;
 
@@ -469,7 +468,7 @@ final class Index_Type implements CollectableRewindable {
             foreach ($this->items as $key => $value) {
 
                 // add items to array if callback is false
-                !in_array($key, $keys) ?: $items[$counter++] = $value;
+                !Arr::inArray($key, $keys) ?: $items[$counter++] = $value;
 
             }
 
@@ -500,7 +499,7 @@ final class Index_Type implements CollectableRewindable {
             foreach ($this->items as $key => $value) {
 
                 // add items to array if callback is false
-                in_array($key, $keys) ?: $items[$counter++] = $value;
+                Arr::inArray($key, $keys) ?: $items[$counter++] = $value;
 
             }
 
@@ -514,6 +513,7 @@ final class Index_Type implements CollectableRewindable {
     /**
      * ### Pick one or more random values out of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr and Iterator functions.
      *
      * @param int $number [optional] <p>
      * Specifies how many entries you want to pick.
@@ -525,38 +525,7 @@ final class Index_Type implements CollectableRewindable {
      */
     public function random (int $number = 1):mixed {
 
-        // check if asked number of items is greater than total number of items in collection
-        !($number > $this->count()) ?: throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
-
-        // set the valid range for possible keys
-        $range = range(0, $this->count() - 1);
-
-        // shuffle an array
-        shuffle($range);
-
-        // if asked number is 1, we will not return array of values
-        if ($number === 1) {
-
-            // return first random key, this is why we shuffled our key range
-            return $this->items[$range[0]];
-
-        }
-
-        // fill keys based on our range and number of asked items
-        for ($counter = 0; $counter < $number; $counter++) {
-
-            $keys[$counter] = $range[$counter];
-
-        }
-
-        // iterate over keys and fill new array with matching records from out existing collection
-        foreach ($keys ?? [] as $key) {
-
-            $items[] = $this->items[$key];
-
-        }
-
-        return $items ?? [];
+        return Arr::random(Iterator::toArray($this->items), $number);
 
     }
 
@@ -977,11 +946,14 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int, mixed> Array from collection.
+     * @since 0.2.0
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
+     *
+     * @return array<int|string, mixed> Array from collection.
      */
     public function toArray ():array {
 
-        return iterator_to_array($this->items);
+        return Iterator::toArray($this->items);
 
     }
 
@@ -1008,7 +980,7 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
-     * @return array<int, mixed> Array from collection.
+     * @return array<int|string, mixed> Array from collection.
      */
     public function __serialize ():array {
 
@@ -1017,12 +989,15 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function __unserialize (array $data):void {
 
         // recalculate size
-        $this->size = count($data);
+        $this->size = Arr::count($data);
 
         // recreate callable
         $this->callable = function () use ($data):void {
