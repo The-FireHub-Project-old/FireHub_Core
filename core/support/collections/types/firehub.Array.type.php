@@ -37,7 +37,6 @@ use function is_int;
 use function array_combine;
 use function is_callable;
 use function array_search;
-use function array_reverse;
 use function shuffle;
 use function array_slice;
 use function array_splice;
@@ -952,6 +951,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Reverse the order of collection items
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param bool $preserve_keys [optional] <p>
      * Whether you want to preserve keys from original collection or not.
@@ -964,7 +964,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($preserve_keys):array {
 
-            return array_reverse($this->items, $preserve_keys);
+            return Arr::reverse($this->items, $preserve_keys);
 
         });
 
@@ -978,22 +978,21 @@ final class Array_Type implements CollectableRewindable {
      * If needle is a string, the comparison is done in a case-sensitive manner.
      * </p>
      * @param int|string|false $second_dimension_column [optional] <p>
-     * Allows you to search second dimension on multidimensional array.
+     * Allows you to search second dimension on multidimensional collection.
      * </p>
      *
      * @return int|string|false The key for needle if it is found in the collection, false otherwise. If needle is found in haystack more than once, the first matching key is returned.
      */
     public function search (mixed $value, int|string|false $second_dimension_column = false):int|string|false {
 
-        return $second_dimension_column
-            ? array_search($value, array_combine(array_keys($this->items), array_column($this->items, $second_dimension_column)), true)
-            : array_search($value, $this->items, true);
+        return Arr::search($value, $this->items, $second_dimension_column);
 
     }
 
     /**
-     * ### Reverse the order of collection items
+     * ### Shuffle collection items
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param bool $preserve_keys [optional] <p>
      * Whether you want to preserve keys from original collection or not.

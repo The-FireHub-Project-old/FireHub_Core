@@ -2446,7 +2446,7 @@ echo $search;
 >> :---:|:---:|:---:|:---:
 >> yes | no | no | no
 
-Searches the collection for a given value and returns the first corresponding key if successful.
+Shuffle collection items.
 
 ```php
 $collection = Collection::create(fn ():array => [

@@ -379,12 +379,17 @@ final class Arr {
      * @param array<int|string, mixed> $array <p>
      * Array to search.
      * </p>
+     * @param int|string|false $second_dimension_column [optional] <p>
+     * Allows you to search second dimension on multidimensional array.
+     * </p>
      *
      * @return false|int|string The key for needle if it is found in the array, false otherwise.
      */
-    public static function search (mixed $value, array $array):false|int|string {
+    public static function search (mixed $value, array $array, int|string|false $second_dimension_column = false):false|int|string {
 
-        return array_search($value, $array, true);
+        return $second_dimension_column
+            ? array_search($value, array_combine(array_keys($array), array_column($array, $second_dimension_column)), true)
+            : array_search($value, $array, true);
 
     }
 
@@ -650,6 +655,25 @@ final class Arr {
         }
 
         return $items ?? [];
+
+    }
+
+    /**
+     * ### Reverse the order of array items
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to reverse.
+     * </p>
+     * @param bool $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original array or not.
+     * </p>
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function reverse (array $array, bool $preserve_keys = false):array {
+
+        return array_reverse($array, $preserve_keys);
 
     }
 
