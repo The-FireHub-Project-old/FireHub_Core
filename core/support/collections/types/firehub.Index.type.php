@@ -14,7 +14,7 @@
 
 namespace FireHub\Support\Collections\Types;
 
-use FireHub\Support\Collections\CollectableRewindable;;
+use FireHub\Support\Collections\CollectableRewindable;
 
 use FireHub\Support\Traits\Tappable;
 use FireHub\Support\LowLevel\ {
