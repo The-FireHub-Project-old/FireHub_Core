@@ -1979,7 +1979,7 @@ $only = $collection->only('age', 'lastname');
 print_r($only->toArray());
 
 // result:
-// Array ( [lastname] => Doe [age] => 25 ) Array ( [firstname] => John ) 
+// Array ( [lastname] => Doe [age] => 25 ) 
 ```
 ***
 
