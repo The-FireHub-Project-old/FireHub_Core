@@ -24,7 +24,6 @@ use FireHub\Support\Enums\Operators\Comparison;
 use FireHub\Support\LowLevel\Arr;
 use Closure, Traversable, Error;
 
-use function is_array;
 use function sprintf;
 use function is_string;
 use function is_int;
@@ -554,7 +553,11 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($values):array {
 
-            return Arr::combine($this->items, is_array($values) ? $values : $values->items);
+            /**
+             * PHPStan stan reports that keys might not be an array, but with method isArray it is already checked.
+             * @phpstan-ignore-next-line
+             */
+            return Arr::combine($this->items, Arr::isArray($values) ? $values : $values->items);
 
         });
 
