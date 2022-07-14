@@ -67,6 +67,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
      * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param bool $multi_dimensional [optional] <p>
