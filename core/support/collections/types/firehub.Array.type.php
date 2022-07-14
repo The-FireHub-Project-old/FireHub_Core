@@ -37,9 +37,6 @@ use function is_int;
 use function array_combine;
 use function is_callable;
 use function array_search;
-use function array_diff_key;
-use function array_diff_assoc;
-use function array_unique;
 use function array_intersect_key;
 use function array_flip;
 use function array_rand;
@@ -634,6 +631,7 @@ final class Array_Type implements CollectableRewindable {
      * Compares existing collection against one or more other collection or array
      * and returns the values in the new collection that are not present in any of the other collections.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
      * Collection or array to compare against.
@@ -664,6 +662,7 @@ final class Array_Type implements CollectableRewindable {
      * Compares the keys from array against the keys from collection or array and returns the difference.
      * This method is like differenceValues() except the comparison is done on the keys instead of the values.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
      * Collection or array to compare against.
@@ -682,7 +681,7 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_diff_key($this->items, ...$excludes ?? []);
+            return Arr::differenceKey($this->items, ...$excludes ?? []);
 
         });
 
@@ -694,6 +693,7 @@ final class Array_Type implements CollectableRewindable {
      * Compare collections or arrays against collection or array and returns the difference.
      * Unlike differenceValues(), the keys are also used in the comparison.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param \FireHub\Support\Collections\Types\Array_Type|array<mixed, mixed> ...$compares <p>
      * Collection or array to compare against.
@@ -712,17 +712,38 @@ final class Array_Type implements CollectableRewindable {
 
             }
 
-            return array_diff_assoc($this->items, ...$excludes ?? []);
+            return Arr::differenceAssoc($this->items, ...$excludes ?? []);
 
         });
 
     }
 
     /**
-     * ### Removes unique values from an array
+     * ### Removes duplicate values from collection
      *
      * Method validates only values, and ignores keys.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
+     * @return self New collection with unique values.
+     */
+    public function unique ():self {
+
+        // return new collection
+        return new self(function ():array {
+
+            return Arr::unique($this->items);
+
+        });
+
+    }
+
+    /**
+     * ### Removes unique values from collection
+     *
+     * Method validates only values, and ignores keys.
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return self New collection with duplicated values.
      */
@@ -731,7 +752,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function ():array {
 
-            return array_diff_assoc($this->items, array_unique($this->items));
+            return Arr::duplicates($this->items);
 
         });
 
@@ -759,25 +780,6 @@ final class Array_Type implements CollectableRewindable {
             }
 
             return $items ?? [];
-
-        });
-
-    }
-
-    /**
-     * ### Removes duplicate values from an array
-     *
-     * Method validates only values, and ignores keys.
-     * @since 0.2.0.pre-alpha.M2
-     *
-     * @return self New collection with unique values.
-     */
-    public function unique ():self {
-
-        // return new collection
-        return new self(function ():array {
-
-            return array_unique($this->items);
 
         });
 

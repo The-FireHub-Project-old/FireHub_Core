@@ -36,6 +36,9 @@ use function is_int;
 use function array_combine;
 use function array_search;
 use function array_diff;
+use function array_diff_key;
+use function array_diff_assoc;
+use function array_unique;
 use function array_keys;
 use function is_null;
 use function range;
@@ -414,6 +417,76 @@ final class Arr {
     public static function difference (array $array, array ...$excludes):array {
 
         return array_diff($array, ...$excludes);
+
+    }
+
+    /**
+     * ### Computes the difference of arrays using keys for comparison
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to compare from.
+     * </p>
+     * @param array<int|string, mixed> ...$excludes [optional] <p>
+     * An array to compare against.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     */
+    public static function differenceKey (array $array, array ...$excludes):array {
+
+        return array_diff_key($array, ...$excludes);
+
+    }
+
+    /**
+     * ### Computes the difference of arrays with additional index check
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to compare from.
+     * </p>
+     * @param array<int|string, mixed> ...$excludes [optional] <p>
+     * An array to compare against.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     */
+    public static function differenceAssoc (array $array, array ...$excludes):array {
+
+        return array_diff_assoc($array, ...$excludes);
+
+    }
+
+    /**
+     * ### Removes duplicate values from an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to remove duplicates.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     */
+    public static function unique (array $array):array {
+
+        return array_unique($array);
+
+    }
+
+    /**
+     * ### Removes unique values from an array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to remove unique values.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array containing all the entries from array1 that are not present in any of the other arrays.
+     */
+    public static function duplicates (array $array):array {
+
+        return self::differenceAssoc($array, array_unique($array));
 
     }
 

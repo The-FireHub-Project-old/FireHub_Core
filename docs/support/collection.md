@@ -993,7 +993,7 @@ print_r($diff->toArray());
 >> :---:|:---:|:---:|:---:
 >> yes | no | no | no
 
-Removes unique values from an array.
+Removes unique values from collection.
 
 > note: method validates only values, and ignores keys.
 
@@ -3414,7 +3414,7 @@ print_r($collection->toArray());
 >> :---:|:---:|:---:|:---:
 >> yes | no | no | no
 
-Removes duplicate values from an array.
+Removes duplicate values from collection.
 
 > note: method validates only values, and ignores keys.
 
