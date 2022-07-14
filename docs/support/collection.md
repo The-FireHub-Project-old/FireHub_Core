@@ -2174,6 +2174,8 @@ $collection = Collection::create(fn ():array => [
 
 $random = $collection->random();
 
+echo $random;
+
 // result (random value):
 // Morpheus
 ```
@@ -2187,6 +2189,8 @@ $collection = Collection::create(fn ():array => [
 ]);
 
 $random = $collection->random(3);
+
+print_r($random);
 
 // result (random value):
 // Array ( [0] => Morpheus [1] => Trinity [2] => Tank )
