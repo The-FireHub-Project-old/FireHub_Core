@@ -9,7 +9,9 @@
  * @license OSL Open Source License version 3 - [https://opensource.org/licenses/OSL-3.0](https://opensource.org/licenses/OSL-3.0)
  *
  * @package FireHub\Support\Collections
+ *
  * @version 1.0
+ * @version 1.1 Added low-level Arr and Iterator functions.
  */
 
 namespace FireHub\Support\Collections\Types;
