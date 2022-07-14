@@ -15,7 +15,6 @@
 namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableRewindable;
-
 use FireHub\Support\Traits\Tappable;
 use FireHub\Support\LowLevel\ {
     Iterator, Arr
@@ -450,6 +449,9 @@ final class Index_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param int ...$keys <p>
      * List of keys to return.
      * </p>
@@ -480,6 +482,9 @@ final class Index_Type implements CollectableRewindable {
 
     /**
      * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int ...$keys <p>
      * List of keys to return.

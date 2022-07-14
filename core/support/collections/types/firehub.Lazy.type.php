@@ -16,12 +16,12 @@ namespace FireHub\Support\Collections\Types;
 
 use FireHub\Support\Collections\CollectableNonRewindable;
 use FireHub\Support\Traits\Tappable;
+use FireHub\Support\LowLevel\ {
+    Iterator, Arr
+};
 use Generator, Closure, Traversable, Error;
 
-use function iterator_count;
-use function in_array;
 use function serialize;
-use function iterator_to_array;
 use function json_encode;
 use function sprintf;
 
@@ -57,20 +57,26 @@ final class Lazy_Type implements CollectableNonRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function count ():int {
 
-        return iterator_count($this->invokeItems());
+        return Iterator::count($this->items);
 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function isEmpty ():bool {
 
-        return $this->count() === 0;
+        return Iterator::isEmpty($this->items);
 
     }
 
@@ -121,6 +127,9 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param int|string ...$keys <p>
      * List of keys to return.
      * </p>
@@ -134,7 +143,7 @@ final class Lazy_Type implements CollectableNonRewindable {
             foreach ($this->items as $key => $value) {
 
                 // add items to array if callback is false
-                !in_array($key, $keys) ?: yield $key => $value;
+                !Arr::inArray($key, $keys) ?: yield $key => $value;
 
             }
 
@@ -146,6 +155,9 @@ final class Lazy_Type implements CollectableNonRewindable {
 
     /**
      * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int|string ...$keys <p>
      * List of keys to return.
@@ -160,7 +172,7 @@ final class Lazy_Type implements CollectableNonRewindable {
             foreach ($this->items as $key => $value) {
 
                 // add items to array if callback is false
-                in_array($key, $keys) ?: yield $key => $value;
+                Arr::inArray($key, $keys) ?: yield $key => $value;
 
             }
 
@@ -438,11 +450,14 @@ final class Lazy_Type implements CollectableNonRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
+     *
      * @return array<int|string, mixed> Array from collection.
      */
     public function toArray ():array {
 
-        return iterator_to_array($this->invokeItems());
+        return Iterator::toArray($this->items);
 
     }
 
