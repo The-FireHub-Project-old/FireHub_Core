@@ -391,7 +391,7 @@ final class Arr {
     public static function search (mixed $value, array $array, int|string|false $second_dimension_column = false):false|int|string {
 
         return $second_dimension_column
-            ? array_search($value, array_combine(array_keys($array), array_column($array, $second_dimension_column)), true)
+            ? array_search($value, self::combine(self::keys($array), self::column($array, $second_dimension_column)), true)
             : array_search($value, $array, true);
 
     }
@@ -836,6 +836,25 @@ final class Arr {
     public static function splice (array &$array, int $offset, ?int $length = null, array $replacement = []):array {
 
         return array_splice($array, $offset, $length, $replacement);
+
+    }
+
+    /**
+     * ### Remove number of items from the beginning of the array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to skip.
+     * </p>
+     * @param int $offset <p>
+     * Number of items to skip.
+     * </p>
+     *
+     * @return array<int|string, mixed> An array without skipped items.
+     */
+    public static function skip (array $array, int $offset) {
+
+        return self::slice($array, $offset);
 
     }
 

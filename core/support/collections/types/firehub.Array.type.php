@@ -1041,6 +1041,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Remove a portion of the array and replace it with something else
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $offset <p>
      * If offset is positive then the start of removed portion is at that offset from the beginning of the input collection.
@@ -1061,7 +1062,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function splice (int $offset, ?int $length = null, self|array $replacement = []):self {
 
-        // return new collectionh
+        // return new collection
         return new self(function () use ($offset, $length, $replacement):array {
 
             $items = $this->items;
@@ -1075,18 +1076,23 @@ final class Array_Type implements CollectableRewindable {
     }
 
     /**
-     * ### Remove number of elements from the beginning of the collection
+     * ### Remove number of items from the beginning of the collection
      * @since 0.2.0.pre-alpha.M2
      *
      * @param int $offset <p>
      * Number of items to skip.
      * </p>
      *
-     * @return self New skipped collection.
+     * @return self New collection without skipped items.
      */
     public function skip (int $offset):self {
 
-        return $this->slice($offset);
+        // return new collection
+        return new self(function () use ($offset):array {
+
+            return Arr::skip($this->items, $offset);
+
+        });
 
     }
 
