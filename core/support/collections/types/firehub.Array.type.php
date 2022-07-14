@@ -37,8 +37,6 @@ use function is_int;
 use function array_combine;
 use function is_callable;
 use function array_search;
-use function array_flip;
-use function array_rand;
 use function array_reverse;
 use function shuffle;
 use function array_slice;
@@ -820,6 +818,9 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param int|string ...$keys <p>
      * List of keys to return.
      * </p>
@@ -829,7 +830,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($keys):array {
 
-            return ($this->differenceKeys(array_flip($keys)))->toArray();
+            return Arr::except($this->items, $keys);
 
         });
 
@@ -839,9 +840,10 @@ final class Array_Type implements CollectableRewindable {
      * ### Pad array to the specified length with a value
      *
      * You will get a copy of the input padded to size specified by pad_size with value pad_value.
-     * If pad_size is positive then the array is padded on the right, if it's negative then on the left.
+     * If pad_size is positive then the collection is padded on the right, if it's negative then on the left.
      * If the absolute value of pad_size is less than or equal to the length of the input then no padding takes place.
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $size <p>
      * New size of the array.
@@ -858,7 +860,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($size, $value):array {
 
-            return array_pad($this->items, $size, $value);
+            return Arr::pad($this->items, $size, $value);
 
         });
 
@@ -900,6 +902,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Get the values from given key
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int|string $column <p>
      * The column of values to return. This value may be the integer key of the column you wish to retrieve,
@@ -918,7 +921,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($column, $key):array {
 
-            return array_column($this->items, $column, $key);
+            return Arr::column($this->items, $column, $key);
 
         });
 
@@ -927,6 +930,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Pick one or more random values out of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $number [optional] <p>
      * Specifies how many entries you want to pick.
@@ -941,38 +945,7 @@ final class Array_Type implements CollectableRewindable {
      */
     public function random (int $number = 1, bool $preserve_keys = false):mixed {
 
-        // check if asked number of items is greater than total number of items in collection
-        !($number > $this->count()) ?: throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in collection %d.', $number, $this->count()));
-
-        // get the random keys from collection items
-        $keys = array_rand($this->items, $number);
-
-        // if keys are not array
-        if (!is_array($keys)) {
-
-            return $this->items[$keys];
-
-        }
-
-        if ($preserve_keys) { // if we turn on preserved key
-
-            foreach ($keys as $key) {
-
-                $items[$key] = $this->items[$key];
-
-            }
-
-        } else { // if we turn off preserved key
-
-            foreach ($keys as $key) {
-
-                $items[] = $this->items[$key];
-
-            }
-
-        }
-
-        return $items ?? [];
+        return Arr::random($this->items, $number, $preserve_keys);
 
     }
 

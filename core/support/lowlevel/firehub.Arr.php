@@ -39,6 +39,9 @@ use function array_diff;
 use function array_diff_key;
 use function array_diff_assoc;
 use function array_unique;
+use function array_pad;
+use function sprintf;
+use function array_rand;
 use function array_intersect;
 use function array_intersect_key;
 use function array_intersect_assoc;
@@ -90,8 +93,8 @@ final class Arr {
     /**
      * ### Checks if array is multidimensional
      *
-     * Note that any collection that has at least one item as array
-     * will be considered as multidimensional collection.
+     * Note that any array that has at least one item as array
+     * will be considered as multidimensional array.
      * @since 0.2.1.pre-alpha.M2
      *
      * @param array<int|string, mixed> $array <p>
@@ -107,14 +110,14 @@ final class Arr {
     }
 
     /**
-     * ### Checks if collection is associative
+     * ### Checks if array is associative
      * @since 0.2.1.pre-alpha.M2
      *
      * @param array<int|string, mixed> $array <p>
      * Array to check.
      * </p>
      *
-     * @return bool True if collection is associative, false otherwise
+     * @return bool True if array is associative, false otherwise
      */
     public static function isAssociative (array $array):bool {
 
@@ -243,7 +246,7 @@ final class Arr {
     }
 
     /**
-     * ### Push elements onto the end of array
+     * ### Return the values from a single column in the input array
      * @since 0.2.1.pre-alpha.M2
      *
      * @param array<int|string, mixed> $array <p>
@@ -358,7 +361,7 @@ final class Arr {
 
         } catch (Throwable $error) {
 
-            if (self::count($keys) !== self::count($values)) throw new Error('Current and combined collection need to have the same number of items');
+            if (self::count($keys) !== self::count($values)) throw new Error('Current and combined array need to have the same number of items');
 
             throw new Error($error->getMessage());
 
@@ -541,6 +544,116 @@ final class Arr {
     }
 
     /**
+     * ### Get all items from array except for those with the specified keys
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array to filter items.
+     * </p>
+     * @param array<int|string, mixed> $keys <p>
+     * List of keys to return.
+     * </p>
+     *
+     * @throws Error If method flip requires that all values be either int or string.
+     *
+     * @return array<int|string, mixed> The filtered array.
+     */
+    public static function except (array $array, array $keys):array {
+
+        return self::differenceKey($array, self::flip($keys));
+
+    }
+
+    /**
+     * ### Pad array to the specified length with a value
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Initial array of values to pad.
+     * </p>
+     * @param int $size <p>
+     * New size of the array.
+     * </p>
+     * @param mixed $value <p>
+     * Value to pad if input is less than pad_size.
+     * </p>
+     *
+     * @return array<int|string, mixed> A copy of the input padded to size specified by pad_size with value pad_value. If pad_size is positive then the array is padded on the right, if it's negative then on the left. If the absolute value of pad_size is less than or equal to the length of the input then no padding takes place.
+     */
+    public static function pad (array $array, int $size, mixed $value):array {
+
+        return array_pad($array, $size, $value);
+
+    }
+
+    /**
+     * ### Pick one or more random values out of the array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array from we are picking random items.
+     * </p>
+     * @param int $number [optional] <p>
+     * Specifies how many entries you want to pick.
+     * </p>
+     * @param bool $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original array or not.
+     * </p>
+     *
+     * @throws Error If asked number of items is greater than total number of items in array.
+     *
+     * @return mixed If you are picking only one entry, returns the key for a random entry. Otherwise, it returns an array of keys for the random entries.
+     */
+    public static function random (array $array, int $number = 1, bool $preserve_keys = false):mixed {
+
+        // check if asked number of items is greater than total number of items in array
+        !($number > self::count($array)) ?: throw new Error(sprintf('Asked random values are %d, and are greater then total number of items in array %d.', $number, self::count($array)));
+
+        // get the random keys from array items
+        $keys = array_rand($array, $number);
+
+        // if keys are not array
+        if (!self::isArray($keys)) {
+
+            /**
+             * PHPStan stan reports that keys might not be an array, but with method isArray it is already checked.
+             * @phpstan-ignore-next-line
+             */
+            return $array[$keys];
+
+        }
+
+        if ($preserve_keys) { // if we turn on preserved key
+
+            /**
+             * PHPStan stan reports that keys might not be an array, but with method isArray it is already checked.
+             * @phpstan-ignore-next-line
+             */
+            foreach ($keys as $key) {
+
+                $items[$key] = $array[$key];
+
+            }
+
+        } else { // if we turn off preserved key
+
+            /**
+             * PHPStan stan reports that keys might not be an array, but with method isArray it is already checked.
+             * @phpstan-ignore-next-line
+             */
+            foreach ($keys as $key) {
+
+                $items[] = $array[$key];
+
+            }
+
+        }
+
+        return $items ?? [];
+
+    }
+
+    /**
      * ### Computes the intersection of arrays
      * @since 0.2.1.pre-alpha.M2
      *
@@ -667,8 +780,8 @@ final class Arr {
      * Step should be given as a positive number. If not specified, step will default to 1.
      * </p>
      *
-     * @throws Error If Your start is bigger then the end of collection.
-     * @throws Error If Your step is bigger then the end of collection.
+     * @throws Error If Your start is bigger then the end of array.
+     * @throws Error If Your step is bigger then the end of array.
      *
      * @return array<int, mixed> An array of elements from start to end, inclusive.
      */
@@ -680,9 +793,9 @@ final class Arr {
 
         } catch (Throwable $error) {
 
-            if ($start > $end) throw new Error(sprintf('Your start %d is bigger then the end of collection %d.', $start, $end));
+            if ($start > $end) throw new Error(sprintf('Your start %d is bigger then the end of array %d.', $start, $end));
 
-            if ($end < $step) throw new Error(sprintf('Your step %d is bigger then the end of collection %d.', $end, $step));
+            if ($end < $step) throw new Error(sprintf('Your step %d is bigger then the end of array %d.', $end, $step));
 
             throw new Error($error->getMessage());
 
