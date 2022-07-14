@@ -1997,7 +1997,7 @@ print_r($only->toArray());
 Pad array to the specified length with a value.
 
 You will get a copy of the input padded to size specified by pad_size with value pad_value.   
-If pad_size is positive then the array is padded on the right, if it's negative then on the left.  
+If pad_size is positive then the collection is padded on the right, if it's negative then on the left.  
 If the absolute value of pad_size is less than or equal to the length of the input then no padding takes place.
 
 ```php
