@@ -27,7 +27,6 @@ use function sprintf;
 use function is_int;
 use function serialize;
 use function json_encode;
-use function count;
 
 /**
  * ### Index collection type
