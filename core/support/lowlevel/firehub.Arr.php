@@ -45,6 +45,9 @@ use function array_rand;
 use function array_intersect;
 use function array_intersect_key;
 use function array_intersect_assoc;
+use function shuffle;
+use function array_slice;
+use function array_splice;
 use function array_keys;
 use function is_null;
 use function range;
@@ -731,6 +734,108 @@ final class Arr {
     public static function intersectAssoc (array $array, array ...$arrays):array {
 
         return array_intersect_assoc($array, ...$arrays);
+
+    }
+
+    /**
+     * ### Shuffle array items
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * An array to shuffle.
+     * </p>
+     * @param bool $preserve_keys [optional] <p>
+     * Whether you want to preserve keys from original array or not.
+     * </p>
+     *
+     * @return array<int|string, mixed> Shuffled array.
+     */
+    public static function shuffle (array &$array, bool $preserve_keys = false):array {
+
+        // if we want to preserve keys
+        if ($preserve_keys) {
+
+            // get of keys from array
+            $keys = self::keys($array);
+
+            // shuffle out keys
+            shuffle($keys);
+
+            // add values from original items to shuffled one
+            foreach($keys as $key) {
+
+                $items[$key] = $array[$key];
+
+            }
+
+            // return shuffled array
+            return $items ?? [];
+
+        }
+
+        // shuffle items without preserving keys
+        shuffle($array);
+
+        return $array;
+
+    }
+
+    /**
+     * ### Extract a slice of the array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to slice.
+     * </p>
+     * @param int $offset <p>
+     * If offset is non-negative, the sequence will start at that offset in the array.
+     * If offset is negative, the sequence will start that far from the end of the array.
+     * </p>
+     * @param null|int $length [optional] <p>
+     * If length is given and is positive, then the sequence will have that many elements in it.
+     * If length is given and is negative then the sequence will stop that many elements from the end of the array.
+     * If it is omitted, then the sequence will have everything from offset up until the end of the array.
+     * </p>
+     * @param bool $preserve_keys [optional] <p>
+     * Note that array_slice will reorder and reset the array indices by default.
+     * You can change this behaviour by setting preserve_keys to true
+     * </p>
+     *
+     * @return array<int|string, mixed> Sliced array.
+     */
+    public static function slice (array $array, int $offset, ?int $length = null, bool $preserve_keys = false):array {
+
+        return array_slice($array, $offset, $length, $preserve_keys);
+
+    }
+
+    /**
+     * ### Remove a portion of the array and replace it with something else
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * Array to splice.
+     * </p>
+     * @param int $offset <p>
+     * If offset is positive then the start of removed portion is at that offset from the beginning of the input array.
+     * If offset is negative then it starts that far from the end of the input array.
+     * </p>
+     * @param null|int $length [optional] <p>
+     * If length is omitted, removes everything from offset to the end of the array.
+     * If length is specified and is positive, then that many elements will be removed.
+     * If length is specified and is negative then the end of the removed portion will be that many elements from the end of the array.
+     * </p>
+     * @param array<mixed, mixed> $replacement [optional] <p>
+     * If replacement array is specified, then the removed elements are replaced with elements from this array.
+     * If offset and length are such that nothing is removed, then the elements from the replacement array or array are inserted in the place specified by the offset.
+     * Keys in replacement array are not preserved.
+     * </p>
+     *
+     * @return array<int|string, mixed> Spliced array.
+     */
+    public static function splice (array &$array, int $offset, ?int $length = null, array $replacement = []):array {
+
+        return array_splice($array, $offset, $length, $replacement);
 
     }
 

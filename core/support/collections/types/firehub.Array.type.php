@@ -34,12 +34,7 @@ use function sprintf;
 use function array_column;
 use function is_string;
 use function is_int;
-use function array_combine;
 use function is_callable;
-use function array_search;
-use function shuffle;
-use function array_slice;
-use function array_splice;
 use function asort;
 use function sort;
 use function arsort;
@@ -973,6 +968,9 @@ final class Array_Type implements CollectableRewindable {
     /**
      * {@inheritDoc}
      *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
+     *
      * @param mixed $value <p>
      * The searched value.
      * If needle is a string, the comparison is done in a case-sensitive manner.
@@ -1002,37 +1000,16 @@ final class Array_Type implements CollectableRewindable {
      */
     public function shuffle (bool $preserve_keys = false):bool {
 
-        // if we want to preserve keys
-        if ($preserve_keys) {
+        $this->items = Arr::shuffle($this->items, $preserve_keys);
 
-            // get of keys from collection
-            $keys = array_keys($this->items);
-
-            // shuffle out keys
-            shuffle($keys);
-
-            // add values from original items to shuffled one
-            foreach($keys as $key) {
-
-                $items[$key] = $this->items[$key];
-
-            }
-
-            // attach shuffled items back to collection
-            $this->items = $items ?? [];
-
-            return true;
-
-        }
-
-        // shuffle items without preserving keys
-        return shuffle($this->items);
+        return true;
 
     }
 
     /**
      * ### Extract a slice of the collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $offset <p>
      * If offset is non-negative, the sequence will start at that offset in the collection.
@@ -1055,7 +1032,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($offset, $length, $preserve_keys):array {
 
-            return array_slice($this->items, $offset, $length, $preserve_keys);
+            return Arr::slice($this->items, $offset, $length, $preserve_keys);
 
         });
 
@@ -1084,12 +1061,14 @@ final class Array_Type implements CollectableRewindable {
      */
     public function splice (int $offset, ?int $length = null, self|array $replacement = []):self {
 
-        // return new collection
+        // return new collectionh
         return new self(function () use ($offset, $length, $replacement):array {
 
-            array_splice($this->items, $offset, $length, $replacement instanceof self ? $replacement->items : $replacement);
+            $items = $this->items;
 
-            return $this->items;
+            Arr::splice($items, $offset, $length, $replacement instanceof self ? $replacement->items : $replacement);
+
+            return $items;
 
         });
 
