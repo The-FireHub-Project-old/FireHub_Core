@@ -24,16 +24,12 @@ use FireHub\Support\Enums\Operators\Comparison;
 use FireHub\Support\LowLevel\Arr;
 use Closure, Traversable, Error;
 
-use function array_keys;
 use function is_array;
 use function sprintf;
 use function is_string;
 use function is_int;
 use function is_callable;
 use function is_null;
-use function array_values;
-use function array_key_first;
-use function array_key_last;
 use function serialize;
 use function in_array;
 use function json_encode;
@@ -1261,6 +1257,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Return new collection with specified number of items
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param int $limit <p>
      * If length is given and is positive, then the sequence will have that many elements in it.
@@ -1272,7 +1269,12 @@ final class Array_Type implements CollectableRewindable {
      */
     public function take (int $limit):self {
 
-        return $this->slice(0, $limit);
+        // return new collection
+        return new self(function () use ($limit):array {
+
+            return Arr::slice($this->items, 0, $limit);
+
+        });
 
     }
 
@@ -1379,6 +1381,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Return new collection with keys as values
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param mixed $filter [optional] <p>
      * If specified, then only keys containing these values are returned.
@@ -1391,7 +1394,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function () use ($filter):array {
 
-            return is_null($filter) ? array_keys($this->items) : array_keys($this->items, $filter, true);
+            return Arr::keys($this->items, $filter);
 
         });
 
@@ -1400,6 +1403,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Retrieve only values from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @return self New collection with values only.
      */
@@ -1408,7 +1412,7 @@ final class Array_Type implements CollectableRewindable {
         // return new collection
         return new self(function ():array {
 
-            return array_values($this->items);
+            return Arr::values($this->items);
 
         });
 
@@ -1669,6 +1673,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Get first value from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param ?Closure $callback [optional] <p>
      * Data from callable source.
@@ -1692,7 +1697,7 @@ final class Array_Type implements CollectableRewindable {
 
         }
 
-        $first_key = array_key_first($this->items);
+        $first_key = Arr::first($this->items);
 
         return !is_null($first_key) ? $this->get($first_key) : null;
 
@@ -1701,6 +1706,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Get first key from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param ?Closure $callback [optional] <p>
      * Data from callable source.
@@ -1724,7 +1730,7 @@ final class Array_Type implements CollectableRewindable {
 
         }
 
-        $first_key = array_key_first($this->items);
+        $first_key = Arr::first($this->items);
 
         return !is_null($first_key) ? $first_key : null;
 
@@ -1733,6 +1739,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Get last value from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param ?Closure $callback [optional] <p>
      * Data from callable source.
@@ -1756,7 +1763,7 @@ final class Array_Type implements CollectableRewindable {
 
         }
 
-        $last_key = array_key_last($this->items);
+        $last_key = Arr::last($this->items);
 
         return !is_null($last_key) ? $this->get($last_key) : null;
 
@@ -1765,6 +1772,7 @@ final class Array_Type implements CollectableRewindable {
     /**
      * ### Get last key from collection
      * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Arr functions.
      *
      * @param ?Closure $callback [optional] <p>
      * Data from callable source.
@@ -1788,7 +1796,7 @@ final class Array_Type implements CollectableRewindable {
 
         }
 
-        $last_key = array_key_last($this->items);
+        $last_key = Arr::last($this->items);
 
         return !is_null($last_key) ? $last_key : null;
 

@@ -64,6 +64,9 @@ use function uksort;
 use function array_multisort;
 use function array_key_exists;
 use function array_keys;
+use function array_values;
+use function array_key_first;
+use function array_key_last;
 use function is_null;
 use function range;
 use function array_filter;
@@ -1071,6 +1074,54 @@ final class Arr {
     public static function keys (array $array, mixed $filter = null) {
 
         return is_null($filter) ? array_keys($array) : array_keys($array, $filter, true);
+
+    }
+
+    /**
+     * ### Return all the values from array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array.
+     * </p>
+     *
+     * @return array<int, mixed> An indexed array of values.
+     */
+    public static function values (array $array):array {
+
+        return array_values($array);
+
+    }
+
+    /**
+     * ### Get first key from array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array.
+     * </p>
+     *
+     * @return null|int|string First key from array.
+     */
+    public static function first (array $array):null|int|string {
+
+        return array_key_first($array);
+
+    }
+
+    /**
+     * ### Gat last key from array
+     * @since 0.2.1.pre-alpha.M2
+     *
+     * @param array<int|string, mixed> $array <p>
+     * The array.
+     * </p>
+     *
+     * @return null|int|string First key from array.
+     */
+    public static function last (array $array):null|int|string {
+
+        return array_key_last($array);
 
     }
 
