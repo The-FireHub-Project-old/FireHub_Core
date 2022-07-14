@@ -14,8 +14,9 @@
 
 namespace FireHub\Support\Collections\Types;
 
-use FireHub\Support\Collections\CollectableRewindable;
+use FireHub\Support\Collections\CollectableRewindable;;
 use FireHub\Support\Traits\Tappable;
+use FireHub\Support\LowLevel\Iterator;
 use SplFixedArray, Closure, Traversable, Throwable, Error;
 
 use function is_callable;
@@ -72,20 +73,26 @@ final class Index_Type implements CollectableRewindable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function count ():int {
 
-        return $this->items->count();
+        return Iterator::count($this->items);
 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @since 0.2.0.pre-alpha.M2
+     * @since 0.2.1.pre-alpha.M2 Added low-level Iterator functions.
      */
     public function isEmpty ():bool {
 
-        return $this->count() === 0;
+        return Iterator::isEmpty($this->items);
 
     }
 
